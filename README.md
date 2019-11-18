@@ -1,8 +1,8 @@
 # Coffee-pot
-##Task
+## Task
 Add description here
 
-#Launch Instructions
+# Launch Instructions
 
 ## 0. Go to project directory in Terminal
 
