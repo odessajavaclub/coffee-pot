@@ -6,7 +6,7 @@ import org.odessajavaclub.user.application.port.out.CreateUserPort;
 import org.odessajavaclub.user.domain.User;
 
 @RequiredArgsConstructor
-public class CreateUserService implements CreateUserUseCase {
+class CreateUserService implements CreateUserUseCase {
 
     private final CreateUserPort createUserPort;
 

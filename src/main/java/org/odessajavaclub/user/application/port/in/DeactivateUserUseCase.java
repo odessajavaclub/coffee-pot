@@ -2,16 +2,16 @@ package org.odessajavaclub.user.application.port.in;
 
 import lombok.NonNull;
 import lombok.Value;
-import org.odessajavaclub.user.domain.User.UserId;
+import org.odessajavaclub.user.domain.User;
 
 public interface DeactivateUserUseCase {
 
-    boolean deactivateUser(DeactivateUserCommand command);
+    void deactivateUser(DeactivateUserCommand command);
 
     @Value
     class DeactivateUserCommand {
 
         @NonNull
-        private final UserId userId;
+        private final User.UserId userId;
     }
 }

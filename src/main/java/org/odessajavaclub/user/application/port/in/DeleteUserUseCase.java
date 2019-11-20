@@ -2,7 +2,7 @@ package org.odessajavaclub.user.application.port.in;
 
 import lombok.NonNull;
 import lombok.Value;
-import org.odessajavaclub.user.domain.User.UserId;
+import org.odessajavaclub.user.domain.User;
 
 public interface DeleteUserUseCase {
 
@@ -12,6 +12,6 @@ public interface DeleteUserUseCase {
     class DeleteUserCommand {
 
         @NonNull
-        private final UserId userId;
+        private final User.UserId userId;
     }
 }

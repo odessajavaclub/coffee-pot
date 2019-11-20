@@ -2,7 +2,6 @@ package org.odessajavaclub.user.application.port.in;
 
 import lombok.Builder;
 import org.odessajavaclub.user.domain.User;
-import org.odessajavaclub.user.domain.User.UserId;
 
 public interface GetUserUseCase {
 
@@ -11,7 +10,7 @@ public interface GetUserUseCase {
     @Builder
     class GetUserCriteria {
 
-        private final UserId userId;
+        private final User.UserId userId;
 
         private final String firstName;
 
