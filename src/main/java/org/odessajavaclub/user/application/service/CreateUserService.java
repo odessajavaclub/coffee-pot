@@ -24,8 +24,7 @@ public class CreateUserService implements CreateUserUseCase {
         checkFirstNameIsNotBlank(command);
         checkLastNameIsNotBlank(command);
 
-        CreateUserCommandToUserMapper createUserCommandToUserMapper = new CreateUserCommandToUserMapper();
-        User user = createUserCommandToUserMapper.map(command, isDeactivated);
+        User user = User.withoutId(command.getFirstName(), command.getLastName(), isDeactivated);
 
         return createUserPort.createUser(user);
     }
