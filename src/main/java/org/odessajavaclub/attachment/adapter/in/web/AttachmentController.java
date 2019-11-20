@@ -49,9 +49,10 @@ public class AttachmentController {
 
     @GetMapping("/list")
     public ResponseEntity<SliceOfAttachmentsResponse> getAttachmentsList(
+            @RequestParam(value = "meetingId", required = true) Long meetingId,
             @RequestParam(value = "pageNumber", required = true) Integer pageNumber,
             @RequestParam(value = "pageSize", required = true) Integer pageSize) {
-        return ResponseEntity.ok(getSliceOfAttachmentsUseCase.getAttachmentsList(pageNumber, pageSize));
+        return ResponseEntity.ok(getSliceOfAttachmentsUseCase.getAttachmentsList(meetingId, pageNumber, pageSize));
     }
 
     @GetMapping("/{id}")

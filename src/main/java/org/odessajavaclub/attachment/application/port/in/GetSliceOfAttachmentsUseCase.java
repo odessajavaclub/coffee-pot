@@ -4,5 +4,5 @@ import org.odessajavaclub.attachment.domain.SliceOfAttachmentsResponse;
 
 public interface GetSliceOfAttachmentsUseCase {
 
-    SliceOfAttachmentsResponse getAttachmentsList(Integer pageNumber, Integer pageSize);
+    SliceOfAttachmentsResponse getAttachmentsList(Long meetingId, Integer pageNumber, Integer pageSize);
 }

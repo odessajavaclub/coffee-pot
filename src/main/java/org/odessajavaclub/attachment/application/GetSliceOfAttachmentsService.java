@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 public class GetSliceOfAttachmentsService implements GetSliceOfAttachmentsUseCase {
 
     @Override
-    public SliceOfAttachmentsResponse getAttachmentsList(Integer pageNumber, Integer pageSize) {
+    public SliceOfAttachmentsResponse getAttachmentsList(Long meetingId, Integer pageNumber, Integer pageSize) {
         return null;
     }
 }
