@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SliceOfAttachmentsResponse {
 
-    private List<AttachmentDetailsResponse> list;
+    private List<AttachmentDetailsResponse> list; //TODO: use less detailed response for getting a list - to discuss later
     private Boolean hasNext;
 }
