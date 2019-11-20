@@ -1,19 +1,19 @@
 package org.odessajavaclub.user.application.port.in;
 
-import lombok.Builder;
+import lombok.NonNull;
+import lombok.Value;
 import org.odessajavaclub.user.domain.User;
+
+import java.util.Optional;
 
 public interface GetUserUseCase {
 
-    User getUser(GetUserCriteria userId);
+    Optional<User> getUser(GetUserCommand getUserCommand);
 
-    @Builder
-    class GetUserCriteria {
+    @Value
+    class GetUserCommand {
 
+        @NonNull
         private final User.UserId userId;
-
-        private final String firstName;
-
-        private final String lastName;
     }
 }
