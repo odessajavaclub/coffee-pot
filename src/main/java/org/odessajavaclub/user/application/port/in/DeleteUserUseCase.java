@@ -6,7 +6,7 @@ import org.odessajavaclub.user.domain.User;
 
 public interface DeleteUserUseCase {
 
-    boolean deleteUser(DeleteUserCommand command);
+    void deleteUser(DeleteUserCommand command);
 
     @Value
     class DeleteUserCommand {
