@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Value;
 
 import java.util.Optional;
@@ -15,9 +16,11 @@ public class User {
     private UserId id;
 
     @Getter
+    @NonNull
     private String firstName;
 
     @Getter
+    @NonNull
     private String lastName;
 
     @Getter
@@ -26,6 +29,7 @@ public class User {
     @Value
     public static class UserId {
 
+        @NonNull
         private Long value;
     }
 

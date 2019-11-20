@@ -5,7 +5,9 @@ import lombok.Value;
 
 public interface CreateUserUseCase {
 
-    boolean createUser(CreateUserCommand command);
+    boolean createActivatedUser(CreateUserCommand command);
+
+    boolean createDeactivatedUser(CreateUserCommand command);
 
     @Value
     class CreateUserCommand {
