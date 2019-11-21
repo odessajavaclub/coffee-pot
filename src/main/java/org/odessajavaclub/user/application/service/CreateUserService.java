@@ -11,16 +11,16 @@ class CreateUserService implements CreateUserUseCase {
     private final CreateUserPort createUserPort;
 
     @Override
-    public boolean createActivatedUser(CreateUserCommand command) {
+    public User.UserId createActivatedUser(CreateUserCommand command) {
         return createUser(command, false);
     }
 
     @Override
-    public boolean createDeactivatedUser(CreateUserCommand command) {
+    public User.UserId createDeactivatedUser(CreateUserCommand command) {
         return createUser(command, true);
     }
 
-    private boolean createUser(CreateUserCommand command, boolean isDeactivated) {
+    private User.UserId createUser(CreateUserCommand command, boolean isDeactivated) {
         checkFirstNameIsNotBlank(command);
         checkLastNameIsNotBlank(command);
 

@@ -2,12 +2,13 @@ package org.odessajavaclub.user.application.port.in;
 
 import lombok.NonNull;
 import lombok.Value;
+import org.odessajavaclub.user.domain.User;
 
 public interface CreateUserUseCase {
 
-    boolean createActivatedUser(CreateUserCommand command);
+    User.UserId createActivatedUser(CreateUserCommand command);
 
-    boolean createDeactivatedUser(CreateUserCommand command);
+    User.UserId createDeactivatedUser(CreateUserCommand command);
 
     @Value
     class CreateUserCommand {
