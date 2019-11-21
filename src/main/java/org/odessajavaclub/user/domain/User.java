@@ -41,6 +41,13 @@ public class User {
         return new User(userId, firstName, lastName, isDeactivated);
     }
 
+    public static User from(User user, String newFirstName, String newLastName) {
+        return new User(user.id,
+                        newFirstName != null ? newFirstName : user.firstName,
+                        newLastName != null ? newLastName : user.lastName,
+                        user.isDeactivated);
+    }
+
     public Optional<UserId> getId() {
         return Optional.ofNullable(this.id);
     }
