@@ -5,9 +5,12 @@ import org.odessajavaclub.user.application.port.in.UpdateUserUseCase;
 import org.odessajavaclub.user.application.port.out.LoadUserPort;
 import org.odessajavaclub.user.application.port.out.UpdateUserPort;
 import org.odessajavaclub.user.domain.User;
+import org.springframework.stereotype.Service;
 
 import java.util.Objects;
+import java.util.Optional;
 
+@Service
 @RequiredArgsConstructor
 public class UpdateUserService implements UpdateUserUseCase {
 
@@ -16,13 +19,17 @@ public class UpdateUserService implements UpdateUserUseCase {
     private final UpdateUserPort updateUserPort;
 
     @Override
-    public User updateUser(UpdateUserCommand command) {
+    public Optional<User> updateUser(UpdateUserCommand command) {
         User.UserId userId = Objects.requireNonNull(command.getId(), "User id must not be null");
 
         User existingUser = loadUserPort.loadUser(userId);
+        if (existingUser == null) {
+            //TODO: return from port Optional maybe?
+            return Optional.empty();
+        }
 
         User updatedUser = User.from(existingUser, command.getNewFirstName(), command.getNewLastName());
 
-        return updateUserPort.updateUser(updatedUser);
+        return Optional.ofNullable(updateUserPort.updateUser(updatedUser));
     }
 }

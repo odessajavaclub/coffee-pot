@@ -4,5 +4,5 @@ import org.odessajavaclub.user.domain.User;
 
 public interface DeleteUserPort {
 
-    void deleteUser(User.UserId userId);
+    boolean deleteUser(User.UserId userId);
 }

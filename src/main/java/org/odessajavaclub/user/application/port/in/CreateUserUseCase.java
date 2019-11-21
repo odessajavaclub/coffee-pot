@@ -6,9 +6,9 @@ import org.odessajavaclub.user.domain.User;
 
 public interface CreateUserUseCase {
 
-    User.UserId createActivatedUser(CreateUserCommand command);
+    User createActivatedUser(CreateUserCommand command);
 
-    User.UserId createDeactivatedUser(CreateUserCommand command);
+    User createDeactivatedUser(CreateUserCommand command);
 
     @Value
     class CreateUserCommand {

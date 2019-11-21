@@ -4,9 +4,11 @@ import lombok.NonNull;
 import lombok.Value;
 import org.odessajavaclub.user.domain.User;
 
+import java.util.Optional;
+
 public interface UpdateUserUseCase {
 
-    User updateUser(UpdateUserCommand command);
+    Optional<User> updateUser(UpdateUserCommand command);
 
     @Value
     class UpdateUserCommand {

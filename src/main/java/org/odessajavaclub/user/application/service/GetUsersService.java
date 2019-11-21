@@ -6,10 +6,12 @@ import org.odessajavaclub.user.application.port.in.GetUsersUseCase;
 import org.odessajavaclub.user.application.port.out.LoadUserPort;
 import org.odessajavaclub.user.application.port.out.LoadUsersPort;
 import org.odessajavaclub.user.domain.User;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 @RequiredArgsConstructor
 class GetUsersService implements GetUsersUseCase, GetUserUseCase {
 
