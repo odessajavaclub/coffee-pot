@@ -5,7 +5,9 @@ import org.odessajavaclub.user.application.port.in.ActivateUserUseCase;
 import org.odessajavaclub.user.application.port.in.DeactivateUserUseCase;
 import org.odessajavaclub.user.application.port.out.ActivateUserPort;
 import org.odessajavaclub.user.application.port.out.DeactivateUserPort;
+import org.springframework.stereotype.Service;
 
+@Service
 @RequiredArgsConstructor
 class ActivationUserService implements ActivateUserUseCase, DeactivateUserUseCase {
 
@@ -14,12 +16,12 @@ class ActivationUserService implements ActivateUserUseCase, DeactivateUserUseCas
     private final DeactivateUserPort deactivateUserPort;
 
     @Override
-    public void activateUser(ActivateUserCommand command) {
-        activateUserPort.activateUser(command.getUserId());
+    public boolean activateUser(ActivateUserCommand command) {
+        return activateUserPort.activateUser(command.getUserId());
     }
 
     @Override
-    public void deactivateUser(DeactivateUserCommand command) {
-        deactivateUserPort.deactivateUser(command.getUserId());
+    public boolean deactivateUser(DeactivateUserCommand command) {
+        return deactivateUserPort.deactivateUser(command.getUserId());
     }
 }

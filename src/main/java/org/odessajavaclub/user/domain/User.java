@@ -55,6 +55,13 @@ public class User {
                         user.isDeactivated);
     }
 
+    public static User from(User user, boolean isDeactivated) {
+        return new User(user.id,
+                        user.firstName,
+                        user.lastName,
+                        isDeactivated);
+    }
+
     public Optional<UserId> getId() {
         return Optional.ofNullable(this.id);
     }

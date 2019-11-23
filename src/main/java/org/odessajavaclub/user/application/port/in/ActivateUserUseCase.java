@@ -6,7 +6,7 @@ import org.odessajavaclub.user.domain.User;
 
 public interface ActivateUserUseCase {
 
-    void activateUser(ActivateUserCommand command);
+    boolean activateUser(ActivateUserCommand command);
 
     @Value
     class ActivateUserCommand {

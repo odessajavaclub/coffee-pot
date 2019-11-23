@@ -1,6 +1,8 @@
 package org.odessajavaclub.user.adapter.out;
 
+import org.odessajavaclub.user.application.port.out.ActivateUserPort;
 import org.odessajavaclub.user.application.port.out.CreateUserPort;
+import org.odessajavaclub.user.application.port.out.DeactivateUserPort;
 import org.odessajavaclub.user.application.port.out.DeleteUserPort;
 import org.odessajavaclub.user.application.port.out.LoadUserPort;
 import org.odessajavaclub.user.application.port.out.LoadUsersPort;
@@ -16,7 +18,13 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 @Component
-public class UserMockRepository implements CreateUserPort, LoadUsersPort, LoadUserPort, DeleteUserPort, UpdateUserPort {
+public class UserMockRepository implements CreateUserPort,
+                                           LoadUsersPort,
+                                           LoadUserPort,
+                                           DeleteUserPort,
+                                           UpdateUserPort,
+                                           ActivateUserPort,
+                                           DeactivateUserPort {
 
     private static AtomicLong id = new AtomicLong(1L);
 
@@ -56,5 +64,21 @@ public class UserMockRepository implements CreateUserPort, LoadUsersPort, LoadUs
                            return updatedUser;
                        })
                        .orElse(null);
+    }
+
+    @Override
+    public boolean activateUser(User.UserId userId) {
+        return Optional.ofNullable(users.get(userId.getValue()))
+                       .map(user -> User.from(user, false))
+                       .map(user -> users.put(userId.getValue(), user))
+                       .isPresent();
+    }
+
+    @Override
+    public boolean deactivateUser(User.UserId userId) {
+        return Optional.ofNullable(users.get(userId.getValue()))
+                       .map(user -> User.from(user, true))
+                       .map(user -> users.put(userId.getValue(), user))
+                       .isPresent();
     }
 }

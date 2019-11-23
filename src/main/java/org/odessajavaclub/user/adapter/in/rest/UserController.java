@@ -1,7 +1,9 @@
 package org.odessajavaclub.user.adapter.in.rest;
 
 import lombok.RequiredArgsConstructor;
+import org.odessajavaclub.user.application.port.in.ActivateUserUseCase;
 import org.odessajavaclub.user.application.port.in.CreateUserUseCase;
+import org.odessajavaclub.user.application.port.in.DeactivateUserUseCase;
 import org.odessajavaclub.user.application.port.in.DeleteUserUseCase;
 import org.odessajavaclub.user.application.port.in.GetUserUseCase;
 import org.odessajavaclub.user.application.port.in.GetUsersUseCase;
@@ -33,6 +35,10 @@ public class UserController {
     private final DeleteUserUseCase deleteUserUseCase;
 
     private final UpdateUserUseCase updateUserUseCase;
+
+    private final ActivateUserUseCase activateUserUseCase;
+
+    private final DeactivateUserUseCase deactivateUserUseCase;
 
     @PostMapping
     User createUser(@RequestBody UserDto user) {
@@ -67,5 +73,19 @@ public class UserController {
                                                                                     user.getLastName()))
                                 .map(ResponseEntity::ok)
                                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/activate/{id}")
+    ResponseEntity<User> activateUser(@PathVariable Long id) {
+        return activateUserUseCase.activateUser(new ActivateUserUseCase.ActivateUserCommand(new User.UserId(id)))
+               ? ResponseEntity.ok().build()
+               : ResponseEntity.notFound().build();
+    }
+
+    @PutMapping("/deactivate/{id}")
+    ResponseEntity<User> deactivate(@PathVariable Long id) {
+        return deactivateUserUseCase.deactivateUser(new DeactivateUserUseCase.DeactivateUserCommand(new User.UserId(id)))
+               ? ResponseEntity.ok().build()
+               : ResponseEntity.notFound().build();
     }
 }

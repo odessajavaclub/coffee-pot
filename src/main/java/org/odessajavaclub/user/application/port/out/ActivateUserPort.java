@@ -4,5 +4,5 @@ import org.odessajavaclub.user.domain.User;
 
 public interface ActivateUserPort {
 
-    void activateUser(User.UserId userId);
+    boolean activateUser(User.UserId userId);
 }
