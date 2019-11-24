@@ -5,10 +5,11 @@ import org.odessajavaclub.shared.SelfValidating;
 import org.odessajavaclub.topic.domain.Topic;
 
 import javax.validation.constraints.NotNull;
+import java.util.Optional;
 
 public interface CreateTopicUseCase {
 
-    Topic createTopic(CreateTopicCommand command);
+    Optional<Topic> createTopic(CreateTopicCommand command);
 
     @EqualsAndHashCode
     class CreateTopicCommand extends SelfValidating<CreateTopicCommand> {
