@@ -4,7 +4,7 @@ import org.odessajavaclub.user.domain.User;
 
 import java.util.List;
 
-public interface GetUsersUseCase {
+public interface GetUsersQuery {
 
     List<User> getUsers();
 }

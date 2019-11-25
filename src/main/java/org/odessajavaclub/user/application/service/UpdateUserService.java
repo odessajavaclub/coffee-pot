@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class UpdateUserService implements UpdateUserUseCase {
+class UpdateUserService implements UpdateUserUseCase {
 
     private final LoadUserPort loadUserPort;
 

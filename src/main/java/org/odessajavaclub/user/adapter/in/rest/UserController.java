@@ -5,8 +5,8 @@ import org.odessajavaclub.user.application.port.in.ActivateUserUseCase;
 import org.odessajavaclub.user.application.port.in.CreateUserUseCase;
 import org.odessajavaclub.user.application.port.in.DeactivateUserUseCase;
 import org.odessajavaclub.user.application.port.in.DeleteUserUseCase;
-import org.odessajavaclub.user.application.port.in.GetUserUseCase;
-import org.odessajavaclub.user.application.port.in.GetUsersUseCase;
+import org.odessajavaclub.user.application.port.in.GetUserQuery;
+import org.odessajavaclub.user.application.port.in.GetUsersQuery;
 import org.odessajavaclub.user.application.port.in.UpdateUserUseCase;
 import org.odessajavaclub.user.domain.User;
 import org.springframework.http.ResponseEntity;
@@ -28,9 +28,9 @@ public class UserController {
 
     private final CreateUserUseCase createUserUseCase;
 
-    private final GetUsersUseCase getUsersUseCase;
+    private final GetUsersQuery getUsersQuery;
 
-    private final GetUserUseCase getUserUseCase;
+    private final GetUserQuery getUserQuery;
 
     private final DeleteUserUseCase deleteUserUseCase;
 
@@ -49,14 +49,14 @@ public class UserController {
 
     @GetMapping
     List<User> getUsers() {
-        return getUsersUseCase.getUsers();
+        return getUsersQuery.getUsers();
     }
 
     @GetMapping("/{id}")
     ResponseEntity<User> getUser(@PathVariable Long id) {
-        return getUserUseCase.getUser(new GetUserUseCase.GetUserCommand(new User.UserId(id)))
-                             .map(ResponseEntity::ok)
-                             .orElseGet(() -> ResponseEntity.notFound().build());
+        return getUserQuery.getUser(new GetUserQuery.UserQuery(new User.UserId(id)))
+                           .map(ResponseEntity::ok)
+                           .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")

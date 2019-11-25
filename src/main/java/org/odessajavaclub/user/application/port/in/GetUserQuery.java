@@ -6,12 +6,12 @@ import org.odessajavaclub.user.domain.User;
 
 import java.util.Optional;
 
-public interface GetUserUseCase {
+public interface GetUserQuery {
 
-    Optional<User> getUser(GetUserCommand getUserCommand);
+    Optional<User> getUser(UserQuery userQuery);
 
     @Value
-    class GetUserCommand {
+    class UserQuery {
 
         @NonNull
         private final User.UserId userId;

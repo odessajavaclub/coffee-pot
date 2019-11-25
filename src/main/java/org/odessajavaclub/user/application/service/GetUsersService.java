@@ -1,8 +1,8 @@
 package org.odessajavaclub.user.application.service;
 
 import lombok.RequiredArgsConstructor;
-import org.odessajavaclub.user.application.port.in.GetUserUseCase;
-import org.odessajavaclub.user.application.port.in.GetUsersUseCase;
+import org.odessajavaclub.user.application.port.in.GetUserQuery;
+import org.odessajavaclub.user.application.port.in.GetUsersQuery;
 import org.odessajavaclub.user.application.port.out.LoadUserPort;
 import org.odessajavaclub.user.application.port.out.LoadUsersPort;
 import org.odessajavaclub.user.domain.User;
@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-class GetUsersService implements GetUsersUseCase, GetUserUseCase {
+class GetUsersService implements GetUsersQuery, GetUserQuery {
 
     private final LoadUserPort loadUserPort;
 
@@ -25,7 +25,7 @@ class GetUsersService implements GetUsersUseCase, GetUserUseCase {
     }
 
     @Override
-    public Optional<User> getUser(GetUserCommand getUserCommand) {
-        return Optional.ofNullable(loadUserPort.loadUser(getUserCommand.getUserId()));
+    public Optional<User> getUser(UserQuery userQuery) {
+        return Optional.ofNullable(loadUserPort.loadUser(userQuery.getUserId()));
     }
 }
