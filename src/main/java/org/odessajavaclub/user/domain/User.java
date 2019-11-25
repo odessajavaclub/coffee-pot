@@ -4,23 +4,26 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Value;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Optional;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 public class User {
 
     private UserId id;
 
+    @NotNull
+    @NotBlank
     @Getter
-    @NonNull
     private String firstName;
 
+    @NotNull
+    @NotBlank
     @Getter
-    @NonNull
     private String lastName;
 
     @Getter
@@ -29,7 +32,7 @@ public class User {
     @Value
     public static class UserId {
 
-        @NonNull
+        @NotNull
         private Long value;
     }
 
