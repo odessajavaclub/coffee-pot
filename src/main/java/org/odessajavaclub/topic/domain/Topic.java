@@ -74,5 +74,16 @@ public class Topic {
         private Long value;
     }
 
+    public Topic() {
+    }
 
+
+    public static Topic from(Topic topic, TopicId topicId) {
+        Topic result = new Topic();
+        result.setId(topicId);
+        result.setTitle(topic.getTitle());
+        result.setEvent(topic.getEvent());
+        result.setType(topic.getType());
+        return result;
+    }
 }
