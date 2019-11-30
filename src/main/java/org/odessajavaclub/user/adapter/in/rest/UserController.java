@@ -60,7 +60,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    ResponseEntity<User> deleteUser(@PathVariable Long id) {
+    ResponseEntity deleteUser(@PathVariable Long id) {
         return deleteUserUseCase.deleteUser(new DeleteUserUseCase.DeleteUserCommand(new User.UserId(id)))
                ? ResponseEntity.noContent().build()
                : ResponseEntity.notFound().build();
@@ -76,14 +76,14 @@ public class UserController {
     }
 
     @PutMapping("/activate/{id}")
-    ResponseEntity<User> activateUser(@PathVariable Long id) {
+    ResponseEntity activateUser(@PathVariable Long id) {
         return activateUserUseCase.activateUser(new ActivateUserUseCase.ActivateUserCommand(new User.UserId(id)))
                ? ResponseEntity.ok().build()
                : ResponseEntity.notFound().build();
     }
 
     @PutMapping("/deactivate/{id}")
-    ResponseEntity<User> deactivate(@PathVariable Long id) {
+    ResponseEntity deactivate(@PathVariable Long id) {
         return deactivateUserUseCase.deactivateUser(new DeactivateUserUseCase.DeactivateUserCommand(new User.UserId(id)))
                ? ResponseEntity.ok().build()
                : ResponseEntity.notFound().build();
