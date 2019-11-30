@@ -4,7 +4,6 @@ import org.odessajavaclub.user.application.port.out.ActivateUserPort;
 import org.odessajavaclub.user.application.port.out.CreateUserPort;
 import org.odessajavaclub.user.application.port.out.DeactivateUserPort;
 import org.odessajavaclub.user.application.port.out.DeleteUserPort;
-import org.odessajavaclub.user.application.port.out.LoadUserPort;
 import org.odessajavaclub.user.application.port.out.LoadUsersPort;
 import org.odessajavaclub.user.application.port.out.UpdateUserPort;
 import org.odessajavaclub.user.domain.User;
@@ -20,7 +19,6 @@ import java.util.stream.Collectors;
 @Component
 public class UserMockRepository implements CreateUserPort,
                                            LoadUsersPort,
-                                           LoadUserPort,
                                            DeleteUserPort,
                                            UpdateUserPort,
                                            ActivateUserPort,

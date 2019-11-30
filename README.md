@@ -61,3 +61,24 @@ after this you will be redirected to request response.
 ## 4. Stop the app
 `docker-compose down`
 
+# Test
+
+## Users
+
+*Get all users*
+`http -a lohika_user@gmail.com:password123 GET http://localhost:8080/users`
+
+*Get a user by id*
+`http -a lohika_user@gmail.com:password123 GET http://localhost:8080/users/{userId}`
+
+*Create a user*
+`http -a lohika_user@gmail.com:password123 POST http://localhost:8080/users firstName=Maxim lastName=Sashkin`
+
+*Update a user*
+`http -a lohika_user@gmail.com:password123 PUT http://localhost:8080/users/{userId} firstName=MaximUpdated`
+
+*Activate a user*
+`http -a lohika_user@gmail.com:password123 PUT http://localhost:8080/users/activate/{userId}`
+
+*Deactivate a user*
+`http -a lohika_user@gmail.com:password123 PUT http://localhost:8080/users/deactivate/{userId}`

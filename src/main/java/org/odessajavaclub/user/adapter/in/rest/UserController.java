@@ -5,7 +5,6 @@ import org.odessajavaclub.user.application.port.in.ActivateUserUseCase;
 import org.odessajavaclub.user.application.port.in.CreateUserUseCase;
 import org.odessajavaclub.user.application.port.in.DeactivateUserUseCase;
 import org.odessajavaclub.user.application.port.in.DeleteUserUseCase;
-import org.odessajavaclub.user.application.port.in.GetUserQuery;
 import org.odessajavaclub.user.application.port.in.GetUsersQuery;
 import org.odessajavaclub.user.application.port.in.UpdateUserUseCase;
 import org.odessajavaclub.user.domain.User;
@@ -30,8 +29,6 @@ public class UserController {
 
     private final GetUsersQuery getUsersQuery;
 
-    private final GetUserQuery getUserQuery;
-
     private final DeleteUserUseCase deleteUserUseCase;
 
     private final UpdateUserUseCase updateUserUseCase;
@@ -54,9 +51,9 @@ public class UserController {
 
     @GetMapping("/{id}")
     ResponseEntity<User> getUser(@PathVariable Long id) {
-        return getUserQuery.getUser(new GetUserQuery.UserQuery(new User.UserId(id)))
-                           .map(ResponseEntity::ok)
-                           .orElseGet(() -> ResponseEntity.notFound().build());
+        return getUsersQuery.getUser(new GetUsersQuery.UserQuery(new User.UserId(id)))
+                            .map(ResponseEntity::ok)
+                            .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")

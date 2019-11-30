@@ -7,4 +7,6 @@ import java.util.List;
 public interface LoadUsersPort {
 
     List<User> loadUsers();
+
+    User loadUser(User.UserId userId);
 }
