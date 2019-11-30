@@ -3,9 +3,11 @@ package org.odessajavaclub.user.adapter.in.rest;
 import lombok.Data;
 
 @Data
-class UserDto {
+class UpdateUserDto {
 
     private String firstName;
 
     private String lastName;
+
+    private String email;
 }

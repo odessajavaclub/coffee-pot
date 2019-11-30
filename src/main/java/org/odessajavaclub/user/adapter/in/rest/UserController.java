@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -38,9 +39,13 @@ public class UserController {
     private final DeactivateUserUseCase deactivateUserUseCase;
 
     @PostMapping
-    User createUser(@RequestBody UserDto user) {
+    User createUser(@Valid @RequestBody CreateUserDto user) {
+        UserDtoMapper userDtoMapper = new UserDtoMapper();
         CreateUserUseCase.CreateUserCommand command = new CreateUserUseCase.CreateUserCommand(user.getFirstName(),
-                                                                                              user.getLastName());
+                                                                                              user.getLastName(),
+                                                                                              user.getEmail(),
+                                                                                              user.getPassword(),
+                                                                                              userDtoMapper.mapRole(user.getRole()));
         return createUserUseCase.createActivatedUser(command);
     }
 
@@ -64,10 +69,11 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody UserDto user) {
+    ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody UpdateUserDto user) {
         return updateUserUseCase.updateUser(new UpdateUserUseCase.UpdateUserCommand(new User.UserId(id),
                                                                                     user.getFirstName(),
-                                                                                    user.getLastName()))
+                                                                                    user.getLastName(),
+                                                                                    user.getEmail()))
                                 .map(ResponseEntity::ok)
                                 .orElseGet(() -> ResponseEntity.notFound().build());
     }

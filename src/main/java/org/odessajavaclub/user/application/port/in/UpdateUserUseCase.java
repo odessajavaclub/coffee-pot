@@ -23,12 +23,16 @@ public interface UpdateUserUseCase {
 
         private final String newLastName;
 
+        private final String newEmail;
+
         public UpdateUserCommand(User.UserId id,
                                  String newFirstName,
-                                 String newLastName) {
+                                 String newLastName,
+                                 String newEmail) {
             this.id = id;
             this.newFirstName = newFirstName;
             this.newLastName = newLastName;
+            this.newEmail = newEmail;
             this.validateSelf();
         }
     }

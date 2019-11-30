@@ -28,7 +28,10 @@ class UpdateUserService implements UpdateUserUseCase {
             return Optional.empty();
         }
 
-        User updatedUser = User.from(existingUser, command.getNewFirstName(), command.getNewLastName());
+        User updatedUser = User.from(existingUser,
+                                     command.getNewFirstName(),
+                                     command.getNewLastName(),
+                                     command.getNewEmail());
 
         return Optional.ofNullable(updateUserPort.updateUser(updatedUser));
     }

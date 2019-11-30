@@ -72,7 +72,7 @@ after this you will be redirected to request response.
 `http -a lohika_user@gmail.com:password123 GET http://localhost:8080/users/{userId}`
 
 *Create a user*
-`http -a lohika_user@gmail.com:password123 POST http://localhost:8080/users firstName=Maxim lastName=Sashkin`
+`http -a lohika_user@gmail.com:password123 POST http://localhost:8080/users firstName=Maxim lastName=Sashkin email=max@email.com password=pass123 role=admin`
 
 *Update a user*
 `http -a lohika_user@gmail.com:password123 PUT http://localhost:8080/users/{userId} firstName=MaximUpdated`
