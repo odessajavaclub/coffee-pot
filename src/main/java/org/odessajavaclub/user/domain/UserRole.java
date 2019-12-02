@@ -14,6 +14,10 @@ public enum UserRole {
         this.name = name;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public static UserRole fromName(String name) {
         return Arrays.stream(UserRole.values())
                      .filter(ur -> ur.name.equals(name))

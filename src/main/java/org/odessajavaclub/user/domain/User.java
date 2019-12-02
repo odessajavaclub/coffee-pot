@@ -34,6 +34,7 @@ public class User {
     private String password;
 
     @NotNull
+    @Getter
     private UserRole role;
 
     @Getter

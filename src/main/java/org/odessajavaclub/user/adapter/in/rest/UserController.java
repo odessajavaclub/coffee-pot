@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,20 +39,23 @@ public class UserController {
 
     private final DeactivateUserUseCase deactivateUserUseCase;
 
+    private final UserDtoMapper userDtoMapper = new UserDtoMapper();
+
     @PostMapping
     User createUser(@Valid @RequestBody CreateUserDto user) {
-        UserDtoMapper userDtoMapper = new UserDtoMapper();
         CreateUserUseCase.CreateUserCommand command = new CreateUserUseCase.CreateUserCommand(user.getFirstName(),
                                                                                               user.getLastName(),
                                                                                               user.getEmail(),
                                                                                               user.getPassword(),
-                                                                                              userDtoMapper.mapRole(user.getRole()));
+                                                                                              userDtoMapper.mapStringRoleToUserRole(user.getRole()));
         return createUserUseCase.createActivatedUser(command);
     }
 
     @GetMapping
-    List<User> getUsers() {
-        return getUsersQuery.getUsers();
+    List<GetUserDto> getUsers() {
+        return getUsersQuery.getUsers().stream()
+                            .map(userDtoMapper::mapUserToGetUserDto)
+                            .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
@@ -62,7 +66,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    ResponseEntity deleteUser(@PathVariable Long id) {
+    ResponseEntity<?> deleteUser(@PathVariable Long id) {
         return deleteUserUseCase.deleteUser(new DeleteUserUseCase.DeleteUserCommand(new User.UserId(id)))
                ? ResponseEntity.noContent().build()
                : ResponseEntity.notFound().build();
@@ -79,14 +83,14 @@ public class UserController {
     }
 
     @PutMapping("/activate/{id}")
-    ResponseEntity activateUser(@PathVariable Long id) {
+    ResponseEntity<?> activateUser(@PathVariable Long id) {
         return activateUserUseCase.activateUser(new ActivateUserUseCase.ActivateUserCommand(new User.UserId(id)))
                ? ResponseEntity.ok().build()
                : ResponseEntity.notFound().build();
     }
 
     @PutMapping("/deactivate/{id}")
-    ResponseEntity deactivate(@PathVariable Long id) {
+    ResponseEntity<?> deactivate(@PathVariable Long id) {
         return deactivateUserUseCase.deactivateUser(new DeactivateUserUseCase.DeactivateUserCommand(new User.UserId(id)))
                ? ResponseEntity.ok().build()
                : ResponseEntity.notFound().build();
