@@ -15,6 +15,8 @@ class UserDtoMapper {
                                   .orElse(0L),
                               user.getFirstName(),
                               user.getLastName(),
-                              user.getRole().getName());
+                              user.getEmail(),
+                              user.getRole().getName(),
+                              user.isDeactivated());
     }
 }

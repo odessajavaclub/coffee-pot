@@ -42,13 +42,14 @@ public class UserController {
     private final UserDtoMapper userDtoMapper = new UserDtoMapper();
 
     @PostMapping
-    User createUser(@Valid @RequestBody CreateUserDto user) {
+    GetUserDto createUser(@Valid @RequestBody CreateUserDto user) {
         CreateUserUseCase.CreateUserCommand command = new CreateUserUseCase.CreateUserCommand(user.getFirstName(),
                                                                                               user.getLastName(),
                                                                                               user.getEmail(),
                                                                                               user.getPassword(),
-                                                                                              userDtoMapper.mapStringRoleToUserRole(user.getRole()));
-        return createUserUseCase.createActivatedUser(command);
+                                                                                              userDtoMapper.mapStringRoleToUserRole(
+                                                                                                      user.getRole()));
+        return userDtoMapper.mapUserToGetUserDto(createUserUseCase.createActivatedUser(command));
     }
 
     @GetMapping
@@ -59,8 +60,9 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    ResponseEntity<User> getUser(@PathVariable Long id) {
+    ResponseEntity<GetUserDto> getUser(@PathVariable Long id) {
         return getUsersQuery.getUser(new GetUsersQuery.UserQuery(new User.UserId(id)))
+                            .map(userDtoMapper::mapUserToGetUserDto)
                             .map(ResponseEntity::ok)
                             .orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -73,11 +75,12 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody UpdateUserDto user) {
+    ResponseEntity<GetUserDto> updateUser(@PathVariable Long id, @RequestBody UpdateUserDto user) {
         return updateUserUseCase.updateUser(new UpdateUserUseCase.UpdateUserCommand(new User.UserId(id),
                                                                                     user.getFirstName(),
                                                                                     user.getLastName(),
                                                                                     user.getEmail()))
+                                .map(userDtoMapper::mapUserToGetUserDto)
                                 .map(ResponseEntity::ok)
                                 .orElseGet(() -> ResponseEntity.notFound().build());
     }

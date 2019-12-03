@@ -19,10 +19,13 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -66,10 +69,36 @@ class UserControllerTest {
     @Test
     @WithMockUser(username = USER_NAME)
     void testCreateUserShouldReturnOkIfUserIsOk() throws Exception {
+        when(createUserUseCase.createActivatedUser(new CreateUserUseCase.CreateUserCommand("Maxim",
+                                                                                           "Sashkin",
+                                                                                           "max@email.com",
+                                                                                           "pass123",
+                                                                                           UserRole.ADMIN)))
+                .thenReturn(User.withId(new User.UserId(1L),
+                                        "Maxim",
+                                        "Sashkin",
+                                        "max@email.com",
+                                        "pass123",
+                                        UserRole.ADMIN,
+                                        false));
+
         mockMvc.perform(post("/users/")
                                 .header("Content-Type", "application/json")
-                                .content("{ \"firstName\": \"Maxim\", \"lastName\": \"Sashkin\", \"email\": \"max@email.com\", \"password\": \"pass123\", \"role\": \"admin\" }"))
-               .andExpect(status().isOk());
+                                .content("{\n" +
+                                                 "  \"firstName\": \"Maxim\",\n" +
+                                                 "  \"lastName\": \"Sashkin\",\n" +
+                                                 "  \"email\": \"max@email.com\",\n" +
+                                                 "  \"password\": \"pass123\",\n" +
+                                                 "  \"role\": \"admin\"\n" +
+                                                 "}"))
+               .andExpect(status().isOk())
+               .andExpect(content().json("{\n" +
+                                                 "  \"firstName\": \"Maxim\",\n" +
+                                                 "  \"lastName\": \"Sashkin\",\n" +
+                                                 "  \"email\": \"max@email.com\",\n" +
+                                                 "  \"role\": \"admin\",\n" +
+                                                 "  \"deactivated\": false\n" +
+                                                 "}"));
     }
 
     @Test
@@ -77,7 +106,14 @@ class UserControllerTest {
     void testCreateUserShouldReturnBadRequestIfFirstNameIsBlank() throws Exception {
         mockMvc.perform(post("/users/")
                                 .header("Content-Type", "application/json")
-                                .content("{ \"firstName\": \"  \", \"lastName\": \"Sashkin\", \"email\": \"max@email.com\", \"password\": \"pass123\", \"role\": \"admin\" }"))
+                                .content(
+                                        "{\n" +
+                                                "  \"firstName\": \"  \",\n" +
+                                                "  \"lastName\": \"Sashkin\",\n" +
+                                                "  \"email\": \"max@email.com\",\n" +
+                                                "  \"password\": \"pass123\",\n" +
+                                                "  \"role\": \"admin\"\n" +
+                                                "}"))
                .andExpect(status().isBadRequest());
     }
 
@@ -86,7 +122,14 @@ class UserControllerTest {
     void testCreateUserShouldReturnBadRequestIfLastNameIsBlank() throws Exception {
         mockMvc.perform(post("/users/")
                                 .header("Content-Type", "application/json")
-                                .content("{ \"firstName\": \"Maxim\", \"lastName\": \" \", \"email\": \"max@email.com\", \"password\": \"pass123\", \"role\": \"admin\" }"))
+                                .content(
+                                        "{\n" +
+                                                "  \"firstName\": \"Maxim\",\n" +
+                                                "  \"lastName\": \" \",\n" +
+                                                "  \"email\": \"max@email.com\",\n" +
+                                                "  \"password\": \"pass123\",\n" +
+                                                "  \"role\": \"admin\"\n" +
+                                                "}"))
                .andExpect(status().isBadRequest());
     }
 
@@ -95,7 +138,14 @@ class UserControllerTest {
     void testCreateUserShouldReturnBadRequestIfPasswordIsBlank() throws Exception {
         mockMvc.perform(post("/users/")
                                 .header("Content-Type", "application/json")
-                                .content("{ \"firstName\": \"Maxim\", \"lastName\": \"Sashkin\", \"email\": \"max@email.com\", \"password\": \" \", \"role\": \"admin\" }"))
+                                .content(
+                                        "{\n" +
+                                                "  \"firstName\": \"Maxim\",\n" +
+                                                "  \"lastName\": \"Sashkin\",\n" +
+                                                "  \"email\": \"max@email.com\",\n" +
+                                                "  \"password\": \" \",\n" +
+                                                "  \"role\": \"admin\"\n" +
+                                                "}"))
                .andExpect(status().isBadRequest());
     }
 
@@ -104,7 +154,14 @@ class UserControllerTest {
     void testCreateUserShouldReturnBadRequestIfRoleIsBlank() throws Exception {
         mockMvc.perform(post("/users/")
                                 .header("Content-Type", "application/json")
-                                .content("{ \"firstName\": \"Maxim\", \"lastName\": \"Sashkin\", \"email\": \"max@email.com\", \"password\": \"pass123\", \"role\": \" \" }"))
+                                .content(
+                                        "{\n" +
+                                                "  \"firstName\": \"Maxim\",\n" +
+                                                "  \"lastName\": \"Sashkin\",\n" +
+                                                "  \"email\": \"max@email.com\",\n" +
+                                                "  \"password\": \"pass123\",\n" +
+                                                "  \"role\": \" \"\n" +
+                                                "}"))
                .andExpect(status().isBadRequest());
     }
 
@@ -113,13 +170,20 @@ class UserControllerTest {
     void testCreateUserShouldReturnBadRequestIfEmailIsNotValid() throws Exception {
         mockMvc.perform(post("/users/")
                                 .header("Content-Type", "application/json")
-                                .content("{ \"firstName\": \"Maxim\", \"lastName\": \"Sashkin\", \"email\": \"wrongemail\", \"password\": \"pass123\", \"role\": \"admin\" }"))
+                                .content(
+                                        "{\n" +
+                                                "  \"firstName\": \"Maxim\",\n" +
+                                                "  \"lastName\": \"Sashkin\",\n" +
+                                                "  \"email\": \"wrongemail\",\n" +
+                                                "  \"password\": \"pass123\",\n" +
+                                                "  \"role\": \"admin\"\n" +
+                                                "}"))
                .andExpect(status().isBadRequest());
     }
 
     @Test
     @WithMockUser(username = USER_NAME)
-    void testGetUsers() throws Exception {
+    void testGetUsersIfUsersExist() throws Exception {
         when(getUsersQuery.getUsers()).thenReturn(List.of(User.withId(new User.UserId(1L),
                                                                       "First name 1",
                                                                       "Last name 1",
@@ -134,29 +198,183 @@ class UserControllerTest {
                                                                       "pass2",
                                                                       UserRole.USER,
                                                                       true)));
+
         mockMvc.perform(get("/users/")
                                 .header("Content-Type", "application/json"))
                .andExpect(status().isOk())
-               .andExpect(content().json("[{\"id\":1,\"firstName\":\"First name 1\",\"lastName\":\"Last name 1\",\"role\":\"admin\"},{\"id\":2,\"firstName\":\"First name 2\",\"lastName\":\"Last name 2\",\"role\":\"user\"}]"));
+               .andExpect(content().json(
+                       "[\n" +
+                               "  {\n" +
+                               "    \"id\": 1,\n" +
+                               "    \"firstName\": \"First name 1\",\n" +
+                               "    \"lastName\": \"Last name 1\",\n" +
+                               "    \"email\": \"one@email.com\",\n" +
+                               "    \"role\": \"admin\",\n" +
+                               "    \"deactivated\": false\n" +
+                               "  " +
+                               "},\n" +
+                               "  {\n" +
+                               "    \"id\": 2,\n" +
+                               "    \"firstName\": \"First name 2\",\n" +
+                               "    \"lastName\": \"Last name 2\",\n" +
+                               "    \"email\": \"two@email.com\",\n" +
+                               "    \"role\": \"user\",\n" +
+                               "    \"deactivated\": true\n" +
+                               "  }\n" +
+                               "]"));
     }
 
     @Test
-    void testGetUser() {
+    @WithMockUser(username = USER_NAME)
+    void testGetUserIfUserExists() throws Exception {
+        when(getUsersQuery.getUser(new GetUsersQuery.UserQuery(new User.UserId(666L))))
+                .thenReturn(Optional.of(User.withId(new User.UserId(666L),
+                                                    "John",
+                                                    "Johnovich",
+                                                    "john@email.com",
+                                                    "pass1",
+                                                    UserRole.USER,
+                                                    false)));
+
+        mockMvc.perform(get("/users/666")
+                                .header("Content-Type", "application/json"))
+               .andExpect(status().isOk())
+               .andExpect(content().json(
+                       "{\n" +
+                               "  \"id\": 666,\n" +
+                               "  \"firstName\": \"John\",\n" +
+                               "  \"lastName\": \"Johnovich\",\n" +
+                               "  \"email\": \"john@email.com\",\n" +
+                               "  \"role\": \"user\",\n" +
+                               "  \"deactivated\": false\n" +
+                               "}"));
     }
 
     @Test
-    void testDeleteUser() {
+    @WithMockUser(username = USER_NAME)
+    void testGetUserIfUserDoesNotExist() throws Exception {
+        when(getUsersQuery.getUser(new GetUsersQuery.UserQuery(new User.UserId(666L))))
+                .thenReturn(Optional.empty());
+
+        mockMvc.perform(get("/users/666")
+                                .header("Content-Type", "application/json"))
+               .andExpect(status().isNotFound());
     }
 
     @Test
-    void testUpdateUser() {
+    @WithMockUser(username = USER_NAME)
+    void testDeleteUserIfUserExists() throws Exception {
+        when(deleteUserUseCase.deleteUser(new DeleteUserUseCase.DeleteUserCommand(new User.UserId(777L))))
+                .thenReturn(true);
+
+        mockMvc.perform(delete("/users/777")
+                                .header("Content-Type", "application/json"))
+               .andExpect(status().isNoContent());
     }
 
     @Test
-    void testActivateUser() {
+    @WithMockUser(username = USER_NAME)
+    void testDeleteUserIfUserDoesNotExist() throws Exception {
+        when(deleteUserUseCase.deleteUser(new DeleteUserUseCase.DeleteUserCommand(new User.UserId(777L))))
+                .thenReturn(false);
+
+        mockMvc.perform(delete("/users/777")
+                                .header("Content-Type", "application/json"))
+               .andExpect(status().isNotFound());
     }
 
     @Test
-    void testDeactivate() {
+    @WithMockUser(username = USER_NAME)
+    void testUpdateUserIfUserExists() throws Exception {
+        when(updateUserUseCase.updateUser(new UpdateUserUseCase.UpdateUserCommand(new User.UserId(888L),
+                                                                                  "New First Name",
+                                                                                  "New Last Name",
+                                                                                  "new@email.com")))
+                .thenReturn(Optional.of(User.withId(new User.UserId(888L),
+                                                    "New First Name",
+                                                    "New Last Name",
+                                                    "new@email.com",
+                                                    "pass1",
+                                                    UserRole.USER,
+                                                    false)));
+
+        mockMvc.perform(put("/users/888")
+                                .header("Content-Type", "application/json")
+                                .content(
+                                        "{\n" +
+                                                "  \"firstName\": \"New First Name\",\n" +
+                                                "  \"lastName\": \"New Last Name\",\n" +
+                                                "  \"email\": \"new@email.com\"\n" +
+                                                "}"))
+               .andExpect(status().isOk())
+               .andExpect(content().json(
+                       "{\n" +
+                               "  \"firstName\": \"New First Name" +
+                               "\",\n" +
+                               "  \"lastName\": \"New Last Name\",\n" +
+                               "  \"email\": \"new@email.com\",\n" +
+                               "  \"role\": \"user\",\n" +
+                               "  \"deactivated\": false\n" +
+                               "}"));
+    }
+
+    @Test
+    @WithMockUser(username = USER_NAME)
+    void testUpdateUserIfUserDoesNotExist() throws Exception {
+        when(updateUserUseCase.updateUser(new UpdateUserUseCase.UpdateUserCommand(new User.UserId(888L),
+                                                                                  "New First Name",
+                                                                                  "New Last Name",
+                                                                                  "new@email.com")))
+                .thenReturn(Optional.empty());
+
+        mockMvc.perform(put("/users/888")
+                                .header("Content-Type", "application/json")
+                                .content(
+                                        "{\n" +
+                                                "  \"firstName\": \"New First Name\",\n" +
+                                                "  \"lastName\": \"New Last Name\",\n" +
+                                                "  \"email\": \"new@email.com\"\n" +
+                                                "}"))
+               .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @WithMockUser(username = USER_NAME)
+    void testActivateUserIfUserExists() throws Exception {
+        when(activateUserUseCase.activateUser(new ActivateUserUseCase.ActivateUserCommand(new User.UserId(123L))))
+                .thenReturn(true);
+
+        mockMvc.perform(put("/users/activate/123"))
+               .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(username = USER_NAME)
+    void testActivateUserIfUserDoesNotExist() throws Exception {
+        when(activateUserUseCase.activateUser(new ActivateUserUseCase.ActivateUserCommand(new User.UserId(123L))))
+                .thenReturn(false);
+
+        mockMvc.perform(put("/users/activate/123"))
+               .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @WithMockUser(username = USER_NAME)
+    void testDeactivateUserIfUserExists() throws Exception {
+        when(deactivateUserUseCase.deactivateUser(new DeactivateUserUseCase.DeactivateUserCommand(new User.UserId(567L))))
+                .thenReturn(true);
+
+        mockMvc.perform(put("/users/deactivate/567"))
+               .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(username = USER_NAME)
+    void testDeactivateUserIfUserDoesNotExist() throws Exception {
+        when(deactivateUserUseCase.deactivateUser(new DeactivateUserUseCase.DeactivateUserCommand(new User.UserId(567L))))
+                .thenReturn(false);
+
+        mockMvc.perform(put("/users/deactivate/567"))
+               .andExpect(status().isNotFound());
     }
 }

@@ -11,5 +11,9 @@ public class GetUserDto {
 
     private final String lastName;
 
+    private final String email;
+
     private final String role;
+
+    private final boolean deactivated;
 }
