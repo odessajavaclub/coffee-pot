@@ -1,6 +1,20 @@
 # Coffee-pot
-## Task
-Add description here
+
+This is a simple application, which implements a domain-centric "Hexagonal" approach and demonstrates [Microservice Architecture Pattern](http://martinfowler.com/microservices/) using Spring Boot.
+
+## Phase 0
+
+In one single repo need to implement next items:
+- Domain-centric "Hexagonal" approach for each domain
+- Implement JPA (h4) as OUT
+- Add CRUD operations via REST (pagination) as IN
+- Add Swagger
+- Add simple event bus via Spring Core events as IN
+- Add unit and integration tests
+
+## Phase 1
+
+TBD
 
 # Launch Instructions
 
@@ -18,8 +32,7 @@ Add description here
 
 **What happens:**
 
-1. Starts PostgreSQL and waits up to 15 seconds for it to finish ([using wait-for-it]
-2. Starts Spring boot application which populates database with some test data
+1. Starts Spring boot application which populates database with some test data
 
 ## 3. Try it
 
