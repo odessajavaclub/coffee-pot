@@ -13,3 +13,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     - Create "attachment" module
 
 ### Changed
+- ISSUE-18 ([#](https://github.com/odessajavaclub/coffee-pot/pull/19))
+    - Add common changes
+
