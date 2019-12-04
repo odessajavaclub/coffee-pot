@@ -30,12 +30,15 @@ public class CoffeePotSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers("/").hasRole("USER")
+        http
+                .httpBasic()
+                .and()
+                .authorizeRequests()
+                .antMatchers("/**").hasRole("USER")
                 .anyRequest()
                 .authenticated()
                 .and()
-                .formLogin()
-                .permitAll();
+                .csrf().disable()
+                .formLogin().permitAll();
     }
 }
