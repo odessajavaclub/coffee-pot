@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased](https://github.com/odessajavaclub/coffee-pot/compare/master...HEAD)
 ### Added
 
+- ISSUE-20 ([#21](https://github.com/odessajavaclub/coffee-pot/pull/21))
+    - Update readme, add phase0 description 
 - ISSUE-6 ([#13](https://github.com/odessajavaclub/coffee-pot/pull/13))
     - Create "user" module
 - ISSUE-7 ([#](https://github.com/odessajavaclub/coffee-pot/pull/10))
