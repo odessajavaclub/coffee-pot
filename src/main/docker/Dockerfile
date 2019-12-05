@@ -1,4 +1,4 @@
-FROM openjdk:8-jre
+FROM openjdk:11-jre
 WORKDIR /coffee_pot
 VOLUME ["/coffee_pot"]
 COPY maven/coffee_pot.jar coffee_pot.jar
