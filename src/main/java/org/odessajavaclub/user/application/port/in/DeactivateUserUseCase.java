@@ -6,10 +6,11 @@ import org.odessajavaclub.shared.SelfValidating;
 import org.odessajavaclub.user.domain.User;
 
 import javax.validation.constraints.NotNull;
+import java.util.Optional;
 
 public interface DeactivateUserUseCase {
 
-    boolean deactivateUser(DeactivateUserCommand command);
+    Optional<User> deactivateUser(DeactivateUserCommand command);
 
     @Value
     @EqualsAndHashCode(callSuper = false)

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -39,7 +40,7 @@ public class UserController {
 
     private final DeactivateUserUseCase deactivateUserUseCase;
 
-    private final UserDtoMapper userDtoMapper = new UserDtoMapper();
+    private final UserDtoMapper userDtoMapper;
 
     @PostMapping
     GetUserDto createUser(@Valid @RequestBody CreateUserDto user) {
@@ -47,22 +48,35 @@ public class UserController {
                                                                                               user.getLastName(),
                                                                                               user.getEmail(),
                                                                                               user.getPassword(),
-                                                                                              userDtoMapper.mapStringRoleToUserRole(
+                                                                                              userDtoMapper.toUserRole(
                                                                                                       user.getRole()));
-        return userDtoMapper.mapUserToGetUserDto(createUserUseCase.createActivatedUser(command));
+        return userDtoMapper.toGetUserDto(createUserUseCase.createActiveUser(command));
     }
 
     @GetMapping
-    List<GetUserDto> getUsers() {
-        return getUsersQuery.getUsers().stream()
-                            .map(userDtoMapper::mapUserToGetUserDto)
-                            .collect(Collectors.toList());
+    List<GetUserDto> getUsers(@RequestParam(required = false) Boolean active) {
+        if (active == null) {
+            return getUsersQuery.getAllUsers()
+                                .stream()
+                                .map(userDtoMapper::toGetUserDto)
+                                .collect(Collectors.toList());
+        } else if (active) {
+            return getUsersQuery.getActiveUsers()
+                                .stream()
+                                .map(userDtoMapper::toGetUserDto)
+                                .collect(Collectors.toList());
+        } else {
+            return getUsersQuery.getInactiveUsers()
+                                .stream()
+                                .map(userDtoMapper::toGetUserDto)
+                                .collect(Collectors.toList());
+        }
     }
 
     @GetMapping("/{id}")
     ResponseEntity<GetUserDto> getUser(@PathVariable Long id) {
-        return getUsersQuery.getUser(new GetUsersQuery.UserQuery(new User.UserId(id)))
-                            .map(userDtoMapper::mapUserToGetUserDto)
+        return getUsersQuery.getUserById(new User.UserId(id))
+                            .map(userDtoMapper::toGetUserDto)
                             .map(ResponseEntity::ok)
                             .orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -75,12 +89,12 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    ResponseEntity<GetUserDto> updateUser(@PathVariable Long id, @RequestBody UpdateUserDto user) {
+    ResponseEntity<GetUserDto> updateUser(@PathVariable Long id, @Valid @RequestBody UpdateUserDto user) {
         return updateUserUseCase.updateUser(new UpdateUserUseCase.UpdateUserCommand(new User.UserId(id),
                                                                                     user.getFirstName(),
                                                                                     user.getLastName(),
                                                                                     user.getEmail()))
-                                .map(userDtoMapper::mapUserToGetUserDto)
+                                .map(userDtoMapper::toGetUserDto)
                                 .map(ResponseEntity::ok)
                                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -88,14 +102,16 @@ public class UserController {
     @PutMapping("/activate/{id}")
     ResponseEntity<?> activateUser(@PathVariable Long id) {
         return activateUserUseCase.activateUser(new ActivateUserUseCase.ActivateUserCommand(new User.UserId(id)))
-               ? ResponseEntity.ok().build()
-               : ResponseEntity.notFound().build();
+                                  .map(userDtoMapper::toGetUserDto)
+                                  .map(ResponseEntity::ok)
+                                  .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PutMapping("/deactivate/{id}")
-    ResponseEntity<?> deactivate(@PathVariable Long id) {
+    ResponseEntity<?> deactivateUser(@PathVariable Long id) {
         return deactivateUserUseCase.deactivateUser(new DeactivateUserUseCase.DeactivateUserCommand(new User.UserId(id)))
-               ? ResponseEntity.ok().build()
-               : ResponseEntity.notFound().build();
+                                    .map(userDtoMapper::toGetUserDto)
+                                    .map(ResponseEntity::ok)
+                                    .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

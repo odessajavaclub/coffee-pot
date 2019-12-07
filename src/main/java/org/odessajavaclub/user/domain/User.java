@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 import lombok.Value;
 
 import javax.validation.constraints.Email;
@@ -13,32 +14,28 @@ import java.util.Optional;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode(callSuper = false)
+@ToString
+@Getter
 public class User {
 
     private UserId id;
 
     @NotBlank
-    @Getter
     private String firstName;
 
     @NotBlank
-    @Getter
     private String lastName;
 
     @Email
-    @Getter
     private String email;
 
     @NotBlank
-    @Getter
     private String password;
 
     @NotNull
-    @Getter
     private UserRole role;
 
-    @Getter
-    private boolean isDeactivated;
+    private boolean active;
 
     @Value
     public static class UserId {
@@ -52,18 +49,19 @@ public class User {
                                  String email,
                                  String password,
                                  UserRole role,
-                                 boolean isDeactivated) {
-        return new User(null, firstName, lastName, email, password, role, isDeactivated);
+                                 boolean active) {
+        return new User(null, firstName, lastName, email, password, role, active);
     }
 
-    public static User withId(UserId userId,
+    public static User withId(Long id,
                               String firstName,
                               String lastName,
                               String email,
                               String password,
                               UserRole role,
-                              boolean isDeactivated) {
-        return new User(userId, firstName, lastName, email, password, role, isDeactivated);
+                              boolean active) {
+        UserId userId = id != null ? new UserId(id) : null;
+        return new User(userId, firstName, lastName, email, password, role, active);
     }
 
     public static User from(User user, String newFirstName, String newLastName, String newEmail) {
@@ -73,7 +71,7 @@ public class User {
                         newEmail != null ? newEmail : user.email,
                         user.password,
                         user.role,
-                        user.isDeactivated);
+                        user.active);
     }
 
     public static User from(User user, UserId userId) {
@@ -83,17 +81,17 @@ public class User {
                         user.email,
                         user.password,
                         user.role,
-                        user.isDeactivated);
+                        user.active);
     }
 
-    public static User from(User user, boolean isDeactivated) {
+    public static User from(User user, boolean active) {
         return new User(user.id,
                         user.firstName,
                         user.lastName,
                         user.email,
                         user.password,
                         user.role,
-                        isDeactivated);
+                        active);
     }
 
     public Optional<UserId> getId() {

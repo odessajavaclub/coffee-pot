@@ -16,12 +16,22 @@ class GetUsersService implements GetUsersQuery {
     private final LoadUsersPort loadUsersPort;
 
     @Override
-    public List<User> getUsers() {
-        return loadUsersPort.loadUsers();
+    public List<User> getAllUsers() {
+        return loadUsersPort.loadAllUsers();
     }
 
     @Override
-    public Optional<User> getUser(UserQuery userQuery) {
-        return Optional.ofNullable(loadUsersPort.loadUser(userQuery.getUserId()));
+    public List<User> getActiveUsers() {
+        return loadUsersPort.loadActiveUsers();
+    }
+
+    @Override
+    public List<User> getInactiveUsers() {
+        return loadUsersPort.loadInactiveUsers();
+    }
+
+    @Override
+    public Optional<User> getUserById(User.UserId userId) {
+        return loadUsersPort.loadUser(userId);
     }
 }

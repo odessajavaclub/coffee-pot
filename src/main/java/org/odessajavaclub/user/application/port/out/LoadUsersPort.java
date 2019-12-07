@@ -3,10 +3,15 @@ package org.odessajavaclub.user.application.port.out;
 import org.odessajavaclub.user.domain.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface LoadUsersPort {
 
-    List<User> loadUsers();
+    List<User> loadAllUsers();
 
-    User loadUser(User.UserId userId);
+    List<User> loadActiveUsers();
+
+    List<User> loadInactiveUsers();
+
+    Optional<User> loadUser(User.UserId userId);
 }

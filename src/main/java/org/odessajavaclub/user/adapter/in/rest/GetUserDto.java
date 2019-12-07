@@ -3,7 +3,7 @@ package org.odessajavaclub.user.adapter.in.rest;
 import lombok.Data;
 
 @Data
-public class GetUserDto {
+class GetUserDto {
 
     private final long id;
 
@@ -15,5 +15,5 @@ public class GetUserDto {
 
     private final String role;
 
-    private final boolean deactivated;
+    private final boolean active;
 }

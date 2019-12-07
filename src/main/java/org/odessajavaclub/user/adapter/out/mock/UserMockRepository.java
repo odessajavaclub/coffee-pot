@@ -1,13 +1,10 @@
-package org.odessajavaclub.user.adapter.out;
+package org.odessajavaclub.user.adapter.out.mock;
 
-import org.odessajavaclub.user.application.port.out.ActivateUserPort;
 import org.odessajavaclub.user.application.port.out.CreateUserPort;
-import org.odessajavaclub.user.application.port.out.DeactivateUserPort;
 import org.odessajavaclub.user.application.port.out.DeleteUserPort;
 import org.odessajavaclub.user.application.port.out.LoadUsersPort;
 import org.odessajavaclub.user.application.port.out.UpdateUserPort;
 import org.odessajavaclub.user.domain.User;
-import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,13 +13,11 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
-@Component
+//@Component
 public class UserMockRepository implements CreateUserPort,
                                            LoadUsersPort,
                                            DeleteUserPort,
-                                           UpdateUserPort,
-                                           ActivateUserPort,
-                                           DeactivateUserPort {
+                                           UpdateUserPort {
 
     private static AtomicLong id = new AtomicLong(1L);
 
@@ -35,7 +30,7 @@ public class UserMockRepository implements CreateUserPort,
     }
 
     @Override
-    public List<User> loadUsers() {
+    public List<User> loadAllUsers() {
         return users.entrySet()
                     .stream()
                     .map(e -> User.from(e.getValue(), new User.UserId(e.getKey())))
@@ -43,10 +38,27 @@ public class UserMockRepository implements CreateUserPort,
     }
 
     @Override
-    public User loadUser(User.UserId userId) {
+    public List<User> loadActiveUsers() {
+        return users.entrySet()
+                    .stream()
+                    .filter(e -> e.getValue().isActive())
+                    .map(e -> User.from(e.getValue(), new User.UserId(e.getKey())))
+                    .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<User> loadInactiveUsers() {
+        return users.entrySet()
+                    .stream()
+                    .filter(e -> !e.getValue().isActive())
+                    .map(e -> User.from(e.getValue(), new User.UserId(e.getKey())))
+                    .collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<User> loadUser(User.UserId userId) {
         return Optional.ofNullable(users.get(userId.getValue()))
-                       .map(u -> User.from(u, userId))
-                       .orElse(null);
+                       .map(u -> User.from(u, userId));
     }
 
     @Override
@@ -62,21 +74,5 @@ public class UserMockRepository implements CreateUserPort,
                            return updatedUser;
                        })
                        .orElse(null);
-    }
-
-    @Override
-    public boolean activateUser(User.UserId userId) {
-        return Optional.ofNullable(users.get(userId.getValue()))
-                       .map(user -> User.from(user, false))
-                       .map(user -> users.put(userId.getValue(), user))
-                       .isPresent();
-    }
-
-    @Override
-    public boolean deactivateUser(User.UserId userId) {
-        return Optional.ofNullable(users.get(userId.getValue()))
-                       .map(user -> User.from(user, true))
-                       .map(user -> users.put(userId.getValue(), user))
-                       .isPresent();
     }
 }

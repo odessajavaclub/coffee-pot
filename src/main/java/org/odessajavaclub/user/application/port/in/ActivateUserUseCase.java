@@ -6,10 +6,11 @@ import org.odessajavaclub.shared.SelfValidating;
 import org.odessajavaclub.user.domain.User;
 
 import javax.validation.constraints.NotNull;
+import java.util.Optional;
 
 public interface ActivateUserUseCase {
 
-    boolean activateUser(ActivateUserCommand command);
+    Optional<User> activateUser(ActivateUserCommand command);
 
     @Value
     @EqualsAndHashCode(callSuper = false)

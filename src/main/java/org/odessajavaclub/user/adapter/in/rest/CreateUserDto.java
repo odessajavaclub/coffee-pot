@@ -14,6 +14,7 @@ class CreateUserDto {
     @NotBlank
     private String lastName;
 
+    @NotBlank
     @Email
     private String email;
 

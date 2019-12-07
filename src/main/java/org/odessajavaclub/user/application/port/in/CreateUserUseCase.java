@@ -12,9 +12,9 @@ import javax.validation.constraints.NotNull;
 
 public interface CreateUserUseCase {
 
-    User createActivatedUser(CreateUserCommand command);
+    User createActiveUser(CreateUserCommand command);
 
-    User createDeactivatedUser(CreateUserCommand command);
+    User createInactiveUser(CreateUserCommand command);
 
     @Value
     @EqualsAndHashCode(callSuper = false)

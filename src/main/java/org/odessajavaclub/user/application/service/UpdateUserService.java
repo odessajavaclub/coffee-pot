@@ -22,17 +22,11 @@ class UpdateUserService implements UpdateUserUseCase {
     public Optional<User> updateUser(UpdateUserCommand command) {
         User.UserId userId = Objects.requireNonNull(command.getId(), "User id must not be null");
 
-        User existingUser = loadUserPort.loadUser(userId);
-        if (existingUser == null) {
-            //TODO: return from port Optional maybe?
-            return Optional.empty();
-        }
-
-        User updatedUser = User.from(existingUser,
-                                     command.getNewFirstName(),
-                                     command.getNewLastName(),
-                                     command.getNewEmail());
-
-        return Optional.ofNullable(updateUserPort.updateUser(updatedUser));
+        return loadUserPort.loadUser(userId)
+                           .map(existingUser -> User.from(existingUser,
+                                                          command.getNewFirstName(),
+                                                          command.getNewLastName(),
+                                                          command.getNewEmail()))
+                           .map(updateUserPort::updateUser);
     }
 }

@@ -1,22 +1,26 @@
 package org.odessajavaclub.user.adapter.in.rest;
 
+import lombok.NoArgsConstructor;
 import org.odessajavaclub.user.domain.User;
 import org.odessajavaclub.user.domain.UserRole;
 
-class UserDtoMapper {
+@NoArgsConstructor
+public class UserDtoMapper {
 
-    UserRole mapStringRoleToUserRole(String role) {
+    private static final long UNDEFINED_ID = -1L;
+
+    public UserRole toUserRole(String role) {
         return UserRole.fromName(role);
     }
 
-    GetUserDto mapUserToGetUserDto(User user) {
+    public GetUserDto toGetUserDto(User user) {
         return new GetUserDto(user.getId()
                                   .map(User.UserId::getValue)
-                                  .orElse(0L),
+                                  .orElse(UNDEFINED_ID),
                               user.getFirstName(),
                               user.getLastName(),
                               user.getEmail(),
                               user.getRole().getName(),
-                              user.isDeactivated());
+                              user.isActive());
     }
 }

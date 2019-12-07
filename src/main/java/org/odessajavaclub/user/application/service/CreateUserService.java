@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.odessajavaclub.user.application.port.in.CreateUserUseCase;
 import org.odessajavaclub.user.application.port.out.CreateUserPort;
 import org.odessajavaclub.user.domain.User;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -14,20 +13,19 @@ class CreateUserService implements CreateUserUseCase {
 
     private final CreateUserPort createUserPort;
 
-    // TODO: for testing purposes only
-    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final PasswordEncoder passwordEncoder;
 
     @Override
-    public User createActivatedUser(CreateUserCommand command) {
-        return createUser(command, false);
-    }
-
-    @Override
-    public User createDeactivatedUser(CreateUserCommand command) {
+    public User createActiveUser(CreateUserCommand command) {
         return createUser(command, true);
     }
 
-    private User createUser(CreateUserCommand command, boolean isDeactivated) {
+    @Override
+    public User createInactiveUser(CreateUserCommand command) {
+        return createUser(command, false);
+    }
+
+    private User createUser(CreateUserCommand command, boolean active) {
         checkFirstNameIsNotBlank(command);
         checkLastNameIsNotBlank(command);
         checkEmailIsNotBlank(command);
@@ -41,7 +39,7 @@ class CreateUserService implements CreateUserUseCase {
                                    command.getEmail(),
                                    encodedPassword,
                                    command.getRole(),
-                                   isDeactivated);
+                                   active);
 
         return createUserPort.createUser(user);
     }
