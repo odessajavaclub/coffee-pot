@@ -18,7 +18,7 @@ public class GetTopicService implements GetTopicsQuery {
 
     @Override
     public Optional<Topic> getTopic(Topic.TopicId topicId) {
-        return Optional.ofNullable(loadTopicPort.loadTopic(topicId));
+        return loadTopicPort.loadTopic(topicId);
     }
 
     @Override

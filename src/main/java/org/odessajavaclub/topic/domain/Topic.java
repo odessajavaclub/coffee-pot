@@ -15,7 +15,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Optional;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode
@@ -38,16 +38,6 @@ public class Topic {
     @NotNull
     @NotBlank
     @Setter
-    private String category;
-
-    @NotNull
-    @NotBlank
-    @Setter
-    private List<String> tags;
-
-    @NotNull
-    @NotBlank
-    @Setter
     private TopicType type = TopicType.STUDY;
 
     @NotNull
@@ -61,22 +51,14 @@ public class Topic {
     @Setter
     private TopicStatus status = TopicStatus.PENDING;
 
-    @Setter
-    private List<Integer> scores;
-
-    @Setter
-    private List<String> materials;
-
     @Value
     public static class TopicId {
-
         @NonNull
         private Long value;
     }
 
     public Topic() {
     }
-
 
     public static Topic from(Topic topic, TopicId topicId) {
         Topic result = new Topic();
@@ -85,5 +67,9 @@ public class Topic {
         result.setEvent(topic.getEvent());
         result.setType(topic.getType());
         return result;
+    }
+
+    public Optional<TopicId> getId() {
+        return Optional.ofNullable(this.id);
     }
 }

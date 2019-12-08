@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -19,26 +20,34 @@ import java.util.List;
 public class TopicController {
     private final CreateTopicUseCase createTopicUseCase;
     private final GetTopicsQuery topicsQuery;
+    private final TopicDtoMapper topicDtoMapper;
 
 
     @GetMapping("/topics")
-    List<Topic> listTopics() {
-        return topicsQuery.getTopics();
+    List<TopicDto> listTopics() {
+        return topicsQuery.getTopics()
+                .stream()
+                .map(topicDtoMapper::toGetTopicDto)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/topics/{id}")
-    ResponseEntity<Topic> listTopic(@PathVariable Long id) {
+    ResponseEntity<TopicDto> listTopic(@PathVariable Long id) {
         return topicsQuery.getTopic(new Topic.TopicId(id))
+                .map(topicDtoMapper::toGetTopicDto)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping("/topics")
-    ResponseEntity<Topic> createTopic(@RequestBody Topic topic) {
+    ResponseEntity<TopicDto> createTopic(@RequestBody Topic topic) {
         // a command uses for validation purposes
         CreateTopicUseCase.CreateTopicCommand command = new CreateTopicUseCase.CreateTopicCommand(topic);
         return createTopicUseCase.createTopic(command)
+                .map(topicDtoMapper::toGetTopicDto)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
+
+    //TODO: Add PUT and DELETE
 }
