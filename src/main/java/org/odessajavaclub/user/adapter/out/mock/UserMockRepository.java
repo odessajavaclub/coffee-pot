@@ -35,21 +35,22 @@ public class UserMockRepository implements CreateUserPort, LoadUsersPort, Delete
     }
 
     @Override
-    public List<User> loadActiveUsers() {
+    public List<User> loadAllUsers(int page, int size) {
+        return loadAllUsers();
+    }
+
+    @Override
+    public List<User> loadAllUsersByActive(boolean active) {
         return users.entrySet()
                     .stream()
-                    .filter(e -> e.getValue().isActive())
+                    .filter(e -> e.getValue().isActive() == active)
                     .map(e -> User.from(e.getValue(), new User.UserId(e.getKey())))
                     .collect(Collectors.toList());
     }
 
     @Override
-    public List<User> loadInactiveUsers() {
-        return users.entrySet()
-                    .stream()
-                    .filter(e -> !e.getValue().isActive())
-                    .map(e -> User.from(e.getValue(), new User.UserId(e.getKey())))
-                    .collect(Collectors.toList());
+    public List<User> loadAllUsersByActive(boolean active, int page, int size) {
+        return loadAllUsersByActive(active);
     }
 
     @Override

@@ -54,22 +54,34 @@ public class UserController {
     }
 
     @GetMapping
-    List<GetUserDto> getUsers(@RequestParam(required = false) Boolean active) {
+    List<GetUserDto> getUsers(@RequestParam(required = false) Boolean active,
+                              @RequestParam(required = false) Integer page,
+                              @RequestParam(required = false) Integer size
+    ) {
         if (active == null) {
-            return getUsersQuery.getAllUsers()
-                                .stream()
-                                .map(userDtoMapper::toGetUserDto)
-                                .collect(Collectors.toList());
-        } else if (active) {
-            return getUsersQuery.getActiveUsers()
-                                .stream()
-                                .map(userDtoMapper::toGetUserDto)
-                                .collect(Collectors.toList());
+            if (page != null && size != null) {
+                return getUsersQuery.getAllUsers(page, size)
+                                    .stream()
+                                    .map(userDtoMapper::toGetUserDto)
+                                    .collect(Collectors.toList());
+            } else {
+                return getUsersQuery.getAllUsers()
+                                    .stream()
+                                    .map(userDtoMapper::toGetUserDto)
+                                    .collect(Collectors.toList());
+            }
         } else {
-            return getUsersQuery.getInactiveUsers()
-                                .stream()
-                                .map(userDtoMapper::toGetUserDto)
-                                .collect(Collectors.toList());
+            if (page != null && size != null) {
+                return getUsersQuery.getAllUsersByActive(active, page, size)
+                                    .stream()
+                                    .map(userDtoMapper::toGetUserDto)
+                                    .collect(Collectors.toList());
+            } else {
+                return getUsersQuery.getAllUsersByActive(active)
+                                    .stream()
+                                    .map(userDtoMapper::toGetUserDto)
+                                    .collect(Collectors.toList());
+            }
         }
     }
 

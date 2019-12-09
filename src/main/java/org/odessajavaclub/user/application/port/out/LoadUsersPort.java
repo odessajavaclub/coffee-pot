@@ -9,9 +9,11 @@ public interface LoadUsersPort {
 
     List<User> loadAllUsers();
 
-    List<User> loadActiveUsers();
+    List<User> loadAllUsers(int page, int size);
 
-    List<User> loadInactiveUsers();
+    List<User> loadAllUsersByActive(boolean active);
+
+    List<User> loadAllUsersByActive(boolean active, int page, int size);
 
     Optional<User> loadUser(User.UserId userId);
 }

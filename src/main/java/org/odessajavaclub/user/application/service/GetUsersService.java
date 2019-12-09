@@ -21,13 +21,18 @@ class GetUsersService implements GetUsersQuery {
     }
 
     @Override
-    public List<User> getActiveUsers() {
-        return loadUsersPort.loadActiveUsers();
+    public List<User> getAllUsers(int page, int size) {
+        return loadUsersPort.loadAllUsers(page, size);
     }
 
     @Override
-    public List<User> getInactiveUsers() {
-        return loadUsersPort.loadInactiveUsers();
+    public List<User> getAllUsersByActive(boolean active) {
+        return loadUsersPort.loadAllUsersByActive(active);
+    }
+
+    @Override
+    public List<User> getAllUsersByActive(boolean active, int page, int size) {
+        return loadUsersPort.loadAllUsersByActive(active, page, size);
     }
 
     @Override

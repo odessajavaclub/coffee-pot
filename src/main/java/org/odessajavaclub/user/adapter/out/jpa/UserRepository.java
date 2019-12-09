@@ -6,6 +6,8 @@ import org.odessajavaclub.user.application.port.out.DeleteUserPort;
 import org.odessajavaclub.user.application.port.out.LoadUsersPort;
 import org.odessajavaclub.user.application.port.out.UpdateUserPort;
 import org.odessajavaclub.user.domain.User;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -46,16 +48,23 @@ public class UserRepository implements CreateUserPort, DeleteUserPort, LoadUsers
     }
 
     @Override
-    public List<User> loadActiveUsers() {
-        return userJpaRepository.findAllByActive(true)
+    public List<User> loadAllUsers(int page, int size) {
+        return StreamSupport.stream(userJpaRepository.findAll(PageRequest.of(page, size)).spliterator(), false)
+                            .map(userEntityMapper::toUser)
+                            .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<User> loadAllUsersByActive(boolean active) {
+        return userJpaRepository.findAllByActive(active, Pageable.unpaged())
                                 .stream()
                                 .map(userEntityMapper::toUser)
                                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<User> loadInactiveUsers() {
-        return userJpaRepository.findAllByActive(false)
+    public List<User> loadAllUsersByActive(boolean active, int page, int size) {
+        return userJpaRepository.findAllByActive(active, PageRequest.of(page, size))
                                 .stream()
                                 .map(userEntityMapper::toUser)
                                 .collect(Collectors.toList());

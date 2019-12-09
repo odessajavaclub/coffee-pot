@@ -33,19 +33,43 @@ class GetUsersServiceTest {
     }
 
     @Test
+    void getAllUsersPaged() {
+        List<User> users = List.of(mock(User.class), mock(User.class));
+        when(loadUsersPort.loadAllUsers(123, 456)).thenReturn(users);
+
+        assertEquals(users, getUsersService.getAllUsers(123, 456));
+    }
+
+    @Test
     void getActiveUsers() {
         List<User> users = List.of(mock(User.class), mock(User.class));
-        when(loadUsersPort.loadActiveUsers()).thenReturn(users);
+        when(loadUsersPort.loadAllUsersByActive(true)).thenReturn(users);
 
-        assertEquals(users, getUsersService.getActiveUsers());
+        assertEquals(users, getUsersService.getAllUsersByActive(true));
+    }
+
+    @Test
+    void getActiveUsersPaged() {
+        List<User> users = List.of(mock(User.class), mock(User.class));
+        when(loadUsersPort.loadAllUsersByActive(true, 123, 456)).thenReturn(users);
+
+        assertEquals(users, getUsersService.getAllUsersByActive(true, 123, 456));
     }
 
     @Test
     void getInactiveUsers() {
         List<User> users = List.of(mock(User.class), mock(User.class));
-        when(loadUsersPort.loadInactiveUsers()).thenReturn(users);
+        when(loadUsersPort.loadAllUsersByActive(false)).thenReturn(users);
 
-        assertEquals(users, getUsersService.getInactiveUsers());
+        assertEquals(users, getUsersService.getAllUsersByActive(false));
+    }
+
+    @Test
+    void getInactiveUsersPaged() {
+        List<User> users = List.of(mock(User.class), mock(User.class));
+        when(loadUsersPort.loadAllUsersByActive(false, 123, 456)).thenReturn(users);
+
+        assertEquals(users, getUsersService.getAllUsersByActive(false, 123, 456));
     }
 
     @Test

@@ -9,9 +9,11 @@ public interface GetUsersQuery {
 
     List<User> getAllUsers();
 
-    List<User> getActiveUsers();
+    List<User> getAllUsers(int page, int size);
 
-    List<User> getInactiveUsers();
+    List<User> getAllUsersByActive(boolean active);
+
+    List<User> getAllUsersByActive(boolean active, int page, int size);
 
     Optional<User> getUserById(User.UserId userId);
 }

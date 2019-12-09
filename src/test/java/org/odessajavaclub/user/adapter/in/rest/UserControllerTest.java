@@ -71,7 +71,7 @@ class UserControllerTest {
 
     @Test
     @WithMockUser(username = USER_NAME)
-    void testCreateUserShouldReturnOkIfUserIsOk() throws Exception {
+    void createUserShouldReturnOkIfUserIsOk() throws Exception {
         when(createUserUseCase.createActiveUser(new CreateUserUseCase.CreateUserCommand("Maxim",
                                                                                         "Sashkin",
                                                                                         "max@email.com",
@@ -106,7 +106,7 @@ class UserControllerTest {
 
     @Test
     @WithMockUser(username = USER_NAME)
-    void testCreateUserShouldReturnBadRequestIfFirstNameIsBlank() throws Exception {
+    void createUserShouldReturnBadRequestIfFirstNameIsBlank() throws Exception {
         mockMvc.perform(post("/users/")
                                 .header("Content-Type", "application/json")
                                 .content(
@@ -122,7 +122,7 @@ class UserControllerTest {
 
     @Test
     @WithMockUser(username = USER_NAME)
-    void testCreateUserShouldReturnBadRequestIfLastNameIsBlank() throws Exception {
+    void createUserShouldReturnBadRequestIfLastNameIsBlank() throws Exception {
         mockMvc.perform(post("/users/")
                                 .header("Content-Type", "application/json")
                                 .content(
@@ -138,7 +138,7 @@ class UserControllerTest {
 
     @Test
     @WithMockUser(username = USER_NAME)
-    void testCreateUserShouldReturnBadRequestIfPasswordIsBlank() throws Exception {
+    void createUserShouldReturnBadRequestIfPasswordIsBlank() throws Exception {
         mockMvc.perform(post("/users/")
                                 .header("Content-Type", "application/json")
                                 .content(
@@ -154,7 +154,7 @@ class UserControllerTest {
 
     @Test
     @WithMockUser(username = USER_NAME)
-    void testCreateUserShouldReturnBadRequestIfRoleIsBlank() throws Exception {
+    void createUserShouldReturnBadRequestIfRoleIsBlank() throws Exception {
         mockMvc.perform(post("/users/")
                                 .header("Content-Type", "application/json")
                                 .content(
@@ -170,7 +170,7 @@ class UserControllerTest {
 
     @Test
     @WithMockUser(username = USER_NAME)
-    void testCreateUserShouldReturnBadRequestIfEmailIsNotValid() throws Exception {
+    void createUserShouldReturnBadRequestIfEmailIsNotValid() throws Exception {
         mockMvc.perform(post("/users/")
                                 .header("Content-Type", "application/json")
                                 .content(
@@ -186,7 +186,7 @@ class UserControllerTest {
 
     @Test
     @WithMockUser(username = USER_NAME)
-    void testGetUsersIfUsersExist() throws Exception {
+    void getUsersIfUsersExist() throws Exception {
         when(getUsersQuery.getAllUsers()).thenReturn(List.of(User.withId(1L,
                                                                          "First name 1",
                                                                          "Last name 1",
@@ -228,7 +228,49 @@ class UserControllerTest {
 
     @Test
     @WithMockUser(username = USER_NAME)
-    void testGetUserIfUserExists() throws Exception {
+    void getUsersPagedIfUsersExist() throws Exception {
+        when(getUsersQuery.getAllUsers(1, 2)).thenReturn(List.of(User.withId(1L,
+                                                                             "First name 1",
+                                                                             "Last name 1",
+                                                                             "one@email.com",
+                                                                             "pass1",
+                                                                             UserRole.ADMIN,
+                                                                             true),
+                                                                 User.withId(2L,
+                                                                             "First name 2",
+                                                                             "Last name 2",
+                                                                             "two@email.com",
+                                                                             "pass2",
+                                                                             UserRole.USER,
+                                                                             false)));
+
+        mockMvc.perform(get("/users?page=1&size=2"))
+               .andExpect(status().isOk())
+               .andExpect(content().json(
+                       "[\n" +
+                               "  {\n" +
+                               "    \"id\": 1,\n" +
+                               "    \"firstName\": \"First name 1\",\n" +
+                               "    \"lastName\": \"Last name 1\",\n" +
+                               "    \"email\": \"one@email.com\",\n" +
+                               "    \"role\": \"admin\",\n" +
+                               "    \"active\": true\n" +
+                               "  " +
+                               "},\n" +
+                               "  {\n" +
+                               "    \"id\": 2,\n" +
+                               "    \"firstName\": \"First name 2\",\n" +
+                               "    \"lastName\": \"Last name 2\",\n" +
+                               "    \"email\": \"two@email.com\",\n" +
+                               "    \"role\": \"user\",\n" +
+                               "    \"active\": false\n" +
+                               "  }\n" +
+                               "]"));
+    }
+
+    @Test
+    @WithMockUser(username = USER_NAME)
+    void getUserIfUserExists() throws Exception {
         when(getUsersQuery.getUserById(new User.UserId(666L)))
                 .thenReturn(Optional.of(User.withId(666L,
                                                     "John",
@@ -253,7 +295,7 @@ class UserControllerTest {
 
     @Test
     @WithMockUser(username = USER_NAME)
-    void testGetUserIfUserDoesNotExist() throws Exception {
+    void getUserIfUserDoesNotExist() throws Exception {
         when(getUsersQuery.getUserById(new User.UserId(666L)))
                 .thenReturn(Optional.empty());
 
@@ -263,7 +305,7 @@ class UserControllerTest {
 
     @Test
     @WithMockUser(username = USER_NAME)
-    void testDeleteUserIfUserExists() throws Exception {
+    void deleteUserIfUserExists() throws Exception {
         when(deleteUserUseCase.deleteUser(new DeleteUserUseCase.DeleteUserCommand(new User.UserId(777L))))
                 .thenReturn(true);
 
@@ -273,7 +315,7 @@ class UserControllerTest {
 
     @Test
     @WithMockUser(username = USER_NAME)
-    void testDeleteUserIfUserDoesNotExist() throws Exception {
+    void deleteUserIfUserDoesNotExist() throws Exception {
         when(deleteUserUseCase.deleteUser(new DeleteUserUseCase.DeleteUserCommand(new User.UserId(777L))))
                 .thenReturn(false);
 
@@ -283,7 +325,7 @@ class UserControllerTest {
 
     @Test
     @WithMockUser(username = USER_NAME)
-    void testUpdateUserIfUserExists() throws Exception {
+    void updateUserIfUserExists() throws Exception {
         when(updateUserUseCase.updateUser(new UpdateUserUseCase.UpdateUserCommand(new User.UserId(888L),
                                                                                   "New First Name",
                                                                                   "New Last Name",
@@ -318,7 +360,7 @@ class UserControllerTest {
 
     @Test
     @WithMockUser(username = USER_NAME)
-    void testUpdateUserIfUserDoesNotExist() throws Exception {
+    void updateUserIfUserDoesNotExist() throws Exception {
         when(updateUserUseCase.updateUser(new UpdateUserUseCase.UpdateUserCommand(new User.UserId(888L),
                                                                                   "New First Name",
                                                                                   "New Last Name",
@@ -338,7 +380,7 @@ class UserControllerTest {
 
     @Test
     @WithMockUser(username = USER_NAME)
-    void testActivateUserIfUserExists() throws Exception {
+    void activateUserIfUserExists() throws Exception {
         when(activateUserUseCase.activateUser(new ActivateUserUseCase.ActivateUserCommand(new User.UserId(123L))))
                 .thenReturn(Optional.of(User.withId(123L,
                                                     "Max",
@@ -354,7 +396,7 @@ class UserControllerTest {
 
     @Test
     @WithMockUser(username = USER_NAME)
-    void testActivateUserIfUserDoesNotExist() throws Exception {
+    void activateUserIfUserDoesNotExist() throws Exception {
         when(activateUserUseCase.activateUser(new ActivateUserUseCase.ActivateUserCommand(new User.UserId(123L))))
                 .thenReturn(Optional.empty());
 
@@ -364,7 +406,7 @@ class UserControllerTest {
 
     @Test
     @WithMockUser(username = USER_NAME)
-    void testDeactivateUserIfUserExists() throws Exception {
+    void deactivateUserIfUserExists() throws Exception {
         when(deactivateUserUseCase.deactivateUser(new DeactivateUserUseCase.DeactivateUserCommand(new User.UserId(567L))))
                 .thenReturn(Optional.of(User.withId(567L,
                                                     "Max",
@@ -380,7 +422,7 @@ class UserControllerTest {
 
     @Test
     @WithMockUser(username = USER_NAME)
-    void testDeactivateUserIfUserDoesNotExist() throws Exception {
+    void deactivateUserIfUserDoesNotExist() throws Exception {
         when(deactivateUserUseCase.deactivateUser(new DeactivateUserUseCase.DeactivateUserCommand(new User.UserId(567L))))
                 .thenReturn(Optional.empty());
 
@@ -390,21 +432,21 @@ class UserControllerTest {
 
     @Test
     @WithMockUser(username = USER_NAME)
-    void testGetActiveUsersOnly() throws Exception {
-        when(getUsersQuery.getActiveUsers()).thenReturn(List.of(User.withId(1L,
-                                                                            "First name 1",
-                                                                            "Last name 1",
-                                                                            "one@email.com",
-                                                                            "pass1",
-                                                                            UserRole.ADMIN,
-                                                                            true),
-                                                                User.withId(2L,
-                                                                            "First name 2",
-                                                                            "Last name 2",
-                                                                            "two@email.com",
-                                                                            "pass2",
-                                                                            UserRole.USER,
-                                                                            true)));
+    void getActiveUsersOnly() throws Exception {
+        when(getUsersQuery.getAllUsersByActive(true)).thenReturn(List.of(User.withId(1L,
+                                                                                     "First name 1",
+                                                                                     "Last name 1",
+                                                                                     "one@email.com",
+                                                                                     "pass1",
+                                                                                     UserRole.ADMIN,
+                                                                                     true),
+                                                                         User.withId(2L,
+                                                                                     "First name 2",
+                                                                                     "Last name 2",
+                                                                                     "two@email.com",
+                                                                                     "pass2",
+                                                                                     UserRole.USER,
+                                                                                     true)));
 
         mockMvc.perform(get("/users?active=true"))
                .andExpect(status().isOk())
@@ -432,23 +474,107 @@ class UserControllerTest {
 
     @Test
     @WithMockUser(username = USER_NAME)
-    void testGetInactiveUsersOnly() throws Exception {
-        when(getUsersQuery.getInactiveUsers()).thenReturn(List.of(User.withId(1L,
-                                                                              "First name 1",
-                                                                              "Last name 1",
-                                                                              "one@email.com",
-                                                                              "pass1",
-                                                                              UserRole.ADMIN,
-                                                                              false),
-                                                                  User.withId(2L,
-                                                                              "First name 2",
-                                                                              "Last name 2",
-                                                                              "two@email.com",
-                                                                              "pass2",
-                                                                              UserRole.USER,
-                                                                              false)));
+    void getActiveUsersOnlyPaged() throws Exception {
+        when(getUsersQuery.getAllUsersByActive(true, 1, 2)).thenReturn(List.of(User.withId(1L,
+                                                                                           "First name 1",
+                                                                                           "Last name 1",
+                                                                                           "one@email.com",
+                                                                                           "pass1",
+                                                                                           UserRole.ADMIN,
+                                                                                           true),
+                                                                               User.withId(2L,
+                                                                                           "First name 2",
+                                                                                           "Last name 2",
+                                                                                           "two@email.com",
+                                                                                           "pass2",
+                                                                                           UserRole.USER,
+                                                                                           true)));
+
+        mockMvc.perform(get("/users?active=true&page=1&size=2"))
+               .andExpect(status().isOk())
+               .andExpect(content().json(
+                       "[\n" +
+                               "  {\n" +
+                               "    \"id\": 1,\n" +
+                               "    \"firstName\": \"First name 1\",\n" +
+                               "    \"lastName\": \"Last name 1\",\n" +
+                               "    \"email\": \"one@email.com\",\n" +
+                               "    \"role\": \"admin\",\n" +
+                               "    \"active\": true\n" +
+                               "  " +
+                               "},\n" +
+                               "  {\n" +
+                               "    \"id\": 2,\n" +
+                               "    \"firstName\": \"First name 2\",\n" +
+                               "    \"lastName\": \"Last name 2\",\n" +
+                               "    \"email\": \"two@email.com\",\n" +
+                               "    \"role\": \"user\",\n" +
+                               "    \"active\": true\n" +
+                               "  }\n" +
+                               "]"));
+    }
+
+    @Test
+    @WithMockUser(username = USER_NAME)
+    void getInactiveUsersOnly() throws Exception {
+        when(getUsersQuery.getAllUsersByActive(false)).thenReturn(List.of(User.withId(1L,
+                                                                                      "First name 1",
+                                                                                      "Last name 1",
+                                                                                      "one@email.com",
+                                                                                      "pass1",
+                                                                                      UserRole.ADMIN,
+                                                                                      false),
+                                                                          User.withId(2L,
+                                                                                      "First name 2",
+                                                                                      "Last name 2",
+                                                                                      "two@email.com",
+                                                                                      "pass2",
+                                                                                      UserRole.USER,
+                                                                                      false)));
 
         mockMvc.perform(get("/users?active=false"))
+               .andExpect(status().isOk())
+               .andExpect(content().json(
+                       "[\n" +
+                               "  {\n" +
+                               "    \"id\": 1,\n" +
+                               "    \"firstName\": \"First name 1\",\n" +
+                               "    \"lastName\": \"Last name 1\",\n" +
+                               "    \"email\": \"one@email.com\",\n" +
+                               "    \"role\": \"admin\",\n" +
+                               "    \"active\": false\n" +
+                               "  " +
+                               "},\n" +
+                               "  {\n" +
+                               "    \"id\": 2,\n" +
+                               "    \"firstName\": \"First name 2\",\n" +
+                               "    \"lastName\": \"Last name 2\",\n" +
+                               "    \"email\": \"two@email.com\",\n" +
+                               "    \"role\": \"user\",\n" +
+                               "    \"active\": false\n" +
+                               "  }\n" +
+                               "]"));
+    }
+
+    @Test
+    @WithMockUser(username = USER_NAME)
+    void getInactiveUsersOnlyPaged() throws Exception {
+        when(getUsersQuery.getAllUsersByActive(false, 1, 2)).thenReturn(List.of(User.withId(1L,
+                                                                                            "First name 1",
+                                                                                            "Last name 1",
+                                                                                            "one@email.com",
+                                                                                            "pass1",
+                                                                                            UserRole.ADMIN,
+                                                                                            false),
+                                                                                User.withId(2L,
+                                                                                            "First name 2",
+                                                                                            "Last name 2",
+                                                                                            "two@email.com",
+                                                                                            "pass2",
+                                                                                            UserRole.USER,
+                                                                                            false)));
+
+        mockMvc.perform(get("/users?active=false&page=1&size=2"))
                .andExpect(status().isOk())
                .andExpect(content().json(
                        "[\n" +
