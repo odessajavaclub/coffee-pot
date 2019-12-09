@@ -2,8 +2,10 @@ package org.odessajavaclub.user.adapter.out.jpa;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.odessajavaclub.user.domain.UserRole;
 
 import javax.persistence.Entity;
@@ -20,6 +22,8 @@ import javax.persistence.Table;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
+@ToString
 public class UserEntity {
 
     @Id

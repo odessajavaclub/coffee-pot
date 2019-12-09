@@ -8,7 +8,9 @@ public class UserEntityMapper {
 
     public UserEntity toUserEntity(User user) {
         return UserEntity.builder()
-                         .id(user.getId().map(User.UserId::getValue).orElse(null))
+                         .id(user.getId()
+                                 .map(User.UserId::getValue)
+                                 .orElse(null))
                          .firstName(user.getFirstName())
                          .lastName(user.getLastName())
                          .email(user.getEmail())
