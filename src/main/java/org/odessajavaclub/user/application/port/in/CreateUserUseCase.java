@@ -26,6 +26,7 @@ public interface CreateUserUseCase {
         @NotBlank
         private final String lastName;
 
+        @NotBlank
         @Email
         private final String email;
 

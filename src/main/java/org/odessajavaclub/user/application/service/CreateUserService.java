@@ -7,6 +7,8 @@ import org.odessajavaclub.user.domain.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @Service
 @RequiredArgsConstructor
 class CreateUserService implements CreateUserUseCase {
@@ -26,11 +28,7 @@ class CreateUserService implements CreateUserUseCase {
     }
 
     private User createUser(CreateUserCommand command, boolean active) {
-        checkFirstNameIsNotBlank(command);
-        checkLastNameIsNotBlank(command);
-        checkEmailIsNotBlank(command);
-        checkPasswordIsNotBlank(command);
-        checkRoleIsNotNull(command);
+        Objects.requireNonNull(command, "CreateUserCommand must not be null");
 
         String encodedPassword = passwordEncoder.encode(command.getPassword());
 
@@ -42,35 +40,5 @@ class CreateUserService implements CreateUserUseCase {
                                    active);
 
         return createUserPort.createUser(user);
-    }
-
-    private static void checkFirstNameIsNotBlank(CreateUserCommand command) {
-        if (command.getFirstName().isBlank()) {
-            throw new FirstNameIsBlankException();
-        }
-    }
-
-    private static void checkLastNameIsNotBlank(CreateUserCommand command) {
-        if (command.getLastName().isBlank()) {
-            throw new LastNameIsBlankException();
-        }
-    }
-
-    private static void checkEmailIsNotBlank(CreateUserCommand command) {
-        if (command.getEmail().isBlank()) {
-            throw new EmailIsBlankException();
-        }
-    }
-
-    private static void checkPasswordIsNotBlank(CreateUserCommand command) {
-        if (command.getPassword().isBlank()) {
-            throw new PasswordIsBlankException();
-        }
-    }
-
-    private static void checkRoleIsNotNull(CreateUserCommand command) {
-        if (command.getRole() == null) {
-            throw new UserRoleIsNullException();
-        }
     }
 }
