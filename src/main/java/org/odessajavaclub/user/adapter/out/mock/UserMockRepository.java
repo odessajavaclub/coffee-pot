@@ -14,10 +14,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 //@Component
-public class UserMockRepository implements CreateUserPort,
-                                           LoadUsersPort,
-                                           DeleteUserPort,
-                                           UpdateUserPort {
+public class UserMockRepository implements CreateUserPort, LoadUsersPort, DeleteUserPort, UpdateUserPort {
 
     private static AtomicLong id = new AtomicLong(1L);
 
