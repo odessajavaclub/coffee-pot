@@ -10,6 +10,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
+@EnableSwagger2
 @ComponentScan(basePackages = "org.odessajavaclub")
 @EnableSwagger2
 public class CoffeePotAppConfig {
@@ -21,6 +22,15 @@ public class CoffeePotAppConfig {
         .paths(PathSelectors.any())
         .build();
   }
+
+    @Bean
+    public Docket api() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .select()
+                .apis(RequestHandlerSelectors.any())
+                .paths(PathSelectors.any())
+                .build();
+    }
 
 // For testing purposes is commented
 //    @Bean
