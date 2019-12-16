@@ -54,35 +54,14 @@ public class UserController {
     }
 
     @GetMapping
-    List<GetUserDto> getUsers(@RequestParam(required = false) Boolean active,
-                              @RequestParam(required = false) Integer page,
-                              @RequestParam(required = false) Integer size
+    List<GetUserDto> getUsers(@RequestParam(required = false, defaultValue = "true") boolean active,
+                              @RequestParam(required = false, defaultValue = "0") int page,
+                              @RequestParam(required = false, defaultValue = "100") int size
     ) {
-        if (active == null) {
-            if (page != null && size != null) {
-                return getUsersQuery.getAllUsers(page, size)
-                                    .stream()
-                                    .map(userDtoMapper::toGetUserDto)
-                                    .collect(Collectors.toList());
-            } else {
-                return getUsersQuery.getAllUsers()
-                                    .stream()
-                                    .map(userDtoMapper::toGetUserDto)
-                                    .collect(Collectors.toList());
-            }
-        } else {
-            if (page != null && size != null) {
-                return getUsersQuery.getAllUsersByActive(active, page, size)
-                                    .stream()
-                                    .map(userDtoMapper::toGetUserDto)
-                                    .collect(Collectors.toList());
-            } else {
-                return getUsersQuery.getAllUsersByActive(active)
-                                    .stream()
-                                    .map(userDtoMapper::toGetUserDto)
-                                    .collect(Collectors.toList());
-            }
-        }
+        return getUsersQuery.getAllUsersByActive(active, page, size)
+                            .stream()
+                            .map(userDtoMapper::toGetUserDto)
+                            .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
