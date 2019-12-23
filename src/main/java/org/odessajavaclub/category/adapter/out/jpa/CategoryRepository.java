@@ -7,13 +7,11 @@ import org.odessajavaclub.category.application.port.out.LoadCategoriesPort;
 import org.odessajavaclub.category.application.port.out.LoadCategoryPort;
 import org.odessajavaclub.category.application.port.out.UpdateCategoryPort;
 import org.odessajavaclub.category.domain.Category;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.List;
-import java.util.stream.StreamSupport;
-
-import static java.util.stream.Collectors.toList;
 
 @AllArgsConstructor
 @Component
@@ -61,13 +59,13 @@ class CategoryRepository implements CreateCategoryPort,
     }
 
     @Override
-    public List<Category> loadCategories() {
-        return StreamSupport.stream(jpaRepository.findAll().spliterator(), false)
+    public Page<Category> loadCategories(PageRequest pageRequest) {
+        return jpaRepository.findAll(pageRequest)
                 .map(entity ->
                         Category.withId(
                                 new Category.CategoryId(entity.getId()),
                                 entity.getName())
-                ).collect(toList());
+                );
     }
 
     @Override

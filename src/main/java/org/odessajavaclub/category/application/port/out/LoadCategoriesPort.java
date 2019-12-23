@@ -1,9 +1,9 @@
 package org.odessajavaclub.category.application.port.out;
 
 import org.odessajavaclub.category.domain.Category;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 public interface LoadCategoriesPort {
-    List<Category> loadCategories();
+    Page<Category> loadCategories(PageRequest pageRequest);
 }

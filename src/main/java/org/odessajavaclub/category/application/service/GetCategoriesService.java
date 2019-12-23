@@ -6,9 +6,10 @@ import org.odessajavaclub.category.application.port.in.GetCategoryQuery;
 import org.odessajavaclub.category.application.port.out.LoadCategoriesPort;
 import org.odessajavaclub.category.application.port.out.LoadCategoryPort;
 import org.odessajavaclub.category.domain.Category;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,8 +20,8 @@ public class GetCategoriesService implements GetCategoryQuery, GetCategoriesQuer
     private final LoadCategoriesPort loadCategoriesPort;
 
     @Override
-    public List<Category> getCategories() {
-        return loadCategoriesPort.loadCategories();
+    public Page<Category> getCategories(PageRequest pageRequest) {
+        return loadCategoriesPort.loadCategories(pageRequest);
     }
 
     @Override
