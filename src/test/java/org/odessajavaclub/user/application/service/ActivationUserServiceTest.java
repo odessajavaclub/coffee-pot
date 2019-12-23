@@ -2,22 +2,17 @@ package org.odessajavaclub.user.application.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.odessajavaclub.user.application.event.UserActivatedEvent;
-import org.odessajavaclub.user.application.event.UserDeactivatedEvent;
 import org.odessajavaclub.user.application.port.in.ActivateUserUseCase;
 import org.odessajavaclub.user.application.port.in.DeactivateUserUseCase;
 import org.odessajavaclub.user.application.port.out.LoadUsersPort;
 import org.odessajavaclub.user.application.port.out.UpdateUserPort;
 import org.odessajavaclub.user.domain.User;
 import org.odessajavaclub.user.domain.UserRole;
-import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 class ActivationUserServiceTest {
@@ -28,14 +23,11 @@ class ActivationUserServiceTest {
 
     private ActivationUserService activationUserService;
 
-    private ApplicationEventPublisher applicationEventPublisher;
-
     @BeforeEach
     void setUp() {
         loadUsersPort = mock(LoadUsersPort.class);
         updateUserPort = mock(UpdateUserPort.class);
-        applicationEventPublisher = mock(ApplicationEventPublisher.class);
-        activationUserService = new ActivationUserService(loadUsersPort, updateUserPort, applicationEventPublisher);
+        activationUserService = new ActivationUserService(loadUsersPort, updateUserPort);
     }
 
     @Test
@@ -55,7 +47,6 @@ class ActivationUserServiceTest {
         Optional<User> actual = activationUserService.activateUser(command);
 
         assertEquals(activatedUser, actual.orElse(null));
-        verify(applicationEventPublisher).publishEvent(new UserActivatedEvent(activatedUser));
     }
 
     @Test
@@ -66,7 +57,6 @@ class ActivationUserServiceTest {
         Optional<User> actual = activationUserService.activateUser(command);
 
         assertEquals(Optional.empty(), actual);
-        verifyNoInteractions(applicationEventPublisher);
     }
 
     @Test
@@ -86,7 +76,6 @@ class ActivationUserServiceTest {
         Optional<User> actual = activationUserService.deactivateUser(command);
 
         assertEquals(deactivatedUser, actual.orElse(null));
-        verify(applicationEventPublisher).publishEvent(new UserDeactivatedEvent(deactivatedUser));
     }
 
     @Test
@@ -97,6 +86,5 @@ class ActivationUserServiceTest {
         Optional<User> actual = activationUserService.deactivateUser(command);
 
         assertEquals(Optional.empty(), actual);
-        verifyNoInteractions(applicationEventPublisher);
     }
 }

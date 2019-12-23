@@ -1,11 +1,11 @@
 package org.odessajavaclub.user.adapter.in.rest;
 
-import lombok.Data;
+import lombok.Value;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
-@Data
+@Value
 class CreateUserDto {
 
     @NotBlank
@@ -19,8 +19,8 @@ class CreateUserDto {
     private String email;
 
     @NotBlank
-    private String role;
+    private String password;
 
     @NotBlank
-    private String password;
+    private String role;
 }

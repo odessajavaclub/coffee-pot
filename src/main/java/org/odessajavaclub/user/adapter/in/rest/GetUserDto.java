@@ -1,19 +1,19 @@
 package org.odessajavaclub.user.adapter.in.rest;
 
-import lombok.Data;
+import lombok.Value;
 
-@Data
+@Value
 class GetUserDto {
 
-    private final long id;
+    private long id;
 
-    private final String firstName;
+    private String firstName;
 
-    private final String lastName;
+    private String lastName;
 
-    private final String email;
+    private String email;
 
-    private final String role;
+    private String role;
 
-    private final boolean active;
+    private boolean active;
 }

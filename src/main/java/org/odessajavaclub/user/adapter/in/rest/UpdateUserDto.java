@@ -1,10 +1,10 @@
 package org.odessajavaclub.user.adapter.in.rest;
 
-import lombok.Data;
+import lombok.Value;
 
 import javax.validation.constraints.Email;
 
-@Data
+@Value
 class UpdateUserDto {
 
     private String firstName;

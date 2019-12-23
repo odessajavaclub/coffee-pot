@@ -2,19 +2,16 @@ package org.odessajavaclub.user.application.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.odessajavaclub.user.application.event.UserUpdatedEvent;
 import org.odessajavaclub.user.application.port.in.UpdateUserUseCase;
 import org.odessajavaclub.user.application.port.out.LoadUsersPort;
 import org.odessajavaclub.user.application.port.out.UpdateUserPort;
 import org.odessajavaclub.user.domain.User;
 import org.odessajavaclub.user.domain.UserRole;
-import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class UpdateUserServiceTest {
@@ -25,14 +22,11 @@ class UpdateUserServiceTest {
 
     private UpdateUserService updateUserService;
 
-    private ApplicationEventPublisher applicationEventPublisher;
-
     @BeforeEach
     void setUp() {
         loadUserPort = mock(LoadUsersPort.class);
         updateUserPort = mock(UpdateUserPort.class);
-        applicationEventPublisher = mock(ApplicationEventPublisher.class);
-        updateUserService = new UpdateUserService(loadUserPort, updateUserPort, applicationEventPublisher);
+        updateUserService = new UpdateUserService(loadUserPort, updateUserPort);
     }
 
     @Test
@@ -61,6 +55,5 @@ class UpdateUserServiceTest {
                                                                                               "new@email.com");
         User actual = updateUserService.updateUser(command).orElseThrow(AssertionError::new);
         assertEquals(newUser, actual);
-        verify(applicationEventPublisher).publishEvent(new UserUpdatedEvent(oldUser, newUser));
     }
 }

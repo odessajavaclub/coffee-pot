@@ -1,5 +1,6 @@
 package org.odessajavaclub.user.adapter.in.rest;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.odessajavaclub.auth.AuthenticationFacade;
@@ -23,12 +24,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Import(UserConfig.class)
@@ -47,6 +48,9 @@ class UserControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @MockBean
     private CreateUserUseCase createUserUseCase;
@@ -72,7 +76,6 @@ class UserControllerTest {
     @BeforeEach
     public void setUp() {
         TestingAuthenticationToken authentication = new TestingAuthenticationToken(USER_NAME, PASSWORD, "USER");
-
         when(authenticationFacade.getAuthentication()).thenReturn(authentication);
     }
 
@@ -92,102 +95,77 @@ class UserControllerTest {
                                         UserRole.ADMIN,
                                         true));
 
-        mockMvc.perform(post("/users/")
-                                .header("Content-Type", "application/json")
-                                .content("{\n" +
-                                                 "  \"firstName\": \"Maxim\",\n" +
-                                                 "  \"lastName\": \"Sashkin\",\n" +
-                                                 "  \"email\": \"max@email.com\",\n" +
-                                                 "  \"password\": \"pass123\",\n" +
-                                                 "  \"role\": \"admin\"\n" +
-                                                 "}"))
-               .andExpect(status().isOk())
-               .andExpect(content().json("{\n" +
-                                                 "  \"firstName\": \"Maxim\",\n" +
-                                                 "  \"lastName\": \"Sashkin\",\n" +
-                                                 "  \"email\": \"max@email.com\",\n" +
-                                                 "  \"role\": \"admin\",\n" +
-                                                 "  \"active\": true\n" +
-                                                 "}"));
+        String expected = objectMapper.writeValueAsString(new GetUserDto(1L,
+                                                                         "Maxim",
+                                                                         "Sashkin",
+                                                                         "max@email.com",
+                                                                         "admin",
+                                                                         true));
+
+        CreateUserDto content = new CreateUserDto("Maxim", "Sashkin", "max@email.com", "pass123", "admin");
+
+        String actual = mockMvc.perform(post("/users/")
+                                                .contentType("application/json")
+                                                .content(objectMapper.writeValueAsString(content)))
+                               .andExpect(status().isOk())
+                               .andReturn()
+                               .getResponse()
+                               .getContentAsString();
+        assertEquals(expected, actual);
     }
 
     @Test
     @WithMockUser(username = USER_NAME)
     void createUserShouldReturnBadRequestIfFirstNameIsBlank() throws Exception {
+        CreateUserDto content = new CreateUserDto("", "Sashkin", "max@email.com", "pass123", "admin");
+
         mockMvc.perform(post("/users/")
-                                .header("Content-Type", "application/json")
-                                .content(
-                                        "{\n" +
-                                                "  \"firstName\": \"  \",\n" +
-                                                "  \"lastName\": \"Sashkin\",\n" +
-                                                "  \"email\": \"max@email.com\",\n" +
-                                                "  \"password\": \"pass123\",\n" +
-                                                "  \"role\": \"admin\"\n" +
-                                                "}"))
+                                .contentType("application/json")
+                                .content(objectMapper.writeValueAsString(content)))
                .andExpect(status().isBadRequest());
     }
 
     @Test
     @WithMockUser(username = USER_NAME)
     void createUserShouldReturnBadRequestIfLastNameIsBlank() throws Exception {
+        CreateUserDto content = new CreateUserDto("Max", "", "max@email.com", "pass123", "admin");
+
         mockMvc.perform(post("/users/")
-                                .header("Content-Type", "application/json")
-                                .content(
-                                        "{\n" +
-                                                "  \"firstName\": \"Maxim\",\n" +
-                                                "  \"lastName\": \" \",\n" +
-                                                "  \"email\": \"max@email.com\",\n" +
-                                                "  \"password\": \"pass123\",\n" +
-                                                "  \"role\": \"admin\"\n" +
-                                                "}"))
+                                .contentType("application/json")
+                                .content(objectMapper.writeValueAsString(content)))
                .andExpect(status().isBadRequest());
     }
 
     @Test
     @WithMockUser(username = USER_NAME)
     void createUserShouldReturnBadRequestIfPasswordIsBlank() throws Exception {
+        CreateUserDto content = new CreateUserDto("Max", "Sashkin", "max@email.com", "", "admin");
+
         mockMvc.perform(post("/users/")
-                                .header("Content-Type", "application/json")
-                                .content(
-                                        "{\n" +
-                                                "  \"firstName\": \"Maxim\",\n" +
-                                                "  \"lastName\": \"Sashkin\",\n" +
-                                                "  \"email\": \"max@email.com\",\n" +
-                                                "  \"password\": \" \",\n" +
-                                                "  \"role\": \"admin\"\n" +
-                                                "}"))
+                                .contentType("application/json")
+                                .content(objectMapper.writeValueAsString(content)))
                .andExpect(status().isBadRequest());
     }
 
     @Test
     @WithMockUser(username = USER_NAME)
     void createUserShouldReturnBadRequestIfRoleIsBlank() throws Exception {
+        CreateUserDto content = new CreateUserDto("Max", "Sashkin", "max@email.com", "pass123", "");
+
         mockMvc.perform(post("/users/")
-                                .header("Content-Type", "application/json")
-                                .content(
-                                        "{\n" +
-                                                "  \"firstName\": \"Maxim\",\n" +
-                                                "  \"lastName\": \"Sashkin\",\n" +
-                                                "  \"email\": \"max@email.com\",\n" +
-                                                "  \"password\": \"pass123\",\n" +
-                                                "  \"role\": \" \"\n" +
-                                                "}"))
+                                .contentType("application/json")
+                                .content(objectMapper.writeValueAsString(content)))
                .andExpect(status().isBadRequest());
     }
 
     @Test
     @WithMockUser(username = USER_NAME)
     void createUserShouldReturnBadRequestIfEmailIsNotValid() throws Exception {
+        CreateUserDto content = new CreateUserDto("Max", "Sashkin", "", "pass123", "admin");
+
         mockMvc.perform(post("/users/")
-                                .header("Content-Type", "application/json")
-                                .content(
-                                        "{\n" +
-                                                "  \"firstName\": \"Maxim\",\n" +
-                                                "  \"lastName\": \"Sashkin\",\n" +
-                                                "  \"email\": \"wrongemail\",\n" +
-                                                "  \"password\": \"pass123\",\n" +
-                                                "  \"role\": \"admin\"\n" +
-                                                "}"))
+                                .contentType("application/json")
+                                .content(objectMapper.writeValueAsString(content)))
                .andExpect(status().isBadRequest());
     }
 
@@ -210,28 +188,25 @@ class UserControllerTest {
                                                 UserRole.USER,
                                                 false)));
 
-        mockMvc.perform(get("/users/"))
-               .andExpect(status().isOk())
-               .andExpect(content().json(
-                       "[\n" +
-                               "  {\n" +
-                               "    \"id\": 1,\n" +
-                               "    \"firstName\": \"First name 1\",\n" +
-                               "    \"lastName\": \"Last name 1\",\n" +
-                               "    \"email\": \"one@email.com\",\n" +
-                               "    \"role\": \"admin\",\n" +
-                               "    \"active\": true\n" +
-                               "  " +
-                               "},\n" +
-                               "  {\n" +
-                               "    \"id\": 2,\n" +
-                               "    \"firstName\": \"First name 2\",\n" +
-                               "    \"lastName\": \"Last name 2\",\n" +
-                               "    \"email\": \"two@email.com\",\n" +
-                               "    \"role\": \"user\",\n" +
-                               "    \"active\": false\n" +
-                               "  }\n" +
-                               "]"));
+        String expected = objectMapper.writeValueAsString(List.of(new GetUserDto(1L,
+                                                                                 "First name 1",
+                                                                                 "Last name 1",
+                                                                                 "one@email.com",
+                                                                                 "admin",
+                                                                                 true),
+                                                                  new GetUserDto(2L,
+                                                                                 "First name 2",
+                                                                                 "Last name 2",
+                                                                                 "two@email.com",
+                                                                                 "user",
+                                                                                 false)));
+
+        String actual = mockMvc.perform(get("/users/"))
+                               .andExpect(status().isOk())
+                               .andReturn()
+                               .getResponse()
+                               .getContentAsString();
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -253,28 +228,27 @@ class UserControllerTest {
                                                 UserRole.USER,
                                                 false)));
 
-        mockMvc.perform(get("/users?page=1&size=2"))
-               .andExpect(status().isOk())
-               .andExpect(content().json(
-                       "[\n" +
-                               "  {\n" +
-                               "    \"id\": 1,\n" +
-                               "    \"firstName\": \"First name 1\",\n" +
-                               "    \"lastName\": \"Last name 1\",\n" +
-                               "    \"email\": \"one@email.com\",\n" +
-                               "    \"role\": \"admin\",\n" +
-                               "    \"active\": true\n" +
-                               "  " +
-                               "},\n" +
-                               "  {\n" +
-                               "    \"id\": 2,\n" +
-                               "    \"firstName\": \"First name 2\",\n" +
-                               "    \"lastName\": \"Last name 2\",\n" +
-                               "    \"email\": \"two@email.com\",\n" +
-                               "    \"role\": \"user\",\n" +
-                               "    \"active\": false\n" +
-                               "  }\n" +
-                               "]"));
+        String expected = objectMapper.writeValueAsString(List.of(new GetUserDto(1L,
+                                                                                 "First name 1",
+                                                                                 "Last name 1",
+                                                                                 "one@email.com",
+                                                                                 "admin",
+                                                                                 true),
+                                                                  new GetUserDto(2L,
+                                                                                 "First name 2",
+                                                                                 "Last name 2",
+                                                                                 "two@email.com",
+                                                                                 "user",
+                                                                                 false)));
+
+        String actual = mockMvc.perform(get("/users/")
+                                                .param("page", "1")
+                                                .param("size", "2"))
+                               .andExpect(status().isOk())
+                               .andReturn()
+                               .getResponse()
+                               .getContentAsString();
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -289,17 +263,19 @@ class UserControllerTest {
                                                     UserRole.USER,
                                                     true)));
 
-        mockMvc.perform(get("/users/666"))
-               .andExpect(status().isOk())
-               .andExpect(content().json(
-                       "{\n" +
-                               "  \"id\": 666,\n" +
-                               "  \"firstName\": \"John\",\n" +
-                               "  \"lastName\": \"Johnovich\",\n" +
-                               "  \"email\": \"john@email.com\",\n" +
-                               "  \"role\": \"user\",\n" +
-                               "  \"active\": true\n" +
-                               "}"));
+        String expected = objectMapper.writeValueAsString(new GetUserDto(666L,
+                                                                         "John",
+                                                                         "Johnovich",
+                                                                         "john@email.com",
+                                                                         "user",
+                                                                         true));
+
+        String actual = mockMvc.perform(get("/users/666"))
+                               .andExpect(status().isOk())
+                               .andReturn()
+                               .getResponse()
+                               .getContentAsString();
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -347,24 +323,20 @@ class UserControllerTest {
                                                     UserRole.USER,
                                                     true)));
 
-        mockMvc.perform(put("/users/888")
-                                .header("Content-Type", "application/json")
-                                .content(
-                                        "{\n" +
-                                                "  \"firstName\": \"New First Name\",\n" +
-                                                "  \"lastName\": \"New Last Name\",\n" +
-                                                "  \"email\": \"new@email.com\"\n" +
-                                                "}"))
-               .andExpect(status().isOk())
-               .andExpect(content().json(
-                       "{\n" +
-                               "  \"firstName\": \"New First Name" +
-                               "\",\n" +
-                               "  \"lastName\": \"New Last Name\",\n" +
-                               "  \"email\": \"new@email.com\",\n" +
-                               "  \"role\": \"user\",\n" +
-                               "  \"active\": true\n" +
-                               "}"));
+        String expected = objectMapper.writeValueAsString(new GetUserDto(888L, "New First Name",
+                                                                         "New Last Name",
+                                                                         "new@email.com",
+                                                                         "user",
+                                                                         true));
+        UpdateUserDto content = new UpdateUserDto("New First Name", "New Last Name", "new@email.com");
+        String actual = mockMvc.perform(put("/users/888")
+                                                .contentType("application/json")
+                                                .content(objectMapper.writeValueAsString(content)))
+                               .andExpect(status().isOk())
+                               .andReturn()
+                               .getResponse()
+                               .getContentAsString();
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -376,14 +348,10 @@ class UserControllerTest {
                                                                                   "new@email.com")))
                 .thenReturn(Optional.empty());
 
+        UpdateUserDto content = new UpdateUserDto("New First Name", "New Last Name", "new@email.com");
         mockMvc.perform(put("/users/888")
-                                .header("Content-Type", "application/json")
-                                .content(
-                                        "{\n" +
-                                                "  \"firstName\": \"New First Name\",\n" +
-                                                "  \"lastName\": \"New Last Name\",\n" +
-                                                "  \"email\": \"new@email.com\"\n" +
-                                                "}"))
+                                .contentType("application/json")
+                                .content(objectMapper.writeValueAsString(content)))
                .andExpect(status().isNotFound());
     }
 
@@ -458,70 +426,67 @@ class UserControllerTest {
                                                 UserRole.USER,
                                                 true)));
 
-        mockMvc.perform(get("/users?active=true"))
-               .andExpect(status().isOk())
-               .andExpect(content().json(
-                       "[\n" +
-                               "  {\n" +
-                               "    \"id\": 1,\n" +
-                               "    \"firstName\": \"First name 1\",\n" +
-                               "    \"lastName\": \"Last name 1\",\n" +
-                               "    \"email\": \"one@email.com\",\n" +
-                               "    \"role\": \"admin\",\n" +
-                               "    \"active\": true\n" +
-                               "  " +
-                               "},\n" +
-                               "  {\n" +
-                               "    \"id\": 2,\n" +
-                               "    \"firstName\": \"First name 2\",\n" +
-                               "    \"lastName\": \"Last name 2\",\n" +
-                               "    \"email\": \"two@email.com\",\n" +
-                               "    \"role\": \"user\",\n" +
-                               "    \"active\": true\n" +
-                               "  }\n" +
-                               "]"));
+        String expected = objectMapper.writeValueAsString(List.of(new GetUserDto(1L,
+                                                                                 "First name 1",
+                                                                                 "Last name 1",
+                                                                                 "one@email.com",
+                                                                                 "admin",
+                                                                                 true),
+                                                                  new GetUserDto(2L,
+                                                                                 "First name 2",
+                                                                                 "Last name 2",
+                                                                                 "two@email.com",
+                                                                                 "user",
+                                                                                 true)));
+        String actual = mockMvc.perform(get("/users")
+                                                .param("active", "true"))
+                               .andExpect(status().isOk())
+                               .andReturn()
+                               .getResponse()
+                               .getContentAsString();
+        assertEquals(expected, actual);
     }
 
     @Test
     @WithMockUser(username = USER_NAME)
     void getActiveUsersOnlyPaged() throws Exception {
-        when(getUsersQuery.getAllUsersByActive(true, 1, 2)).thenReturn(List.of(User.withId(1L,
-                                                                                           "First name 1",
-                                                                                           "Last name 1",
-                                                                                           "one@email.com",
-                                                                                           "pass1",
-                                                                                           UserRole.ADMIN,
-                                                                                           true),
-                                                                               User.withId(2L,
-                                                                                           "First name 2",
-                                                                                           "Last name 2",
-                                                                                           "two@email.com",
-                                                                                           "pass2",
-                                                                                           UserRole.USER,
-                                                                                           true)));
+        when(getUsersQuery.getAllUsersByActive(true, 1, 2))
+                .thenReturn(List.of(User.withId(1L,
+                                                "First name 1",
+                                                "Last name 1",
+                                                "one@email.com",
+                                                "pass1",
+                                                UserRole.ADMIN,
+                                                true),
+                                    User.withId(2L,
+                                                "First name 2",
+                                                "Last name 2",
+                                                "two@email.com",
+                                                "pass2",
+                                                UserRole.USER,
+                                                true)));
 
-        mockMvc.perform(get("/users?active=true&page=1&size=2"))
-               .andExpect(status().isOk())
-               .andExpect(content().json(
-                       "[\n" +
-                               "  {\n" +
-                               "    \"id\": 1,\n" +
-                               "    \"firstName\": \"First name 1\",\n" +
-                               "    \"lastName\": \"Last name 1\",\n" +
-                               "    \"email\": \"one@email.com\",\n" +
-                               "    \"role\": \"admin\",\n" +
-                               "    \"active\": true\n" +
-                               "  " +
-                               "},\n" +
-                               "  {\n" +
-                               "    \"id\": 2,\n" +
-                               "    \"firstName\": \"First name 2\",\n" +
-                               "    \"lastName\": \"Last name 2\",\n" +
-                               "    \"email\": \"two@email.com\",\n" +
-                               "    \"role\": \"user\",\n" +
-                               "    \"active\": true\n" +
-                               "  }\n" +
-                               "]"));
+        String expected = objectMapper.writeValueAsString(List.of(new GetUserDto(1L,
+                                                                                 "First name 1",
+                                                                                 "Last name 1",
+                                                                                 "one@email.com",
+                                                                                 "admin",
+                                                                                 true),
+                                                                  new GetUserDto(2L,
+                                                                                 "First name 2",
+                                                                                 "Last name 2",
+                                                                                 "two@email.com",
+                                                                                 "user",
+                                                                                 true)));
+        String actual = mockMvc.perform(get("/users")
+                                                .param("active", "true")
+                                                .param("page", "1")
+                                                .param("size", "2"))
+                               .andExpect(status().isOk())
+                               .andReturn()
+                               .getResponse()
+                               .getContentAsString();
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -543,69 +508,66 @@ class UserControllerTest {
                                                 UserRole.USER,
                                                 false)));
 
-        mockMvc.perform(get("/users?active=false"))
-               .andExpect(status().isOk())
-               .andExpect(content().json(
-                       "[\n" +
-                               "  {\n" +
-                               "    \"id\": 1,\n" +
-                               "    \"firstName\": \"First name 1\",\n" +
-                               "    \"lastName\": \"Last name 1\",\n" +
-                               "    \"email\": \"one@email.com\",\n" +
-                               "    \"role\": \"admin\",\n" +
-                               "    \"active\": false\n" +
-                               "  " +
-                               "},\n" +
-                               "  {\n" +
-                               "    \"id\": 2,\n" +
-                               "    \"firstName\": \"First name 2\",\n" +
-                               "    \"lastName\": \"Last name 2\",\n" +
-                               "    \"email\": \"two@email.com\",\n" +
-                               "    \"role\": \"user\",\n" +
-                               "    \"active\": false\n" +
-                               "  }\n" +
-                               "]"));
+        String expected = objectMapper.writeValueAsString(List.of(new GetUserDto(1L,
+                                                                                 "First name 1",
+                                                                                 "Last name 1",
+                                                                                 "one@email.com",
+                                                                                 "admin",
+                                                                                 false),
+                                                                  new GetUserDto(2L,
+                                                                                 "First name 2",
+                                                                                 "Last name 2",
+                                                                                 "two@email.com",
+                                                                                 "user",
+                                                                                 false)));
+        String actual = mockMvc.perform(get("/users")
+                                                .param("active", "false"))
+                               .andExpect(status().isOk())
+                               .andReturn()
+                               .getResponse()
+                               .getContentAsString();
+        assertEquals(expected, actual);
     }
 
     @Test
     @WithMockUser(username = USER_NAME)
     void getInactiveUsersOnlyPaged() throws Exception {
-        when(getUsersQuery.getAllUsersByActive(false, 1, 2)).thenReturn(List.of(User.withId(1L,
-                                                                                            "First name 1",
-                                                                                            "Last name 1",
-                                                                                            "one@email.com",
-                                                                                            "pass1",
-                                                                                            UserRole.ADMIN,
-                                                                                            false),
-                                                                                User.withId(2L,
-                                                                                            "First name 2",
-                                                                                            "Last name 2",
-                                                                                            "two@email.com",
-                                                                                            "pass2",
-                                                                                            UserRole.USER,
-                                                                                            false)));
+        when(getUsersQuery.getAllUsersByActive(false, 1, 2))
+                .thenReturn(List.of(User.withId(1L,
+                                                "First name 1",
+                                                "Last name 1",
+                                                "one@email.com",
+                                                "pass1",
+                                                UserRole.ADMIN,
+                                                false),
+                                    User.withId(2L,
+                                                "First name 2",
+                                                "Last name 2",
+                                                "two@email.com",
+                                                "pass2",
+                                                UserRole.USER,
+                                                false)));
 
-        mockMvc.perform(get("/users?active=false&page=1&size=2"))
-               .andExpect(status().isOk())
-               .andExpect(content().json(
-                       "[\n" +
-                               "  {\n" +
-                               "    \"id\": 1,\n" +
-                               "    \"firstName\": \"First name 1\",\n" +
-                               "    \"lastName\": \"Last name 1\",\n" +
-                               "    \"email\": \"one@email.com\",\n" +
-                               "    \"role\": \"admin\",\n" +
-                               "    \"active\": false\n" +
-                               "  " +
-                               "},\n" +
-                               "  {\n" +
-                               "    \"id\": 2,\n" +
-                               "    \"firstName\": \"First name 2\",\n" +
-                               "    \"lastName\": \"Last name 2\",\n" +
-                               "    \"email\": \"two@email.com\",\n" +
-                               "    \"role\": \"user\",\n" +
-                               "    \"active\": false\n" +
-                               "  }\n" +
-                               "]"));
+        String expected = objectMapper.writeValueAsString(List.of(new GetUserDto(1L,
+                                                                                 "First name 1",
+                                                                                 "Last name 1",
+                                                                                 "one@email.com",
+                                                                                 "admin",
+                                                                                 false),
+                                                                  new GetUserDto(2L,
+                                                                                 "First name 2",
+                                                                                 "Last name 2",
+                                                                                 "two@email.com",
+                                                                                 "user",
+                                                                                 false)));
+        String actual = mockMvc.perform(get("/users")
+                                                .param("active", "false")
+                                                .param("page", "1")
+                                                .param("size", "2"))
+                               .andExpect(status().isOk())
+                               .andReturn()
+                               .getResponse()
+                               .getContentAsString();
+        assertEquals(expected, actual);
     }
 }
