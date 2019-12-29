@@ -13,5 +13,11 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 11
-    - name: Build with Maven
+
+    - name: Build
       run: mvn -B package --file pom.xml
+
+    - name: Send report
+      env:
+        CODECOV_TOKEN: 472f6a61-2ea5-4d13-8732-741622db3384
+      run: bash <(curl -s https://codecov.io/bash)
