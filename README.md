@@ -1,4 +1,5 @@
 # Coffee-pot
+[![codecov](https://codecov.io/gh/odessajavaclub/coffee-pot/branch/master/graph/badge.svg)](https://codecov.io/gh/odessajavaclub/coffee-pot)
 
 This is a simple application, which implements a domain-centric "Hexagonal" approach and demonstrates [Microservice Architecture Pattern](http://martinfowler.com/microservices/) using Spring Boot.
 
