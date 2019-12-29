@@ -6,7 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](https://github.com/odessajavaclub/coffee-pot/compare/master...HEAD)
 ### Added
-
+- ISSUE-22 ([#22](https://github.com/odessajavaclub/coffee-pot/pull/22))
+    - Add codecov.io for code coverage
 - ISSUE-20 ([#21](https://github.com/odessajavaclub/coffee-pot/pull/21))
     - Update readme, add phase0 description 
 - ISSUE-6 ([#13](https://github.com/odessajavaclub/coffee-pot/pull/13))
@@ -17,4 +18,3 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 - ISSUE-18 ([#](https://github.com/odessajavaclub/coffee-pot/pull/19))
     - Add common changes
-
