@@ -1,4 +1,4 @@
-name: Maven CI
+name: Workflow CI
 
 on: [push]
 
@@ -17,7 +17,7 @@ jobs:
     - name: Build
       run: mvn -B package --file pom.xml
 
-    - name: Send report
-      env:
-        CODECOV_TOKEN: 472f6a61-2ea5-4d13-8732-741622db3384
-      run: bash <(curl -s https://codecov.io/bash)
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v1.0.5
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
