@@ -12,8 +12,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     - Update readme, add phase0 description 
 - ISSUE-6 ([#13](https://github.com/odessajavaclub/coffee-pot/pull/13))
     - Create "user" module
-- ISSUE-7 ([#](https://github.com/odessajavaclub/coffee-pot/pull/10))
+- ISSUE-7 ([#10](https://github.com/odessajavaclub/coffee-pot/pull/10))
     - Create "attachment" module
+- ISSUE-26 ([#27](https://github.com/odessajavaclub/coffee-pot/pull/27))
+    - Add Workflow CI badge
 
 ### Changed
 - ISSUE-18 ([#](https://github.com/odessajavaclub/coffee-pot/pull/19))
