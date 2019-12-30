@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     - Create "user" module
 - ISSUE-7 ([#](https://github.com/odessajavaclub/coffee-pot/pull/10))
     - Create "attachment" module
+- ISSUE-28 ([#29](https://github.com/odessajavaclub/coffee-pot/pull/29))
+    - Create stale gh-actions job
 
 ### Changed
 - ISSUE-18 ([#](https://github.com/odessajavaclub/coffee-pot/pull/19))
