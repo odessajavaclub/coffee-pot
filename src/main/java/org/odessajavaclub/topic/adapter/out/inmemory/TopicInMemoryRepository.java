@@ -1,11 +1,17 @@
 package org.odessajavaclub.topic.adapter.out.inmemory;
 
 import org.odessajavaclub.topic.application.port.out.CreateTopicPort;
+import org.odessajavaclub.topic.application.port.out.DeleteTopicPort;
 import org.odessajavaclub.topic.application.port.out.LoadTopicPort;
+import org.odessajavaclub.topic.application.port.out.UpdateTopicPort;
 import org.odessajavaclub.topic.domain.Topic;
+import org.odessajavaclub.topic.domain.enumeration.TopicStatus;
+import org.odessajavaclub.topic.domain.enumeration.TopicType;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.time.chrono.ChronoLocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +21,7 @@ import java.util.stream.Collectors;
 
 @Component
 @Profile("alpha")
-public class TopicInMemoryRepository implements CreateTopicPort, LoadTopicPort {
+public class TopicInMemoryRepository implements CreateTopicPort, LoadTopicPort, UpdateTopicPort, DeleteTopicPort {
     private static AtomicLong id = new AtomicLong(1L);
     private Map<Long, Topic> storage = new HashMap<>();
 
@@ -32,10 +38,76 @@ public class TopicInMemoryRepository implements CreateTopicPort, LoadTopicPort {
     }
 
     @Override
-    public List<Topic> listAll() {
+    public List<Topic> listAll(String sortBy, String order, int page, int size) {
         return storage.entrySet()
                 .stream()
                 .map(e -> Topic.from(e.getValue(), new Topic.TopicId(e.getKey())))
+                .limit(size)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Topic> listByType(TopicType type, String sortBy, String order, int page, int size) {
+        return storage.entrySet()
+                .stream()
+                .map(e -> Topic.from(e.getValue(), new Topic.TopicId(e.getKey())))
+                .filter(e -> e.getType() == type)
+                .limit(size)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Topic> listByStatus(TopicStatus status, String sortBy, String order, int page, int size) {
+        return storage.entrySet()
+                .stream()
+                .map(e -> Topic.from(e.getValue(), new Topic.TopicId(e.getKey())))
+                .filter(e -> e.getStatus() == status)
+                .limit(size)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Topic> listByDateRange(LocalDate start, LocalDate end, String sortBy, String order, int page, int size) {
+        return storage.entrySet()
+                .stream()
+                .map(e -> Topic.from(e.getValue(), new Topic.TopicId(e.getKey())))
+                .filter(e -> e.getEvent().isAfter(ChronoLocalDateTime.from(start)) && e.getEvent().isBefore(ChronoLocalDateTime.from(end)))
+                .limit(size)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Topic> listByDate(LocalDate start, String sortBy, String order, int page, int size) {
+        return storage.entrySet()
+                .stream()
+                .map(e -> Topic.from(e.getValue(), new Topic.TopicId(e.getKey())))
+                .filter(e -> e.getEvent().isEqual(ChronoLocalDateTime.from(start)))
+                .limit(size)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Topic> listByTitleLike(String title, String sortBy, String order, int page, int size) {
+        return storage.entrySet()
+                .stream()
+                .map(e -> Topic.from(e.getValue(), new Topic.TopicId(e.getKey())))
+                .filter(e -> e.getTitle().contains(title))
+                .limit(size)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean deleteTopic(Topic.TopicId topicId) {
+        return storage.remove(topicId.getValue()) != null;
+    }
+
+    @Override
+    public Topic updateTopic(Topic topic) {
+        return Optional.ofNullable(topic.getId().get().getValue())
+                .map(id -> {
+                    storage.put(id, topic);
+                    return topic;
+                })
+                .orElse(null);
     }
 }

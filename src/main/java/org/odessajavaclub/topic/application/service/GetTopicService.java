@@ -4,9 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.odessajavaclub.topic.application.port.in.GetTopicsQuery;
 import org.odessajavaclub.topic.application.port.out.LoadTopicPort;
 import org.odessajavaclub.topic.domain.Topic;
+import org.odessajavaclub.topic.domain.enumeration.TopicStatus;
+import org.odessajavaclub.topic.domain.enumeration.TopicType;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,25 +25,32 @@ public class GetTopicService implements GetTopicsQuery {
     }
 
     @Override
-    public List<Topic> getTopics() {
-        return loadTopicPort.listAll();
+    public List<Topic> getTopics(String sortBy, String order, int page, int size) {
+        return loadTopicPort.listAll(sortBy, order, page, size);
     }
 
     @Override
-    public Optional<Topic> getTopicByName(String topicName) {
-        //TODO: Implement me
-        throw new RuntimeException("Not implemented yet");
+    public List<Topic> getTopicsByName(String topicName, String sortBy, String order, int page, int size) {
+        return loadTopicPort.listByTitleLike(topicName, sortBy, order, page, size);
     }
 
     @Override
-    public List<Topic> getTopicsByAuthor(String authorName) {
-        //TODO: Implement me
-        throw new RuntimeException("Not implemented yet");
+    public List<Topic> getTopicsByStatus(TopicStatus status, String sortBy, String order, int page, int size) {
+        return loadTopicPort.listByStatus(status, sortBy, order, page, size);
     }
 
     @Override
-    public List<Topic> getTopicsByCategory(String category) {
-        //TODO: Implement me
-        throw new RuntimeException("Not implemented yet");
+    public List<Topic> getTopicsByType(TopicType type, String sortBy, String order, int page, int size) {
+        return loadTopicPort.listByType(type, sortBy, order, page, size);
+    }
+
+    @Override
+    public List<Topic> getTopicsInDate(LocalDate date, String sortBy, String order, int page, int size) {
+        return loadTopicPort.listByDate(date, sortBy, order, page, size);
+    }
+
+    @Override
+    public List<Topic> getTopicsInDateRange(LocalDate start, LocalDate end, String sortBy, String order, int page, int size) {
+        return loadTopicPort.listByDateRange(start, end, sortBy, order, page, size);
     }
 }

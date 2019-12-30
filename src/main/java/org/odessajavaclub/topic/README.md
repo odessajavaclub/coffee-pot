@@ -14,14 +14,18 @@
 7. Return HTTP response
 
 # Happy path scenario
-When I go to /topics I want to see list of topics
-When I go to /topics?type="typeName" I want to see list of topics with specific type
-When I go to /topics?category="categoryName" I want to see list of topics with specific category 
-When I go to /topics?status="statusName" I want to see list of topics with specific status 
-When I go to /topics?author="authorName" I want to see list of topics with specific author
-When I go to /topics?sort="asc,desc" I want to see list of topics sorted by asc or desc
-When I go to /topics?q={"author": "Alex Pletnev"} I want to see list of topics sorted by "author" name
+- When I go to /topics I want to see list of topics
+- When I go to /topics/id I want to see a topic
+- When I go to /topics/name/topicName I want to see list of topics contains a name 
+- When I go to /topics/type/typeName I want to see list of topics with specific type
+- When I go to /topics/status/statusName I want to see list of topics with specific status 
+- When I go to /topics/author/authorName I want to see list of topics created by author
+- When I go to /topics/date/date I want to see list of topics in specific date 
+- When I go to /topics/range/startDate/endDate I want to see list of topics in date range
+- When I go to /topics?sortBy="name"&order="desc" I want to see list of topics sorted by name in desc order
+- When I go to /topics?page="0"&size="100" I want to see list of topics from page 0 with 100 items 
 
 When I go to /topic/id I want to see particular topic
 I want to create a new topic when I send POST request to /topic
 I want to update a topic when I send PUT request to /topic/id
+I want to delete a topic when I send DELETE request to /topic/id
