@@ -10,8 +10,8 @@ import org.odessajavaclub.topic.domain.enumeration.TopicType;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
-import java.time.chrono.ChronoLocalDateTime;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 @Component
 @Profile("alpha")
-public class TopicInMemoryRepository implements CreateTopicPort, LoadTopicPort, UpdateTopicPort, DeleteTopicPort {
+public class TopicInMemoryAdapter implements CreateTopicPort, LoadTopicPort, UpdateTopicPort, DeleteTopicPort {
     private static AtomicLong id = new AtomicLong(1L);
     private Map<Long, Topic> storage = new HashMap<>();
 
@@ -67,21 +67,22 @@ public class TopicInMemoryRepository implements CreateTopicPort, LoadTopicPort, 
     }
 
     @Override
-    public List<Topic> listByDateRange(LocalDate start, LocalDate end, String sortBy, String order, int page, int size) {
+    public List<Topic> listByDateRange(Date start, Date end, String sortBy, String order, int page, int size) {
         return storage.entrySet()
                 .stream()
                 .map(e -> Topic.from(e.getValue(), new Topic.TopicId(e.getKey())))
-                .filter(e -> e.getEvent().isAfter(ChronoLocalDateTime.from(start)) && e.getEvent().isBefore(ChronoLocalDateTime.from(end)))
+                .filter(e -> e.getEvent().after(start) && e.getEvent().before(end))
                 .limit(size)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<Topic> listByDate(LocalDate start, String sortBy, String order, int page, int size) {
+    public List<Topic> listByDate(Date start, String sortBy, String order, int page, int size) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         return storage.entrySet()
                 .stream()
                 .map(e -> Topic.from(e.getValue(), new Topic.TopicId(e.getKey())))
-                .filter(e -> e.getEvent().isEqual(ChronoLocalDateTime.from(start)))
+                .filter(e -> sdf.format(e.getEvent()).equals(sdf.format(start)))
                 .limit(size)
                 .collect(Collectors.toList());
     }

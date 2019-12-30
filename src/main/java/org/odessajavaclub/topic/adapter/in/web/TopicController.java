@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -93,7 +93,7 @@ public class TopicController {
     }
 
     @GetMapping("/date/{date}")
-    List<TopicDto> listTopicsByDate(@PathVariable LocalDate date,
+    List<TopicDto> listTopicsByDate(@PathVariable Date date,
                                     @RequestParam(required = false, defaultValue = "0") int page,
                                     @RequestParam(required = false, defaultValue = "100") int size,
                                     @RequestParam(value = "sortBy", defaultValue = "event") String sortBy,
@@ -105,7 +105,7 @@ public class TopicController {
     }
 
     @GetMapping("/range/{startDate}/{endDate}")
-    List<TopicDto> listTopicsByDateRange(@PathVariable LocalDate start, @PathVariable LocalDate end,
+    List<TopicDto> listTopicsByDateRange(@PathVariable Date start, @PathVariable Date end,
                                          @RequestParam(required = false, defaultValue = "0") int page,
                                          @RequestParam(required = false, defaultValue = "100") int size,
                                          @RequestParam(value = "sortBy", defaultValue = "event") String sortBy,

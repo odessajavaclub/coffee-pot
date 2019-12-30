@@ -4,7 +4,7 @@ import org.odessajavaclub.topic.domain.Topic;
 import org.odessajavaclub.topic.domain.enumeration.TopicStatus;
 import org.odessajavaclub.topic.domain.enumeration.TopicType;
 
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,9 +17,9 @@ public interface LoadTopicPort {
 
     List<Topic> listByStatus(TopicStatus status, String sortBy, String order, int page, int size);
 
-    List<Topic> listByDateRange(LocalDate start, LocalDate end, String sortBy, String order, int page, int size);
+    List<Topic> listByDateRange(Date start, Date end, String sortBy, String order, int page, int size);
 
-    List<Topic> listByDate(LocalDate start, String sortBy, String order, int page, int size);
+    List<Topic> listByDate(Date start, String sortBy, String order, int page, int size);
 
     List<Topic> listByTitleLike(String title, String sortBy, String order, int page, int size);
 }

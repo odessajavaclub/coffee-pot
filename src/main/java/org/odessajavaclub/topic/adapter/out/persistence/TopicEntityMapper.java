@@ -9,7 +9,7 @@ public class TopicEntityMapper {
         return TopicEntity.builder()
                 .id(topic.getId().map(Topic.TopicId::getValue).orElse(null))
                 .title(topic.getTitle())
-                .event(java.sql.Timestamp.valueOf(topic.getEvent()))
+                .event(topic.getEvent())
                 .type(topic.getType())
                 .author(topic.getAuthor())
                 .score(topic.getScore())
@@ -23,7 +23,7 @@ public class TopicEntityMapper {
         topic.setId(topicId);
         topic.setAuthor(topicEntity.getAuthor());
         topic.setTitle(topicEntity.getTitle());
-        topic.setEvent(new java.sql.Timestamp(topicEntity.getEvent().getTime()).toLocalDateTime());
+        topic.setEvent(topicEntity.getEvent());
         topic.setStatus(topicEntity.getStatus());
         topic.setType(topicEntity.getType());
         topic.setScore(topicEntity.getScore());

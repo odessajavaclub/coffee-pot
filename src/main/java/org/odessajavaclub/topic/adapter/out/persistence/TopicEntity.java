@@ -19,7 +19,7 @@ import javax.persistence.TemporalType;
 import java.util.Date;
 
 @Entity
-@Table(name = "Topic")
+@Table(name = "topic")
 @Builder
 @Getter
 @NoArgsConstructor

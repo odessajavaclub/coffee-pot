@@ -4,7 +4,7 @@ import org.odessajavaclub.topic.domain.Topic;
 import org.odessajavaclub.topic.domain.enumeration.TopicStatus;
 import org.odessajavaclub.topic.domain.enumeration.TopicType;
 
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,7 +20,7 @@ public interface GetTopicsQuery {
 
     List<Topic> getTopicsByType(TopicType type, String sortBy, String order, int page, int size);
 
-    List<Topic> getTopicsInDate(LocalDate date, String sortBy, String order, int page, int size);
+    List<Topic> getTopicsInDate(Date date, String sortBy, String order, int page, int size);
 
-    List<Topic> getTopicsInDateRange(LocalDate start, LocalDate end, String sortBy, String order, int page, int size);
+    List<Topic> getTopicsInDateRange(Date start, Date end, String sortBy, String order, int page, int size);
 }

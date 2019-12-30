@@ -14,7 +14,7 @@ import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Optional;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -33,7 +33,7 @@ public class Topic {
     @NotNull
     @FutureOrPresent
     @Setter
-    private LocalDateTime event;
+    private Date event;
 
     @NotNull
     @NotBlank

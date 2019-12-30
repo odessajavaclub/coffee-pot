@@ -9,7 +9,7 @@ import org.odessajavaclub.topic.domain.enumeration.TopicType;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,12 +45,12 @@ public class GetTopicService implements GetTopicsQuery {
     }
 
     @Override
-    public List<Topic> getTopicsInDate(LocalDate date, String sortBy, String order, int page, int size) {
+    public List<Topic> getTopicsInDate(Date date, String sortBy, String order, int page, int size) {
         return loadTopicPort.listByDate(date, sortBy, order, page, size);
     }
 
     @Override
-    public List<Topic> getTopicsInDateRange(LocalDate start, LocalDate end, String sortBy, String order, int page, int size) {
+    public List<Topic> getTopicsInDateRange(Date start, Date end, String sortBy, String order, int page, int size) {
         return loadTopicPort.listByDateRange(start, end, sortBy, order, page, size);
     }
 }

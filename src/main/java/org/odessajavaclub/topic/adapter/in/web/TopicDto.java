@@ -1,13 +1,13 @@
 package org.odessajavaclub.topic.adapter.in.web;
 
 import lombok.Data;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 public class TopicDto {
     private final long id;
     private final String title;
-    private final LocalDateTime event;
+    private final Date event;
     private final String type;
     private final String author;
     private final int score;
