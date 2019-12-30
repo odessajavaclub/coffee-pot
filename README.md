@@ -1,4 +1,5 @@
 # Coffee-pot
+[![workflow-ci](https://github.com/odessajavaclub/coffee-pot/workflows/Workflow%20CI/badge.svg)](https://github.com/odessajavaclub/coffee-pot/actions?query=workflow%3A%22Workflow+CI%22)
 [![codecov](https://codecov.io/gh/odessajavaclub/coffee-pot/branch/master/graph/badge.svg)](https://codecov.io/gh/odessajavaclub/coffee-pot)
 
 This is a simple application, which implements a domain-centric "Hexagonal" approach and demonstrates [Microservice Architecture Pattern](http://martinfowler.com/microservices/) using Spring Boot.
