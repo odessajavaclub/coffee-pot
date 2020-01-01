@@ -21,12 +21,13 @@ class UserTest {
     void withoutId() {
         User actual = User.withoutId("Maxim", "Sashkin", "maxs@email.com", "pass123", UserRole.USER, true);
 
-        assertAll(() -> assertEquals("Maxim", actual.getFirstName()),
-                  () -> assertEquals("Sashkin", actual.getLastName()),
-                  () -> assertEquals("maxs@email.com", actual.getEmail()),
-                  () -> assertEquals("pass123", actual.getPassword()),
-                  () -> assertEquals(UserRole.USER, actual.getRole()),
-                  () -> assertTrue(actual.isActive()));
+        assertAll(
+                () -> assertEquals("Maxim", actual.getFirstName()),
+                () -> assertEquals("Sashkin", actual.getLastName()),
+                () -> assertEquals("maxs@email.com", actual.getEmail()),
+                () -> assertEquals("pass123", actual.getPassword()),
+                () -> assertEquals(UserRole.USER, actual.getRole()),
+                () -> assertTrue(actual.isActive()));
     }
 
     @Test
