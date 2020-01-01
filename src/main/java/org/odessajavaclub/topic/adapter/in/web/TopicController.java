@@ -18,10 +18,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -48,7 +51,7 @@ public class TopicController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     ResponseEntity<TopicDto> getTopic(@PathVariable Long id) {
         return topicsQuery.getTopic(new Topic.TopicId(id))
                 .map(topicDtoMapper::toGetTopicDto)
@@ -117,13 +120,16 @@ public class TopicController {
     }
 
     @PostMapping
-    ResponseEntity<TopicDto> createTopic(@RequestBody Topic topic) {
+    ResponseEntity<TopicDto> createTopic(@Valid @RequestBody Topic topic) {
         // a command uses for validation purposes
         CreateTopicUseCase.CreateTopicCommand command = new CreateTopicUseCase.CreateTopicCommand(topic);
-        return createTopicUseCase.createTopic(command)
-                .map(topicDtoMapper::toGetTopicDto)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.badRequest().build());
+        Optional<TopicDto> topicDto = createTopicUseCase.createTopic(command).map(topicDtoMapper::toGetTopicDto);
+        if (topicDto.isPresent()) {
+            URI uri = MvcUriComponentsBuilder.fromController(getClass()).path("/{id}").buildAndExpand(topicDto.get().getId()).toUri();
+            return ResponseEntity.created(uri).body(topicDto.get());
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @PutMapping("/{id}")
