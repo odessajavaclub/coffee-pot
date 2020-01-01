@@ -34,4 +34,5 @@
 #CURL
 ```$xslt
 curl --user lohika_user@gmail.com:password123 http://localhost:8080/topics
+curl --user lohika_user@gmail.com:password123 -X POST "http://localhost:8080/topics" -H "accept: */*" -H "Content-Type: application/json" -d "{ \"author\": \"apletnev\", \"event\": \"21/01/2020 13:00\", \"score\": 30, \"status\": \"PENDING\", \"title\": \"Spring HZ3\", \"type\": \"STUDY\"}"
 ```

@@ -17,8 +17,8 @@ public class CreateTopicService implements CreateTopicUseCase {
     private final CreateTopicPort createTopicPort;
 
     @Override
-    public Optional<Topic> createTopic(CreateTopicCommand command) {
+    public Topic createTopic(CreateTopicCommand command) {
         Topic newTopic = command.getTopic();
-        return Optional.ofNullable(createTopicPort.createTopic(newTopic));
+        return createTopicPort.createTopic(newTopic);
     }
 }

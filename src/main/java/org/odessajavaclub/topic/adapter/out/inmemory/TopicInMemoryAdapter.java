@@ -78,7 +78,7 @@ public class TopicInMemoryAdapter implements CreateTopicPort, LoadTopicPort, Upd
 
     @Override
     public List<Topic> listByDate(Date start, String sortBy, String order, int page, int size) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         return storage.entrySet()
                 .stream()
                 .map(e -> Topic.from(e.getValue(), new Topic.TopicId(e.getKey())))

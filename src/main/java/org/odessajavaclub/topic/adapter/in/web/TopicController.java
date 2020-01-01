@@ -120,21 +120,32 @@ public class TopicController {
     }
 
     @PostMapping
-    ResponseEntity<TopicDto> createTopic(@Valid @RequestBody Topic topic) {
+    ResponseEntity<TopicDto> createTopic(@Valid @RequestBody TopicDto topic) {
         // a command uses for validation purposes
-        CreateTopicUseCase.CreateTopicCommand command = new CreateTopicUseCase.CreateTopicCommand(topic);
-        Optional<TopicDto> topicDto = createTopicUseCase.createTopic(command).map(topicDtoMapper::toGetTopicDto);
-        if (topicDto.isPresent()) {
-            URI uri = MvcUriComponentsBuilder.fromController(getClass()).path("/{id}").buildAndExpand(topicDto.get().getId()).toUri();
-            return ResponseEntity.created(uri).body(topicDto.get());
+        CreateTopicUseCase.CreateTopicCommand command = new CreateTopicUseCase.CreateTopicCommand(
+                topic.getTitle(),
+                topic.getEvent(),
+                topic.getType(),
+                topic.getScore(),
+                topic.getStatus());
+        TopicDto created = topicDtoMapper.toGetTopicDto(createTopicUseCase.createTopic(command));
+        if (created != null) {
+            URI uri = MvcUriComponentsBuilder.fromController(getClass()).path("/{id}").buildAndExpand(created.getId()).toUri();
+            return ResponseEntity.created(uri).body(created);
         } else {
             return ResponseEntity.badRequest().build();
         }
     }
 
     @PutMapping("/{id}")
-    ResponseEntity<TopicDto> updateTopic(@PathVariable Long id, @Valid @RequestBody Topic topic) {
-        UpdateTopicUseCase.UpdateTopicCommand command = new UpdateTopicUseCase.UpdateTopicCommand(id, topic);
+    ResponseEntity<TopicDto> updateTopic(@PathVariable Long id, @Valid @RequestBody TopicDto topic) {
+        UpdateTopicUseCase.UpdateTopicCommand command = new UpdateTopicUseCase.UpdateTopicCommand(
+                new Topic.TopicId(id),
+                topic.getTitle(),
+                topic.getEvent(),
+                topic.getType(),
+                topic.getScore(),
+                topic.getStatus());
         return updateTopicUseCase.updateTopic(command)
                 .map(topicDtoMapper::toGetTopicDto)
                 .map(ResponseEntity::ok)
