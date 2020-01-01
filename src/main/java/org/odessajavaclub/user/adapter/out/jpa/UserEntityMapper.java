@@ -2,7 +2,9 @@ package org.odessajavaclub.user.adapter.out.jpa;
 
 import lombok.NoArgsConstructor;
 import org.odessajavaclub.user.domain.User;
+import org.springframework.stereotype.Component;
 
+@Component
 @NoArgsConstructor
 public class UserEntityMapper {
 

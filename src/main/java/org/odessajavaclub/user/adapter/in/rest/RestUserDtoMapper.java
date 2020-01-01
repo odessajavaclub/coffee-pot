@@ -3,7 +3,9 @@ package org.odessajavaclub.user.adapter.in.rest;
 import lombok.NoArgsConstructor;
 import org.odessajavaclub.user.domain.User;
 import org.odessajavaclub.user.domain.UserRole;
+import org.springframework.stereotype.Component;
 
+@Component
 @NoArgsConstructor
 public class RestUserDtoMapper {
 
