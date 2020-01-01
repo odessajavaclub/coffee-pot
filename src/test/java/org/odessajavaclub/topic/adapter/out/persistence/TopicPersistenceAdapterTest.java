@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
@@ -89,4 +90,45 @@ class TopicPersistenceAdapterTest {
         assertThat(topics.get(0).getId().get().getValue()).isEqualTo(2);
     }
 
+    @Test
+    void getTopicsByTitlePositive() {
+        List<Topic> topics = adapterUnderTest.listByTitleLike("spring", "event", "desc", 0, 100);
+        assertThat(topics.size()).isEqualTo(2);
+        assertThat(topics.get(0).getId().get().getValue()).isEqualTo(1);
+    }
+
+    @Test
+    void createNewTopic() {
+        Topic newTopic = new Topic();
+        newTopic.setTitle("Spring Core Events");
+        newTopic.setEvent(Date.from(Instant.now()));
+        newTopic.setType(TopicType.STUDY);
+        newTopic.setStatus(TopicStatus.PENDING);
+        newTopic.setScore(20);
+
+        Topic createdTopic = adapterUnderTest.createTopic(newTopic);
+        assertThat(createdTopic.getId()).isNotEmpty();
+        assertThat(repository.count()).isEqualTo(5);
+    }
+
+    @Test
+    void updateTopic() {
+        Optional<Topic> topic = adapterUnderTest.loadTopic(new Topic.TopicId(3L));
+        assertThat(topic.isPresent()).isTrue();
+        Topic updateTopic = topic.get();
+        updateTopic.setScore(80);
+        updateTopic.setStatus(TopicStatus.INPROGRESS);
+        adapterUnderTest.updateTopic(updateTopic);
+        Optional<Topic> update = adapterUnderTest.loadTopic(new Topic.TopicId(3L));
+        assertThat(update.isPresent()).isTrue();
+        assertThat(update.get().getStatus()).isEqualTo(TopicStatus.INPROGRESS);
+    }
+
+    @Test
+    void deleteTopic() {
+        Boolean result = adapterUnderTest.deleteTopic(new Topic.TopicId(1L));
+        assertThat(result).isTrue();
+        Optional<Topic> topic = adapterUnderTest.loadTopic(new Topic.TopicId(1L));
+        assertThat(topic.isPresent()).isFalse();
+    }
 }

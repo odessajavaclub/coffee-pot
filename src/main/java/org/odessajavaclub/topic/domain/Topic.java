@@ -17,6 +17,8 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.Optional;
 
+//TODO: Add image field
+//TODO: Remove author field
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode
 @Data
@@ -66,6 +68,8 @@ public class Topic {
         result.setTitle(topic.getTitle());
         result.setEvent(topic.getEvent());
         result.setType(topic.getType());
+        result.setStatus(topic.getStatus());
+        result.setScore(topic.getScore());
         return result;
     }
 

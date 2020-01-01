@@ -82,7 +82,7 @@ public class TopicPersistenceAdapter implements CreateTopicPort, LoadTopicPort, 
     @Override
     public List<Topic> listByTitleLike(String title, String sortBy, String order, int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(order), sortBy));
-        return topicJpaRepository.findByTitleLike(title, pageRequest).stream()
+        return topicJpaRepository.findByTitleContainingIgnoreCase(title, pageRequest).stream()
                 .map(topicEntityMapper::toTopic)
                 .collect(Collectors.toList());
     }
