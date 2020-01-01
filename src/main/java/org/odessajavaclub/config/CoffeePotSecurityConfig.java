@@ -41,7 +41,8 @@ public class CoffeePotSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticated()
                 .and()
                 .csrf().disable()
-                .formLogin().disable();
+                //.formLogin().disable();
+                .formLogin().permitAll();
 
         // For H2 Embedded
         http
