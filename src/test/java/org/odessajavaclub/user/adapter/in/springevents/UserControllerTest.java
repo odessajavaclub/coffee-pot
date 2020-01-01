@@ -1,15 +1,16 @@
 package org.odessajavaclub.user.adapter.in.springevents;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.odessajavaclub.user.adapter.in.springevents.model.CreateActiveUserRequestEvent;
 import org.odessajavaclub.user.adapter.in.springevents.model.DeleteUserRequestEvent;
-import org.odessajavaclub.user.adapter.in.springevents.model.SpringEventUserDtoMapper;
 import org.odessajavaclub.user.adapter.in.springevents.model.GetUserRequestEvent;
 import org.odessajavaclub.user.adapter.in.springevents.model.GetUsersRequestEvent;
+import org.odessajavaclub.user.adapter.in.springevents.model.SpringEventUserDtoMapper;
+import org.odessajavaclub.user.adapter.in.springevents.model.UpdateUserRequestEvent;
 import org.odessajavaclub.user.application.port.in.CreateUserUseCase;
 import org.odessajavaclub.user.application.port.in.DeleteUserUseCase;
 import org.odessajavaclub.user.application.port.in.GetUsersQuery;
+import org.odessajavaclub.user.application.port.in.UpdateUserUseCase;
 import org.odessajavaclub.user.domain.User;
 import org.odessajavaclub.user.domain.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,14 +45,8 @@ class UserControllerTest {
     @MockBean
     private DeleteUserUseCase deleteUserUseCase;
 
-    @BeforeEach
-    void setUp() {
-        new UserController(applicationEventPublisher,
-                           springEventUserDtoMapper,
-                           createUserUseCase,
-                           getUsersQuery,
-                           deleteUserUseCase);
-    }
+    @MockBean
+    private UpdateUserUseCase updateUserUseCase;
 
     @Test
     void createActiveUser() {
@@ -87,7 +82,7 @@ class UserControllerTest {
         User user1 = mock(User.class);
         when(getUsersQuery.getUserById(new User.UserId(777L))).thenReturn(Optional.of(user1));
 
-        applicationEventPublisher.publishEvent(new GetUserRequestEvent(this, 777L));
+        applicationEventPublisher.publishEvent(new GetUserRequestEvent(this, new User.UserId(777L)));
 
         verify(getUsersQuery).getUserById(new User.UserId(777L));
         verify(springEventUserDtoMapper).toGetUserDto(user1);
@@ -97,7 +92,7 @@ class UserControllerTest {
     void getUserIfAbsent() {
         when(getUsersQuery.getUserById(new User.UserId(777L))).thenReturn(Optional.empty());
 
-        applicationEventPublisher.publishEvent(new GetUserRequestEvent(this, 777L));
+        applicationEventPublisher.publishEvent(new GetUserRequestEvent(this, new User.UserId(777L)));
 
         verify(getUsersQuery).getUserById(new User.UserId(777L));
         verifyNoInteractions(springEventUserDtoMapper);
@@ -108,7 +103,7 @@ class UserControllerTest {
         when(deleteUserUseCase.deleteUser(new DeleteUserUseCase.DeleteUserCommand(new User.UserId(123L))))
                 .thenReturn(true);
 
-        applicationEventPublisher.publishEvent(new DeleteUserRequestEvent(this, 123L));
+        applicationEventPublisher.publishEvent(new DeleteUserRequestEvent(this, new User.UserId(123L)));
 
         verify(deleteUserUseCase).deleteUser(new DeleteUserUseCase.DeleteUserCommand(new User.UserId(123L)));
     }
@@ -118,8 +113,54 @@ class UserControllerTest {
         when(deleteUserUseCase.deleteUser(new DeleteUserUseCase.DeleteUserCommand(new User.UserId(123L))))
                 .thenReturn(false);
 
-        applicationEventPublisher.publishEvent(new DeleteUserRequestEvent(this, 123L));
+        applicationEventPublisher.publishEvent(new DeleteUserRequestEvent(this, new User.UserId(123L)));
 
         verify(deleteUserUseCase).deleteUser(new DeleteUserUseCase.DeleteUserCommand(new User.UserId(123L)));
+    }
+
+    @Test
+    void updateUserIfPresent() {
+        when(updateUserUseCase.updateUser(new UpdateUserUseCase.UpdateUserCommand(new User.UserId(123L),
+                                                                                  "New",
+                                                                                  "User",
+                                                                                  "newemail@email.com")))
+                .thenReturn(Optional.of(User.withId(123L,
+                                                    "New",
+                                                    "User",
+                                                    "newemail@email.com",
+                                                    "pass123",
+                                                    UserRole.ADMIN,
+                                                    true)));
+
+        applicationEventPublisher.publishEvent(new UpdateUserRequestEvent(this,
+                                                                          new User.UserId(123L),
+                                                                          "New",
+                                                                          "User",
+                                                                          "newemail@email.com"));
+
+        verify(updateUserUseCase).updateUser(new UpdateUserUseCase.UpdateUserCommand(new User.UserId(123L),
+                                                                                     "New",
+                                                                                     "User",
+                                                                                     "newemail@email.com"));
+    }
+
+    @Test
+    void updateUserIfAbsent() {
+        when(updateUserUseCase.updateUser(new UpdateUserUseCase.UpdateUserCommand(new User.UserId(123L),
+                                                                                  "New",
+                                                                                  "User",
+                                                                                  "newemail@email.com")))
+                .thenReturn(Optional.empty());
+
+        applicationEventPublisher.publishEvent(new UpdateUserRequestEvent(this,
+                                                                          new User.UserId(123L),
+                                                                          "New",
+                                                                          "User",
+                                                                          "newemail@email.com"));
+
+        verify(updateUserUseCase).updateUser(new UpdateUserUseCase.UpdateUserCommand(new User.UserId(123L),
+                                                                                     "New",
+                                                                                     "User",
+                                                                                     "newemail@email.com"));
     }
 }

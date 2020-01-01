@@ -4,14 +4,16 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
 
+import java.util.List;
+
 @Getter
 @EqualsAndHashCode(callSuper = false)
 public class GetUsersResponseEvent extends ApplicationEvent {
 
-    private final GetUserDto getUserDto;
+    private final List<GetUserDto> users;
 
-    public GetUsersResponseEvent(Object source, GetUserDto getUserDto) {
+    public GetUsersResponseEvent(Object source, List<GetUserDto> users) {
         super(source);
-        this.getUserDto = getUserDto;
+        this.users = users;
     }
 }
