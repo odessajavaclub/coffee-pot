@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.odessajavaclub.user.application.port.in.DeleteUserUseCase;
 import org.odessajavaclub.user.application.port.out.DeleteUserPort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 class DeleteUserService implements DeleteUserUseCase {
 
