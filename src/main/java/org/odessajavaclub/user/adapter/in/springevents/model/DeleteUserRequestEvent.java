@@ -6,12 +6,12 @@ import org.springframework.context.ApplicationEvent;
 
 @Getter
 @EqualsAndHashCode(callSuper = false)
-public class GetUsersResponseEvent extends ApplicationEvent {
+public class DeleteUserRequestEvent extends ApplicationEvent {
 
-    private final GetUserDto getUserDto;
+    private final long id;
 
-    public GetUsersResponseEvent(Object source, GetUserDto getUserDto) {
+    public DeleteUserRequestEvent(Object source, long id) {
         super(source);
-        this.getUserDto = getUserDto;
+        this.id = id;
     }
 }

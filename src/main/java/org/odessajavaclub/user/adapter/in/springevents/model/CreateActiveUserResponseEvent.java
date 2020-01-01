@@ -6,11 +6,11 @@ import org.springframework.context.ApplicationEvent;
 
 @Getter
 @EqualsAndHashCode(callSuper = false)
-public class GetUsersResponseEvent extends ApplicationEvent {
+public class CreateActiveUserResponseEvent extends ApplicationEvent {
 
     private final GetUserDto getUserDto;
 
-    public GetUsersResponseEvent(Object source, GetUserDto getUserDto) {
+    public CreateActiveUserResponseEvent(Object source, GetUserDto getUserDto) {
         super(source);
         this.getUserDto = getUserDto;
     }

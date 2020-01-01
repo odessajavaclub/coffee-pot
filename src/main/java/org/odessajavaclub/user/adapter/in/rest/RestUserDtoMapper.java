@@ -5,7 +5,7 @@ import org.odessajavaclub.user.domain.User;
 import org.odessajavaclub.user.domain.UserRole;
 
 @NoArgsConstructor
-public class UserDtoMapper {
+public class RestUserDtoMapper {
 
     private static final long UNDEFINED_ID = -1L;
 

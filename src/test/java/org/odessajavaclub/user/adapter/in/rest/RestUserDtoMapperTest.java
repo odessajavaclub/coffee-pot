@@ -7,13 +7,13 @@ import org.odessajavaclub.user.domain.UserRole;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class UserDtoMapperTest {
+class RestUserDtoMapperTest {
 
-    private UserDtoMapper userDtoMapper;
+    private RestUserDtoMapper userDtoMapper;
 
     @BeforeEach
     void setUp() {
-        userDtoMapper = new UserDtoMapper();
+        userDtoMapper = new RestUserDtoMapper();
     }
 
     @Test

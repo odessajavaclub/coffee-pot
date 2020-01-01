@@ -40,7 +40,7 @@ public class UserController {
 
     private final DeactivateUserUseCase deactivateUserUseCase;
 
-    private final UserDtoMapper userDtoMapper;
+    private final RestUserDtoMapper userDtoMapper;
 
     @PostMapping
     GetUserDto createUser(@Valid @RequestBody CreateUserDto user) {
@@ -56,8 +56,7 @@ public class UserController {
     @GetMapping
     List<GetUserDto> getUsers(@RequestParam(required = false, defaultValue = "true") boolean active,
                               @RequestParam(required = false, defaultValue = "0") int page,
-                              @RequestParam(required = false, defaultValue = "100") int size
-    ) {
+                              @RequestParam(required = false, defaultValue = "100") int size) {
         return getUsersQuery.getAllUsersByActive(active, page, size)
                             .stream()
                             .map(userDtoMapper::toGetUserDto)

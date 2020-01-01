@@ -1,6 +1,7 @@
 package org.odessajavaclub.user.config;
 
-import org.odessajavaclub.user.adapter.in.rest.UserDtoMapper;
+import org.odessajavaclub.user.adapter.in.rest.RestUserDtoMapper;
+import org.odessajavaclub.user.adapter.in.springevents.model.SpringEventUserDtoMapper;
 import org.odessajavaclub.user.adapter.out.jpa.UserEntityMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,12 +10,17 @@ import org.springframework.context.annotation.Configuration;
 public class UserConfig {
 
     @Bean
-    UserDtoMapper userDtoMapper() {
-        return new UserDtoMapper();
+    RestUserDtoMapper restUserDtoMapper() {
+        return new RestUserDtoMapper();
     }
 
     @Bean
     UserEntityMapper userEntityMapper() {
         return new UserEntityMapper();
+    }
+
+    @Bean
+    SpringEventUserDtoMapper eventUserDtoMapper() {
+        return new SpringEventUserDtoMapper();
     }
 }
