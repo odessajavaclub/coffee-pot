@@ -7,7 +7,6 @@ import org.odessajavaclub.topic.domain.Topic;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
