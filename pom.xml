@@ -39,7 +39,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
-
+		<dependency>
+			<groupId>com.google.googlejavaformat</groupId>
+			<artifactId>google-java-format</artifactId>
+			<version>1.7</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.projectlombok</groupId>
