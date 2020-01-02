@@ -8,6 +8,7 @@ import org.odessajavaclub.topic.application.port.in.UpdateTopicUseCase;
 import org.odessajavaclub.topic.domain.Topic;
 import org.odessajavaclub.topic.domain.enumeration.TopicStatus;
 import org.odessajavaclub.topic.domain.enumeration.TopicType;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -73,8 +74,8 @@ public class TopicController {
       @PathVariable TopicType type,
       @RequestParam(required = false, defaultValue = "0") int page,
       @RequestParam(required = false, defaultValue = "100") int size,
-      @RequestParam(value = "sortBy", defaultValue = "event") String sortBy,
-      @RequestParam(value = "order", defaultValue = "ASC") String order) {
+      @RequestParam(required = false, value = "sortBy", defaultValue = "event") String sortBy,
+      @RequestParam(required = false, value = "order", defaultValue = "ASC") String order) {
     return topicsQuery.getTopicsByType(type, sortBy, order, page, size).stream()
         .map(topicDtoMapper::toGetTopicDto)
         .collect(Collectors.toList());
@@ -82,36 +83,36 @@ public class TopicController {
 
   @GetMapping("/name/{name}")
   List<TopicDto> listTopicsByName(
-      @PathVariable String topicName,
+      @PathVariable String name,
       @RequestParam(required = false, defaultValue = "0") int page,
       @RequestParam(required = false, defaultValue = "100") int size,
-      @RequestParam(value = "sortBy", defaultValue = "event") String sortBy,
-      @RequestParam(value = "order", defaultValue = "ASC") String order) {
-    return topicsQuery.getTopicsByName(topicName, sortBy, order, page, size).stream()
+      @RequestParam(required = false, value = "sortBy", defaultValue = "event") String sortBy,
+      @RequestParam(required = false, value = "order", defaultValue = "ASC") String order) {
+    return topicsQuery.getTopicsByName(name, sortBy, order, page, size).stream()
         .map(topicDtoMapper::toGetTopicDto)
         .collect(Collectors.toList());
   }
 
   @GetMapping("/date/{date}")
   List<TopicDto> listTopicsByDate(
-      @PathVariable Date date,
+      @PathVariable @DateTimeFormat(pattern = "dd-MM-yyyy") Date date,
       @RequestParam(required = false, defaultValue = "0") int page,
       @RequestParam(required = false, defaultValue = "100") int size,
-      @RequestParam(value = "sortBy", defaultValue = "event") String sortBy,
-      @RequestParam(value = "order", defaultValue = "ASC") String order) {
+      @RequestParam(required = false, value = "sortBy", defaultValue = "event") String sortBy,
+      @RequestParam(required = false, value = "order", defaultValue = "ASC") String order) {
     return topicsQuery.getTopicsInDate(date, sortBy, order, page, size).stream()
         .map(topicDtoMapper::toGetTopicDto)
         .collect(Collectors.toList());
   }
 
-  @GetMapping("/range/{startDate}/{endDate}")
+  @GetMapping("/range/{start}/{end}")
   List<TopicDto> listTopicsByDateRange(
-      @PathVariable Date start,
-      @PathVariable Date end,
+      @PathVariable @DateTimeFormat(pattern = "dd-MM-yyyy") Date start,
+      @PathVariable @DateTimeFormat(pattern = "dd-MM-yyyy") Date end,
       @RequestParam(required = false, defaultValue = "0") int page,
       @RequestParam(required = false, defaultValue = "100") int size,
-      @RequestParam(value = "sortBy", defaultValue = "event") String sortBy,
-      @RequestParam(value = "order", defaultValue = "ASC") String order) {
+      @RequestParam(required = false, value = "sortBy", defaultValue = "event") String sortBy,
+      @RequestParam(required = false, value = "order", defaultValue = "ASC") String order) {
     return topicsQuery.getTopicsInDateRange(start, end, sortBy, order, page, size).stream()
         .map(topicDtoMapper::toGetTopicDto)
         .collect(Collectors.toList());
