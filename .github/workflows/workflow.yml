@@ -17,6 +17,11 @@ jobs:
     - name: Build
       run: mvn -B package --file pom.xml
 
+    - name: Google Java Format
+      uses: axel-op/googlejavaformat-action@v1.0.0
+      with:
+        args: "--aosp --replace"
+
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1.0.5
       with:
