@@ -14,11 +14,11 @@ import java.util.Optional;
 @Transactional
 public class CreateTopicService implements CreateTopicUseCase {
 
-    private final CreateTopicPort createTopicPort;
+  private final CreateTopicPort createTopicPort;
 
-    @Override
-    public Topic createTopic(CreateTopicCommand command) {
-        Topic newTopic = command.getTopic();
-        return createTopicPort.createTopic(newTopic);
-    }
+  @Override
+  public Topic createTopic(CreateTopicCommand command) {
+    Topic newTopic = command.getTopic();
+    return createTopicPort.createTopic(newTopic);
+  }
 }

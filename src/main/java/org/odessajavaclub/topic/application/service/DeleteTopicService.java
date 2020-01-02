@@ -12,10 +12,10 @@ import javax.transaction.Transactional;
 @Transactional
 public class DeleteTopicService implements DeleteTopicUseCase {
 
-    private final DeleteTopicPort deleteTopicPort;
+  private final DeleteTopicPort deleteTopicPort;
 
-    @Override
-    public boolean deleteTopic(DeleteTopicCommand command) {
-        return deleteTopicPort.deleteTopic(command.getTopicId());
-    }
+  @Override
+  public boolean deleteTopic(DeleteTopicCommand command) {
+    return deleteTopicPort.deleteTopic(command.getTopicId());
+  }
 }

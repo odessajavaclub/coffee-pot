@@ -14,11 +14,11 @@ import java.util.Optional;
 @Transactional
 public class UpdateTopicService implements UpdateTopicUseCase {
 
-    private final UpdateTopicPort updateTopicPort;
+  private final UpdateTopicPort updateTopicPort;
 
-    @Override
-    public Optional<Topic> updateTopic(UpdateTopicCommand command) {
-        Topic updateTopic = command.getTopic();
-        return Optional.ofNullable(updateTopicPort.updateTopic(updateTopic));
-    }
+  @Override
+  public Optional<Topic> updateTopic(UpdateTopicCommand command) {
+    Topic updateTopic = command.getTopic();
+    return Optional.ofNullable(updateTopicPort.updateTopic(updateTopic));
+  }
 }

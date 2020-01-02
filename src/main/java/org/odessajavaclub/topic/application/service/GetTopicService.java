@@ -17,40 +17,44 @@ import java.util.Optional;
 @Service
 @Transactional
 public class GetTopicService implements GetTopicsQuery {
-    private final LoadTopicPort loadTopicPort;
+  private final LoadTopicPort loadTopicPort;
 
-    @Override
-    public Optional<Topic> getTopic(Topic.TopicId topicId) {
-        return loadTopicPort.loadTopic(topicId);
-    }
+  @Override
+  public Optional<Topic> getTopic(Topic.TopicId topicId) {
+    return loadTopicPort.loadTopic(topicId);
+  }
 
-    @Override
-    public List<Topic> getTopics(String sortBy, String order, int page, int size) {
-        return loadTopicPort.listAll(sortBy, order, page, size);
-    }
+  @Override
+  public List<Topic> getTopics(String sortBy, String order, int page, int size) {
+    return loadTopicPort.listAll(sortBy, order, page, size);
+  }
 
-    @Override
-    public List<Topic> getTopicsByName(String topicName, String sortBy, String order, int page, int size) {
-        return loadTopicPort.listByTitleLike(topicName, sortBy, order, page, size);
-    }
+  @Override
+  public List<Topic> getTopicsByName(
+      String topicName, String sortBy, String order, int page, int size) {
+    return loadTopicPort.listByTitleLike(topicName, sortBy, order, page, size);
+  }
 
-    @Override
-    public List<Topic> getTopicsByStatus(TopicStatus status, String sortBy, String order, int page, int size) {
-        return loadTopicPort.listByStatus(status, sortBy, order, page, size);
-    }
+  @Override
+  public List<Topic> getTopicsByStatus(
+      TopicStatus status, String sortBy, String order, int page, int size) {
+    return loadTopicPort.listByStatus(status, sortBy, order, page, size);
+  }
 
-    @Override
-    public List<Topic> getTopicsByType(TopicType type, String sortBy, String order, int page, int size) {
-        return loadTopicPort.listByType(type, sortBy, order, page, size);
-    }
+  @Override
+  public List<Topic> getTopicsByType(
+      TopicType type, String sortBy, String order, int page, int size) {
+    return loadTopicPort.listByType(type, sortBy, order, page, size);
+  }
 
-    @Override
-    public List<Topic> getTopicsInDate(Date date, String sortBy, String order, int page, int size) {
-        return loadTopicPort.listByDate(date, sortBy, order, page, size);
-    }
+  @Override
+  public List<Topic> getTopicsInDate(Date date, String sortBy, String order, int page, int size) {
+    return loadTopicPort.listByDate(date, sortBy, order, page, size);
+  }
 
-    @Override
-    public List<Topic> getTopicsInDateRange(Date start, Date end, String sortBy, String order, int page, int size) {
-        return loadTopicPort.listByDateRange(start, end, sortBy, order, page, size);
-    }
+  @Override
+  public List<Topic> getTopicsInDateRange(
+      Date start, Date end, String sortBy, String order, int page, int size) {
+    return loadTopicPort.listByDateRange(start, end, sortBy, order, page, size);
+  }
 }

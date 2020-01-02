@@ -12,16 +12,16 @@ import java.io.IOException;
 @TestConfiguration
 public class EmbeddedPostgresTestConfig {
 
-    @Bean
-    @Primary
-    public DataSource dataSource() throws IOException {
-        String jdbcUrl = embeddedPostgres().getJdbcUrl("postgres", "postgres");
-        jdbcUrl = jdbcUrl + "&stringtype=unspecified";
-        return new DriverManagerDataSource(jdbcUrl);
-    }
+  @Bean
+  @Primary
+  public DataSource dataSource() throws IOException {
+    String jdbcUrl = embeddedPostgres().getJdbcUrl("postgres", "postgres");
+    jdbcUrl = jdbcUrl + "&stringtype=unspecified";
+    return new DriverManagerDataSource(jdbcUrl);
+  }
 
-    @Bean(destroyMethod = "close")
-    public EmbeddedPostgres embeddedPostgres() throws IOException {
-        return EmbeddedPostgres.start();
-    }
+  @Bean(destroyMethod = "close")
+  public EmbeddedPostgres embeddedPostgres() throws IOException {
+    return EmbeddedPostgres.start();
+  }
 }

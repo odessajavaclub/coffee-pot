@@ -9,11 +9,14 @@ import org.springframework.stereotype.Repository;
 import java.util.Date;
 import java.util.List;
 
-//TODO: Add find by score
+// TODO: Add find by score
 @Repository
 public interface TopicJPARepository extends JpaRepository<TopicEntity, Long> {
-    List<TopicEntity> findByType(TopicType type, Pageable pageable);
-    List<TopicEntity> findByStatus(TopicStatus status, Pageable pageable);
-    List<TopicEntity> findByEventBetween(Date start, Date end, Pageable pageable);
-    List<TopicEntity> findByTitleContainingIgnoreCase(String title, Pageable pageable);
+  List<TopicEntity> findByType(TopicType type, Pageable pageable);
+
+  List<TopicEntity> findByStatus(TopicStatus status, Pageable pageable);
+
+  List<TopicEntity> findByEventBetween(Date start, Date end, Pageable pageable);
+
+  List<TopicEntity> findByTitleContainingIgnoreCase(String title, Pageable pageable);
 }

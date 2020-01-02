@@ -14,40 +14,40 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class CoffeePotSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Bean
-    PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-    }
+  @Bean
+  PasswordEncoder passwordEncoder() {
+    return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+  }
 
-    //the purpose of this task is to get list of user-tied objects and I do not have enough time to implement proper security,
-    // so for test task purposes I will use in memory authentication with userName as unique identifier instead userId
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-                .inMemoryAuthentication()
-                .withUser("lohika_user@gmail.com")
-                .password("{noop}password123")
-                .roles("USER");
-    }
+  // the purpose of this task is to get list of user-tied objects and I do not have enough time to
+  // implement proper security,
+  // so for test task purposes I will use in memory authentication with userName as unique
+  // identifier instead userId
+  @Autowired
+  public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+    auth.inMemoryAuthentication()
+        .withUser("lohika_user@gmail.com")
+        .password("{noop}password123")
+        .roles("USER");
+  }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-                .httpBasic()
-                .and()
-                .authorizeRequests()
-                .antMatchers("/**").hasRole("USER")
-                .anyRequest()
-                .authenticated()
-                .and()
-                .csrf().disable()
-                //.formLogin().disable();
-                .formLogin().permitAll();
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+    http.httpBasic()
+        .and()
+        .authorizeRequests()
+        .antMatchers("/**")
+        .hasRole("USER")
+        .anyRequest()
+        .authenticated()
+        .and()
+        .csrf()
+        .disable()
+        // .formLogin().disable();
+        .formLogin()
+        .permitAll();
 
-        // For H2 Embedded
-        http
-                .headers()
-                .frameOptions()
-                .sameOrigin();
-    }
+    // For H2 Embedded
+    http.headers().frameOptions().sameOrigin();
+  }
 }

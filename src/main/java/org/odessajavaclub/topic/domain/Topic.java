@@ -17,63 +17,50 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.Optional;
 
-//TODO: Add image field
-//TODO: Remove author field
+// TODO: Add image field
+// TODO: Remove author field
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode
 @Data
 public class Topic {
 
-    private TopicId id;
+  private TopicId id;
 
-    @NotNull
-    @NotBlank
-    @Min(3)
-    @Setter
-    private String title;
+  @NotNull
+  @NotBlank
+  @Min(3)
+  @Setter
+  private String title;
 
-    @NotNull
-    @FutureOrPresent
-    @Setter
-    private Date event;
+  @NotNull @FutureOrPresent @Setter private Date event;
 
-    @NotNull
-    @NotBlank
-    @Setter
-    private TopicType type = TopicType.STUDY;
+  @NotNull @NotBlank @Setter private TopicType type = TopicType.STUDY;
 
-    @NotNull
-    @NotBlank
-    private String author;
+  @NotNull @NotBlank private String author;
 
-    private int score;
+  private int score;
 
-    @NotNull
-    @NotBlank
-    @Setter
-    private TopicStatus status = TopicStatus.PENDING;
+  @NotNull @NotBlank @Setter private TopicStatus status = TopicStatus.PENDING;
 
-    @Value
-    public static class TopicId {
-        @NonNull
-        private Long value;
-    }
+  @Value
+  public static class TopicId {
+    @NonNull private Long value;
+  }
 
-    public Topic() {
-    }
+  public Topic() {}
 
-    public static Topic from(Topic topic, TopicId topicId) {
-        Topic result = new Topic();
-        result.setId(topicId);
-        result.setTitle(topic.getTitle());
-        result.setEvent(topic.getEvent());
-        result.setType(topic.getType());
-        result.setStatus(topic.getStatus());
-        result.setScore(topic.getScore());
-        return result;
-    }
+  public static Topic from(Topic topic, TopicId topicId) {
+    Topic result = new Topic();
+    result.setId(topicId);
+    result.setTitle(topic.getTitle());
+    result.setEvent(topic.getEvent());
+    result.setType(topic.getType());
+    result.setStatus(topic.getStatus());
+    result.setScore(topic.getScore());
+    return result;
+  }
 
-    public Optional<TopicId> getId() {
-        return Optional.ofNullable(this.id);
-    }
+  public Optional<TopicId> getId() {
+    return Optional.ofNullable(this.id);
+  }
 }

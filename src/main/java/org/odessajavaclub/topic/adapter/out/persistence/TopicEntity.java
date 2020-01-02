@@ -25,22 +25,22 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TopicEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    private String title;
+  private String title;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date event;
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date event;
 
-    @Enumerated(EnumType.STRING)
-    private TopicType type;
+  @Enumerated(EnumType.STRING)
+  private TopicType type;
 
-    private String author;
+  private String author;
 
-    private int score;
+  private int score;
 
-    @Enumerated(EnumType.STRING)
-    private TopicStatus status;
+  @Enumerated(EnumType.STRING)
+  private TopicStatus status;
 }

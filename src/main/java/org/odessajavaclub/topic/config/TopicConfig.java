@@ -7,13 +7,13 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class TopicConfig {
-    @Bean
-    TopicDtoMapper topicDtoMapper() {
-        return new TopicDtoMapper();
-    }
+  @Bean
+  TopicDtoMapper topicDtoMapper() {
+    return new TopicDtoMapper();
+  }
 
-    @Bean
-    TopicEntityMapper topicEntityMapper() {
-        return new TopicEntityMapper();
-    }
+  @Bean
+  TopicEntityMapper topicEntityMapper() {
+    return new TopicEntityMapper();
+  }
 }
