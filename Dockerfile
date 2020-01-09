@@ -1,7 +1,7 @@
 ARG BASE_IMAGE_PREFIX
 # see hooks/post_checkout
 ARG ARCH
-FROM maven:3.6.3-jdk-11-openj9 as maven
+FROM ${BASE_IMAGE_PREFIX}maven:3.6.3-jdk-11-openj9 as maven
 WORKDIR /coffee_pot
 COPY ./pom.xml ./pom.xml
 RUN mvn dependency:go-offline -B
