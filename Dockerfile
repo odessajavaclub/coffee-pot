@@ -11,7 +11,7 @@ RUN mvn package && cp target/coffee_pot.jar coffee_pot.jar
 
 FROM ${BASE_IMAGE_PREFIX}openjdk:11-jre
 # HACK: don't fail when no qemu binary provided
-COPY qemu-${ARCH}-static* /usr/bin/
+COPY .gitignore qemu-${ARCH}-static* /usr/bin/
 WORKDIR /coffee_pot
 COPY --from=maven /coffee_pot/coffee_pot.jar ./coffee_pot.jar
 COPY docker/start.sh start.sh
