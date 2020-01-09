@@ -1,4 +1,7 @@
-FROM maven:3.6.3-jdk-11-openj9 as maven
+ARG BASE_IMAGE_PREFIX
+# see hooks/post_checkout
+ARG ARCH
+FROM ${BASE_IMAGE_PREFIX}maven:3.6.3-jdk-11-openj9 as maven
 WORKDIR /coffee_pot
 COPY ./pom.xml ./pom.xml
 RUN mvn dependency:go-offline -B
@@ -6,7 +9,9 @@ COPY ./src ./src
 
 RUN mvn package && cp target/coffee_pot.jar coffee_pot.jar
 
-FROM openjdk:11-jre
+FROM ${BASE_IMAGE_PREFIX}openjdk:11-jre
+# HACK: don't fail when no qemu binary provided
+COPY qemu-${ARCH}-static* /usr/bin/
 WORKDIR /coffee_pot
 COPY --from=maven /coffee_pot/coffee_pot.jar ./coffee_pot.jar
 COPY docker/start.sh start.sh
