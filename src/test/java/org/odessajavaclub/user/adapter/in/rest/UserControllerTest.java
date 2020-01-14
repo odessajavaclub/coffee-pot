@@ -171,7 +171,7 @@ class UserControllerTest {
     @Test
     @WithMockUser(username = USER_NAME)
     void getUsersIfUsersExist() throws Exception {
-        when(getUsersQuery.getAllUsersByActive(DEFAULT_ACTIVE, DEFAULT_PAGE, DEFAULT_SIZE))
+        when(getUsersQuery.getAllUsers(DEFAULT_PAGE, DEFAULT_SIZE))
                 .thenReturn(List.of(User.withId(1L,
                                                 "First name 1",
                                                 "Last name 1",
@@ -211,7 +211,7 @@ class UserControllerTest {
     @Test
     @WithMockUser(username = USER_NAME)
     void getUsersPagedIfUsersExist() throws Exception {
-        when(getUsersQuery.getAllUsersByActive(DEFAULT_ACTIVE, 1, 2))
+        when(getUsersQuery.getAllUsers(1, 2))
                 .thenReturn(List.of(User.withId(1L,
                                                 "First name 1",
                                                 "Last name 1",

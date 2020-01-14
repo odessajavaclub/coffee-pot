@@ -54,13 +54,20 @@ public class UserController {
     }
 
     @GetMapping
-    List<GetUserDto> getUsers(@RequestParam(required = false, defaultValue = "true") boolean active,
+    List<GetUserDto> getUsers(@RequestParam(required = false) Boolean active,
                               @RequestParam(required = false, defaultValue = "0") int page,
                               @RequestParam(required = false, defaultValue = "100") int size) {
-        return getUsersQuery.getAllUsersByActive(active, page, size)
-                            .stream()
-                            .map(userDtoMapper::toGetUserDto)
-                            .collect(Collectors.toList());
+        if (active == null) {
+            return getUsersQuery.getAllUsers(page, size)
+                                .stream()
+                                .map(userDtoMapper::toGetUserDto)
+                                .collect(Collectors.toList());
+        } else {
+            return getUsersQuery.getAllUsersByActive(active, page, size)
+                                .stream()
+                                .map(userDtoMapper::toGetUserDto)
+                                .collect(Collectors.toList());
+        }
     }
 
     @GetMapping("/{id}")
