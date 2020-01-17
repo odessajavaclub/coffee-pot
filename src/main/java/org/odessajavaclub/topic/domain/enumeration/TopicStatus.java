@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModel;
 @ApiModel
 public enum TopicStatus {
   INPROGRESS,
-  ABANDONE,
+  ABANDONED,
   DONE,
   PENDING
 }

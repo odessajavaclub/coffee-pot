@@ -8,4 +8,4 @@ insert into topic(id, title, event, type, author, score, status)
 values (2, 'OpenAPI/Swagger', '2019-12-04 13:00:00.0', 'STUDY', 'AlexAleksandrov', 20, 'INPROGRESS');
 
 insert into topic(id, title, event, type, author, score, status)
-values (3, 'Spring Core Events', '2019-03-20 12:00:00.0', 'STUDY', 'kaspian-xz', 30, 'ABANDONE');
+values (3, 'Spring Core Events', '2019-03-20 12:00:00.0', 'STUDY', 'kaspian-xz', 30, 'ABANDONED');

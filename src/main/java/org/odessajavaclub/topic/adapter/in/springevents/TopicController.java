@@ -50,9 +50,8 @@ public class TopicController {
     topicsQuery
         .getTopic(event.getId())
         .ifPresent(
-            topic -> {
-              applicationEventPublisher.publishEvent(new GetTopicResponseEvent(this, topic));
-            });
+            topic ->
+                applicationEventPublisher.publishEvent(new GetTopicResponseEvent(this, topic)));
   }
 
   @EventListener
@@ -62,9 +61,8 @@ public class TopicController {
         .getTopicsByName(
             event.getName(), event.getSortBy(), event.getOrder(), event.getPage(), event.getSize())
         .forEach(
-            topic -> {
-              applicationEventPublisher.publishEvent(new GetTopicResponseEvent(this, topic));
-            });
+            topic ->
+                applicationEventPublisher.publishEvent(new GetTopicResponseEvent(this, topic)));
   }
 
   @EventListener

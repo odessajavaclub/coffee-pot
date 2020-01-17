@@ -19,10 +19,6 @@ public class CoffeePotSecurityConfig extends WebSecurityConfigurerAdapter {
     return PasswordEncoderFactories.createDelegatingPasswordEncoder();
   }
 
-  // the purpose of this task is to get list of user-tied objects and I do not have enough time to
-  // implement proper security,
-  // so for test task purposes I will use in memory authentication with userName as unique
-  // identifier instead userId
   @Autowired
   public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
     auth.inMemoryAuthentication()
