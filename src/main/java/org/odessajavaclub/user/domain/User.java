@@ -1,0 +1,99 @@
+package org.odessajavaclub.user.domain;
+
+import java.util.Optional;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
+import lombok.Value;
+
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@EqualsAndHashCode(callSuper = false)
+@ToString
+@Getter
+public class User {
+
+  private UserId id;
+
+  @NotBlank
+  private String firstName;
+
+  @NotBlank
+  private String lastName;
+
+  @Email
+  private String email;
+
+  @NotBlank
+  private String password;
+
+  @NotNull
+  private UserRole role;
+
+  private boolean active;
+
+  @Value
+  public static class UserId {
+
+    @NotNull
+    private Long value;
+  }
+
+  public static User withoutId(String firstName,
+                               String lastName,
+                               String email,
+                               String password,
+                               UserRole role,
+                               boolean active) {
+    return new User(null, firstName, lastName, email, password, role, active);
+  }
+
+  public static User withId(Long id,
+                            String firstName,
+                            String lastName,
+                            String email,
+                            String password,
+                            UserRole role,
+                            boolean active) {
+    UserId userId = id != null ? new UserId(id) : null;
+    return new User(userId, firstName, lastName, email, password, role, active);
+  }
+
+  public static User from(User user, String newFirstName, String newLastName, String newEmail) {
+    return new User(user.id,
+                    newFirstName != null ? newFirstName : user.firstName,
+                    newLastName != null ? newLastName : user.lastName,
+                    newEmail != null ? newEmail : user.email,
+                    user.password,
+                    user.role,
+                    user.active);
+  }
+
+  public static User from(User user, UserId userId) {
+    return new User(userId,
+                    user.firstName,
+                    user.lastName,
+                    user.email,
+                    user.password,
+                    user.role,
+                    user.active);
+  }
+
+  public static User from(User user, boolean active) {
+    return new User(user.id,
+                    user.firstName,
+                    user.lastName,
+                    user.email,
+                    user.password,
+                    user.role,
+                    active);
+  }
+
+  public Optional<UserId> getId() {
+    return Optional.ofNullable(this.id);
+  }
+}

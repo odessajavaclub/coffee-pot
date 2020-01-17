@@ -21,4 +21,10 @@ public class CoffeePotAppConfig {
         .paths(PathSelectors.any())
         .build();
   }
+
+  // For testing purposes is commented
+//    @Bean
+//    PasswordEncoder passwordEncoder() {
+//        return new BCryptPasswordEncoder();
+//    }
 }
