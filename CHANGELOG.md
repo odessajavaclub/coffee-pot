@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](https://github.com/odessajavaclub/coffee-pot/compare/master...HEAD)
 ### Added
+- ISSUE-1 ([#16](https://github.com/odessajavaclub/coffee-pot/pull/16))
+    - Add topic component
 - ISSUE-30 ([#31](https://github.com/odessajavaclub/coffee-pot/pull/31))
     - Add google code formatter
 - ISSUE-26 ([#27](https://github.com/odessajavaclub/coffee-pot/pull/27))
