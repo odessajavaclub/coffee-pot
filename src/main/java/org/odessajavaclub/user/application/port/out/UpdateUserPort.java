@@ -4,5 +4,5 @@ import org.odessajavaclub.user.domain.User;
 
 public interface UpdateUserPort {
 
-    User updateUser(User updatedUser);
+  User updateUser(User updatedUser);
 }

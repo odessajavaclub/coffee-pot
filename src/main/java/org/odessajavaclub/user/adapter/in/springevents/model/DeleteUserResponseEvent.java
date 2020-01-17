@@ -8,10 +8,10 @@ import org.springframework.context.ApplicationEvent;
 @EqualsAndHashCode(callSuper = false)
 public class DeleteUserResponseEvent extends ApplicationEvent {
 
-    private final boolean removed;
+  private final boolean removed;
 
-    public DeleteUserResponseEvent(Object source, boolean removed) {
-        super(source);
-        this.removed = removed;
-    }
+  public DeleteUserResponseEvent(Object source, boolean removed) {
+    super(source);
+    this.removed = removed;
+  }
 }

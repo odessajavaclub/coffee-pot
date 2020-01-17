@@ -4,7 +4,7 @@ import org.odessajavaclub.user.domain.User;
 
 class UserIdIsAbsentException extends RuntimeException {
 
-    UserIdIsAbsentException(User user) {
-        super("User id must be set for user: " + user);
-    }
+  UserIdIsAbsentException(User user) {
+    super("User id must be set for user: " + user);
+  }
 }

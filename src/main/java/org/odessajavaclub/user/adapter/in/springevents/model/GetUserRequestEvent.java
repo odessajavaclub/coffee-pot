@@ -9,10 +9,10 @@ import org.springframework.context.ApplicationEvent;
 @EqualsAndHashCode(callSuper = false)
 public class GetUserRequestEvent extends ApplicationEvent {
 
-    private final User.UserId id;
+  private final User.UserId id;
 
-    public GetUserRequestEvent(Object source, User.UserId id) {
-        super(source);
-        this.id = id;
-    }
+  public GetUserRequestEvent(Object source, User.UserId id) {
+    super(source);
+    this.id = id;
+  }
 }

@@ -9,10 +9,10 @@ import org.springframework.context.ApplicationEvent;
 @EqualsAndHashCode(callSuper = false)
 public class DeleteUserRequestEvent extends ApplicationEvent {
 
-    private final User.UserId id;
+  private final User.UserId id;
 
-    public DeleteUserRequestEvent(Object source, User.UserId id) {
-        super(source);
-        this.id = id;
-    }
+  public DeleteUserRequestEvent(Object source, User.UserId id) {
+    super(source);
+    this.id = id;
+  }
 }

@@ -1,5 +1,7 @@
 package org.odessajavaclub.user.adapter.in.springevents;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.odessajavaclub.user.adapter.in.springevents.model.CreateActiveUserRequestEvent;
 import org.odessajavaclub.user.adapter.in.springevents.model.CreateActiveUserResponseEvent;
@@ -21,67 +23,67 @@ import org.odessajavaclub.user.domain.User;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @RequiredArgsConstructor
 public class UserController {
 
-    private final ApplicationEventPublisher applicationEventPublisher;
+  private final ApplicationEventPublisher applicationEventPublisher;
 
-    private final SpringEventUserDtoMapper springEventUserDtoMapper;
+  private final SpringEventUserDtoMapper springEventUserDtoMapper;
 
-    private final CreateUserUseCase createUserUseCase;
+  private final CreateUserUseCase createUserUseCase;
 
-    private final GetUsersQuery getUsersQuery;
+  private final GetUsersQuery getUsersQuery;
 
-    private final DeleteUserUseCase deleteUserUseCase;
+  private final DeleteUserUseCase deleteUserUseCase;
 
-    private final UpdateUserUseCase updateUserUseCase;
+  private final UpdateUserUseCase updateUserUseCase;
 
-    @EventListener
-    public void createActiveUser(CreateActiveUserRequestEvent requestEvent) {
-        User createdUser = createUserUseCase.createActiveUser(new CreateUserUseCase.CreateUserCommand(requestEvent.getFirstName(),
-                                                                                                      requestEvent.getLastName(),
-                                                                                                      requestEvent.getEmail(),
-                                                                                                      requestEvent.getPassword(),
-                                                                                                      requestEvent.getRole()));
-        applicationEventPublisher.publishEvent(new CreateActiveUserResponseEvent(this,
-                                                                                 springEventUserDtoMapper.toGetUserDto(createdUser)));
-    }
+  @EventListener
+  public void createActiveUser(CreateActiveUserRequestEvent requestEvent) {
+    User createdUser = createUserUseCase
+        .createActiveUser(new CreateUserUseCase.CreateUserCommand(requestEvent.getFirstName(),
+                                                                  requestEvent.getLastName(),
+                                                                  requestEvent.getEmail(),
+                                                                  requestEvent.getPassword(),
+                                                                  requestEvent.getRole()));
+    applicationEventPublisher.publishEvent(new CreateActiveUserResponseEvent(this,
+                                                                             springEventUserDtoMapper.toGetUserDto(createdUser)));
+  }
 
-    @EventListener
-    public void getUsers(GetUsersRequestEvent requestEvent) {
-        List<GetUserDto> users = getUsersQuery.getAllUsersByActive(requestEvent.isActive(),
-                                                                   requestEvent.getPage(),
-                                                                   requestEvent.getSize())
-                                              .stream()
-                                              .map(springEventUserDtoMapper::toGetUserDto)
-                                              .collect(Collectors.toList());
-        applicationEventPublisher.publishEvent(new GetUsersResponseEvent(this, users));
-    }
+  @EventListener
+  public void getUsers(GetUsersRequestEvent requestEvent) {
+    List<GetUserDto> users = getUsersQuery.getAllUsersByActive(requestEvent.isActive(),
+                                                               requestEvent.getPage(),
+                                                               requestEvent.getSize())
+                                          .stream()
+                                          .map(springEventUserDtoMapper::toGetUserDto)
+                                          .collect(Collectors.toList());
+    applicationEventPublisher.publishEvent(new GetUsersResponseEvent(this, users));
+  }
 
-    @EventListener
-    public void getUser(GetUserRequestEvent requestEvent) {
-        getUsersQuery.getUserById(requestEvent.getId())
-                     .ifPresent(u -> applicationEventPublisher.publishEvent(new GetUserResponseEvent(this,
-                                                                                                     springEventUserDtoMapper.toGetUserDto(u))));
-    }
+  @EventListener
+  public void getUser(GetUserRequestEvent requestEvent) {
+    getUsersQuery.getUserById(requestEvent.getId())
+                 .ifPresent(u -> applicationEventPublisher.publishEvent(new GetUserResponseEvent(this,
+                                                                                                 springEventUserDtoMapper.toGetUserDto(u))));
+  }
 
-    @EventListener
-    public void deleteUser(DeleteUserRequestEvent requestEvent) {
-        boolean removed = deleteUserUseCase.deleteUser(new DeleteUserUseCase.DeleteUserCommand(requestEvent.getId()));
-        applicationEventPublisher.publishEvent(new DeleteUserResponseEvent(this, removed));
-    }
+  @EventListener
+  public void deleteUser(DeleteUserRequestEvent requestEvent) {
+    boolean removed = deleteUserUseCase
+        .deleteUser(new DeleteUserUseCase.DeleteUserCommand(requestEvent.getId()));
+    applicationEventPublisher.publishEvent(new DeleteUserResponseEvent(this, removed));
+  }
 
-    @EventListener
-    public void updateUser(UpdateUserRequestEvent requestEvent) {
-        updateUserUseCase.updateUser(new UpdateUserUseCase.UpdateUserCommand(requestEvent.getId(),
-                                                                             requestEvent.getNewFirstName(),
-                                                                             requestEvent.getNewLastName(),
-                                                                             requestEvent.getNewEmail()))
-                         .map(springEventUserDtoMapper::toGetUserDto)
-                         .ifPresentOrElse(u -> applicationEventPublisher.publishEvent(new UpdateUserResponseEvent(this, u)),
-                                          () -> applicationEventPublisher.publishEvent(new UpdateUserResponseEvent(this, null)));
-    }
+  @EventListener
+  public void updateUser(UpdateUserRequestEvent requestEvent) {
+    updateUserUseCase.updateUser(new UpdateUserUseCase.UpdateUserCommand(requestEvent.getId(),
+                                                                         requestEvent.getNewFirstName(),
+                                                                         requestEvent.getNewLastName(),
+                                                                         requestEvent.getNewEmail()))
+                     .map(springEventUserDtoMapper::toGetUserDto)
+                     .ifPresentOrElse(
+                         u -> applicationEventPublisher.publishEvent(new UpdateUserResponseEvent(this, u)),
+                         () -> applicationEventPublisher.publishEvent(new UpdateUserResponseEvent(this, null)));
+  }
 }

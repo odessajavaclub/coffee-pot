@@ -4,5 +4,5 @@ import org.odessajavaclub.user.domain.User;
 
 public interface CreateUserPort {
 
-    User createUser(User user);
+  User createUser(User user);
 }

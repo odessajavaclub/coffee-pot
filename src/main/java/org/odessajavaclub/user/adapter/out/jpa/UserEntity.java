@@ -1,13 +1,5 @@
 package org.odessajavaclub.user.adapter.out.jpa;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-import org.odessajavaclub.user.domain.UserRole;
-
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -15,6 +7,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.odessajavaclub.user.domain.UserRole;
 
 @Entity
 @Table(name = "USERS")
@@ -26,21 +25,21 @@ import javax.persistence.Table;
 @ToString
 public class UserEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    private String firstName;
+  private String firstName;
 
-    private String lastName;
+  private String lastName;
 
-    private String email;
+  private String email;
 
-    private String password;
+  private String password;
 
-    // TODO: should we create a separate enum for JPA adapter?
-    @Enumerated(EnumType.STRING)
-    private UserRole role;
+  // TODO: should we create a separate enum for JPA adapter?
+  @Enumerated(EnumType.STRING)
+  private UserRole role;
 
-    private boolean active;
+  private boolean active;
 }

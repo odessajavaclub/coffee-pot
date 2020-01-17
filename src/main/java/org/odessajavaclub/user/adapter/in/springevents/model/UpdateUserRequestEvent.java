@@ -9,23 +9,23 @@ import org.springframework.context.ApplicationEvent;
 @EqualsAndHashCode(callSuper = false)
 public class UpdateUserRequestEvent extends ApplicationEvent {
 
-    private User.UserId id;
+  private User.UserId id;
 
-    private String newFirstName;
+  private String newFirstName;
 
-    private String newLastName;
+  private String newLastName;
 
-    private String newEmail;
+  private String newEmail;
 
-    public UpdateUserRequestEvent(Object source,
-                                  User.UserId id,
-                                  String newFirstName,
-                                  String newLastName,
-                                  String newEmail) {
-        super(source);
-        this.id = id;
-        this.newFirstName = newFirstName;
-        this.newLastName = newLastName;
-        this.newEmail = newEmail;
-    }
+  public UpdateUserRequestEvent(Object source,
+                                User.UserId id,
+                                String newFirstName,
+                                String newLastName,
+                                String newEmail) {
+    super(source);
+    this.id = id;
+    this.newFirstName = newFirstName;
+    this.newLastName = newLastName;
+    this.newEmail = newEmail;
+  }
 }

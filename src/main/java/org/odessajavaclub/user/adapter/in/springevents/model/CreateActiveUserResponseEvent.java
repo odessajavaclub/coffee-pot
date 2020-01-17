@@ -8,10 +8,10 @@ import org.springframework.context.ApplicationEvent;
 @EqualsAndHashCode(callSuper = false)
 public class CreateActiveUserResponseEvent extends ApplicationEvent {
 
-    private final GetUserDto createdUser;
+  private final GetUserDto createdUser;
 
-    public CreateActiveUserResponseEvent(Object source, GetUserDto createdUser) {
-        super(source);
-        this.createdUser = createdUser;
-    }
+  public CreateActiveUserResponseEvent(Object source, GetUserDto createdUser) {
+    super(source);
+    this.createdUser = createdUser;
+  }
 }

@@ -8,16 +8,16 @@ import org.springframework.context.ApplicationEvent;
 @EqualsAndHashCode(callSuper = false)
 public class GetUsersRequestEvent extends ApplicationEvent {
 
-    private final boolean active;
+  private final boolean active;
 
-    private final int page;
+  private final int page;
 
-    private final int size;
+  private final int size;
 
-    public GetUsersRequestEvent(Object source, boolean active, int page, int size) {
-        super(source);
-        this.active = active;
-        this.page = page;
-        this.size = size;
-    }
+  public GetUsersRequestEvent(Object source, boolean active, int page, int size) {
+    super(source);
+    this.active = active;
+    this.page = page;
+    this.size = size;
+  }
 }

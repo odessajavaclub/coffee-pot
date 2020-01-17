@@ -11,10 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 class DeleteUserService implements DeleteUserUseCase {
 
-    private final DeleteUserPort deleteUserPort;
+  private final DeleteUserPort deleteUserPort;
 
-    @Override
-    public boolean deleteUser(DeleteUserCommand command) {
-        return deleteUserPort.deleteUser(command.getUserId());
-    }
+  @Override
+  public boolean deleteUser(DeleteUserCommand command) {
+    return deleteUserPort.deleteUser(command.getUserId());
+  }
 }
