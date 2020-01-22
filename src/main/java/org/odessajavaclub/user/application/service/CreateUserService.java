@@ -33,12 +33,14 @@ class CreateUserService implements CreateUserUseCase {
 
     String encodedPassword = passwordEncoder.encode(command.getPassword());
 
-    User user = User.withoutId(command.getFirstName(),
-                               command.getLastName(),
-                               command.getEmail(),
-                               encodedPassword,
-                               command.getRole(),
-                               active);
+    User user = User.builder()
+                    .firstName(command.getFirstName())
+                    .lastName(command.getLastName())
+                    .email(command.getEmail())
+                    .password(encodedPassword)
+                    .role(command.getRole())
+                    .active(active)
+                    .build();
 
     return createUserPort.createUser(user);
   }

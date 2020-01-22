@@ -3,9 +3,9 @@ package org.odessajavaclub.user.application.port.in;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import lombok.EqualsAndHashCode;
-import lombok.Value;
-import org.odessajavaclub.shared.SelfValidating;
+import lombok.Builder;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.odessajavaclub.user.domain.User;
 import org.odessajavaclub.user.domain.UserRole;
 
@@ -15,9 +15,10 @@ public interface CreateUserUseCase {
 
   User createInactiveUser(CreateUserCommand command);
 
-  @Value
-  @EqualsAndHashCode(callSuper = false)
-  class CreateUserCommand extends SelfValidating<CreateUserCommand> {
+  @Data
+  @Builder
+  @RequiredArgsConstructor
+  class CreateUserCommand {
 
     @NotBlank
     private final String firstName;
@@ -34,18 +35,5 @@ public interface CreateUserUseCase {
 
     @NotNull
     private final UserRole role;
-
-    public CreateUserCommand(String firstName,
-                             String lastName,
-                             String email,
-                             String password,
-                             UserRole role) {
-      this.firstName = firstName;
-      this.lastName = lastName;
-      this.email = email;
-      this.password = password;
-      this.role = role;
-      this.validateSelf();
-    }
   }
 }

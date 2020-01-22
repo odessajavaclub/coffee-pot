@@ -41,11 +41,13 @@ public class UserController {
   @EventListener
   public void createActiveUser(CreateActiveUserRequestEvent requestEvent) {
     User createdUser = createUserUseCase
-        .createActiveUser(new CreateUserUseCase.CreateUserCommand(requestEvent.getFirstName(),
-                                                                  requestEvent.getLastName(),
-                                                                  requestEvent.getEmail(),
-                                                                  requestEvent.getPassword(),
-                                                                  requestEvent.getRole()));
+        .createActiveUser(CreateUserUseCase.CreateUserCommand.builder()
+                                                             .firstName(requestEvent.getFirstName())
+                                                             .lastName(requestEvent.getLastName())
+                                                             .email(requestEvent.getEmail())
+                                                             .password(requestEvent.getPassword())
+                                                             .role(requestEvent.getRole())
+                                                             .build());
     applicationEventPublisher.publishEvent(new CreateActiveUserResponseEvent(this,
                                                                              springEventUserDtoMapper.toGetUserDto(createdUser)));
   }
@@ -70,17 +72,18 @@ public class UserController {
 
   @EventListener
   public void deleteUser(DeleteUserRequestEvent requestEvent) {
-    boolean removed = deleteUserUseCase
-        .deleteUser(new DeleteUserUseCase.DeleteUserCommand(requestEvent.getId()));
+//    boolean removed = deleteUserUseCase.deleteUser(new DeleteUserUseCase.DeleteUserCommand(requestEvent.getId()));
+    boolean removed = false;
     applicationEventPublisher.publishEvent(new DeleteUserResponseEvent(this, removed));
   }
 
   @EventListener
   public void updateUser(UpdateUserRequestEvent requestEvent) {
-    updateUserUseCase.updateUser(new UpdateUserUseCase.UpdateUserCommand(requestEvent.getId(),
-                                                                         requestEvent.getNewFirstName(),
-                                                                         requestEvent.getNewLastName(),
-                                                                         requestEvent.getNewEmail()))
+//    updateUserUseCase.updateUser(new UpdateUserUseCase.UpdateUserCommand(requestEvent.getId(),
+//                                                                         requestEvent.getNewFirstName(),
+//                                                                         requestEvent.getNewLastName(),
+//                                                                         requestEvent.getNewEmail()))
+    updateUserUseCase.updateUser(null)
                      .map(springEventUserDtoMapper::toGetUserDto)
                      .ifPresentOrElse(
                          u -> applicationEventPublisher.publishEvent(new UpdateUserResponseEvent(this, u)),

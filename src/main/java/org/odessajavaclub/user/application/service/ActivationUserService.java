@@ -22,14 +22,14 @@ class ActivationUserService implements ActivateUserUseCase, DeactivateUserUseCas
   @Override
   public Optional<User> activateUser(ActivateUserCommand command) {
     return loadUsersPort.loadUser(command.getUserId())
-                        .map(u -> User.from(u, true))
+                        .map(u -> u.toBuilder().active(true).build())
                         .map(updateUserPort::updateUser);
   }
 
   @Override
   public Optional<User> deactivateUser(DeactivateUserCommand command) {
     return loadUsersPort.loadUser(command.getUserId())
-                        .map(u -> User.from(u, false))
+                        .map(u -> u.toBuilder().active(false).build())
                         .map(updateUserPort::updateUser);
   }
 }

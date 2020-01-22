@@ -25,13 +25,15 @@ import org.odessajavaclub.user.domain.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-@Import(RestUserDtoMapper.class)
 @WebMvcTest(controllers = UserController.class)
+@ComponentScan(basePackages = {"org.odessajavaclub.user.shared",
+                               "org.odessajavaclub.user.config",
+                               "org.odessajavaclub.user.adapter.in.rest"})
 class UserControllerTest {
 
   private static final String USER_NAME = "test_user";

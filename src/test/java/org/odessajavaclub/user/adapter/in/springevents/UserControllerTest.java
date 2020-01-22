@@ -20,6 +20,7 @@ import org.odessajavaclub.user.application.port.in.DeleteUserUseCase;
 import org.odessajavaclub.user.application.port.in.GetUsersQuery;
 import org.odessajavaclub.user.application.port.in.UpdateUserUseCase;
 import org.odessajavaclub.user.domain.User;
+import org.odessajavaclub.user.domain.User.UserId;
 import org.odessajavaclub.user.domain.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -126,13 +127,15 @@ class UserControllerTest {
                                                                               "New",
                                                                               "User",
                                                                               "newemail@email.com")))
-        .thenReturn(Optional.of(User.withId(123L,
-                                            "New",
-                                            "User",
-                                            "newemail@email.com",
-                                            "pass123",
-                                            UserRole.ADMIN,
-                                            true)));
+        .thenReturn(Optional.of(User.builder()
+                                    .id(new UserId(123L))
+                                    .firstName("New")
+                                    .lastName("User")
+                                    .email("newemail@email.com")
+                                    .password("pass123")
+                                    .role(UserRole.ADMIN)
+                                    .active(true)
+                                    .build()));
 
     applicationEventPublisher.publishEvent(new UpdateUserRequestEvent(this,
                                                                       new User.UserId(123L),

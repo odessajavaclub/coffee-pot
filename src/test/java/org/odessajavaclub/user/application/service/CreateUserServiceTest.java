@@ -37,12 +37,14 @@ class CreateUserServiceTest {
 
   @Test
   void createActiveUserIfInputDataIsValid() {
-    User user = User.withoutId("Good",
-                               "User",
-                               "good@email.com",
-                               "pass1",
-                               UserRole.USER,
-                               true);
+    User user = User.builder()
+                    .firstName("Good")
+                    .lastName("User")
+                    .email("good@email.com")
+                    .password("pass1")
+                    .role(UserRole.USER)
+                    .active(true)
+                    .build();
 
     when(passwordEncoder.encode("pass1")).thenReturn("pass1");
     when(createUserPort.createUser(user)).thenReturn(user);
@@ -65,12 +67,14 @@ class CreateUserServiceTest {
 
   @Test
   void createInactiveUserIfInputDataIsValid() {
-    User user = User.withoutId("Good",
-                               "User",
-                               "good@email.com",
-                               "pass1",
-                               UserRole.USER,
-                               false);
+    User user = User.builder()
+                    .firstName("Good")
+                    .lastName("User")
+                    .email("good@email.com")
+                    .password("pass1")
+                    .role(UserRole.USER)
+                    .active(false)
+                    .build();
 
     when(passwordEncoder.encode("pass1")).thenReturn("pass1");
     when(createUserPort.createUser(user)).thenReturn(user);

@@ -88,7 +88,7 @@ public class UserRepository implements CreateUserPort,
   }
 
   private static void checkIdIsPresent(User user) {
-    if (user.getId().isEmpty()) {
+    if (user.getId() == null) {
       throw new UserIdIsAbsentException(user);
     }
   }

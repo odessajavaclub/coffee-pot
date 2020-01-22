@@ -23,14 +23,14 @@ public class UserMockRepository implements CreateUserPort, LoadUsersPort, Delete
   @Override
   public User createUser(User user) {
     users.put(id.get(), user);
-    return User.from(user, new User.UserId(id.getAndIncrement()));
+    return user.toBuilder().id(new User.UserId(id.getAndIncrement())).build();
   }
 
   @Override
   public List<User> loadAllUsers() {
     return users.entrySet()
                 .stream()
-                .map(e -> User.from(e.getValue(), new User.UserId(e.getKey())))
+                .map(e -> e.getValue().toBuilder().id(new User.UserId(e.getKey())).build())
                 .collect(Collectors.toList());
   }
 
@@ -44,7 +44,7 @@ public class UserMockRepository implements CreateUserPort, LoadUsersPort, Delete
     return users.entrySet()
                 .stream()
                 .filter(e -> e.getValue().isActive() == active)
-                .map(e -> User.from(e.getValue(), new User.UserId(e.getKey())))
+                .map(e -> e.getValue().toBuilder().id(new User.UserId(e.getKey())).build())
                 .collect(Collectors.toList());
   }
 
@@ -56,7 +56,7 @@ public class UserMockRepository implements CreateUserPort, LoadUsersPort, Delete
   @Override
   public Optional<User> loadUser(User.UserId userId) {
     return Optional.ofNullable(users.get(userId.getValue()))
-                   .map(u -> User.from(u, userId));
+                   .map(u -> u.toBuilder().id(userId).build());
   }
 
   @Override
@@ -66,7 +66,7 @@ public class UserMockRepository implements CreateUserPort, LoadUsersPort, Delete
 
   @Override
   public User updateUser(User updatedUser) {
-    return Optional.ofNullable(updatedUser.getId().get().getValue())
+    return Optional.of(updatedUser.getIdOptional().get().getValue())
                    .map(id -> {
                      users.put(id, updatedUser);
                      return updatedUser;

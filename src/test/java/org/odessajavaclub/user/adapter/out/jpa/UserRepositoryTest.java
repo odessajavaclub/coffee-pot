@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.odessajavaclub.user.domain.User;
+import org.odessajavaclub.user.domain.User.UserId;
 import org.odessajavaclub.user.domain.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -26,12 +27,14 @@ class UserRepositoryTest {
 
   @Test
   void createUser() {
-    User newUser = userRepository.createUser(User.withoutId("New",
-                                                            "User",
-                                                            "newuser@email.com",
-                                                            "{noop}newuser1234",
-                                                            UserRole.READONLY,
-                                                            true));
+    User newUser = userRepository.createUser(User.builder()
+                                                 .firstName("New")
+                                                 .lastName("User")
+                                                 .email("newuser@email.com")
+                                                 .password("{noop}newuser1234")
+                                                 .role(UserRole.READONLY)
+                                                 .active(true)
+                                                 .build());
 
     List<User> actual = userRepository.loadAllUsers();
 
@@ -84,13 +87,15 @@ class UserRepositoryTest {
   void loadExistingUser() {
     Optional<User> actual = userRepository.loadUser(new User.UserId(2L));
 
-    User expected = User.withId(2L,
-                                "Alexander",
-                                "Bevziuk",
-                                "alexb@email.com",
-                                "{noop}alexb1234",
-                                UserRole.USER,
-                                true);
+    User expected = User.builder()
+                        .id(new UserId(2L))
+                        .firstName("Alexander")
+                        .lastName("Bevziuk")
+                        .email("alexb@email.com")
+                        .password("{noop}alexb1234")
+                        .role(UserRole.USER)
+                        .active(true)
+                        .build();
 
     assertEquals(Optional.of(expected), actual);
   }
@@ -105,23 +110,27 @@ class UserRepositoryTest {
   @Test
   void updateUserWithNullId() {
     assertThrows(UserIdIsAbsentException.class,
-                 () -> userRepository.updateUser(User.withoutId("New",
-                                                                "User",
-                                                                "newuser@email.com",
-                                                                "{noop}newuser1234",
-                                                                UserRole.READONLY,
-                                                                true)));
+                 () -> userRepository.updateUser(User.builder()
+                                                     .firstName("New")
+                                                     .lastName("User")
+                                                     .email("newuser@email.com")
+                                                     .password("{noop}newuser1234")
+                                                     .role(UserRole.READONLY)
+                                                     .active(true)
+                                                     .build()));
   }
 
   @Test
   void updateUserWithNormalId() {
-    User expected = User.withId(1L,
-                                "New",
-                                "User",
-                                "newuser@email.com",
-                                "{noop}newuser1234",
-                                UserRole.READONLY,
-                                true);
+    User expected = User.builder()
+                        .id(new UserId(1L))
+                        .firstName("New")
+                        .lastName("User")
+                        .email("newuser@email.com")
+                        .password("{noop}newuser1234")
+                        .role(UserRole.READONLY)
+                        .active(true)
+                        .build();
 
     User updatedUser = userRepository.updateUser(expected);
 

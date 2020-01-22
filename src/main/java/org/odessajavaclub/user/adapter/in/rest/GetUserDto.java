@@ -1,8 +1,8 @@
 package org.odessajavaclub.user.adapter.in.rest;
 
-import lombok.Value;
+import lombok.Data;
 
-@Value
+@Data
 class GetUserDto {
 
   private long id;

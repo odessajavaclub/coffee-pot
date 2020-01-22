@@ -11,13 +11,6 @@ public class SpringEventUserDtoMapper {
   private static final long UNDEFINED_ID = -1L;
 
   public GetUserDto toGetUserDto(User user) {
-    return new GetUserDto(user.getId()
-                              .map(User.UserId::getValue)
-                              .orElse(UNDEFINED_ID),
-                          user.getFirstName(),
-                          user.getLastName(),
-                          user.getEmail(),
-                          user.getRole().getName(),
-                          user.isActive());
+    return null;
   }
 }

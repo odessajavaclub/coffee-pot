@@ -1,9 +1,9 @@
 package org.odessajavaclub.user.adapter.in.rest;
 
 import javax.validation.constraints.Email;
-import lombok.Value;
+import lombok.Data;
 
-@Value
+@Data
 class UpdateUserDto {
 
   private String firstName;

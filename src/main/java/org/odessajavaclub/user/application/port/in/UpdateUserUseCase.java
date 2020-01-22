@@ -2,37 +2,29 @@ package org.odessajavaclub.user.application.port.in;
 
 import java.util.Optional;
 import javax.validation.constraints.NotNull;
-import lombok.EqualsAndHashCode;
-import lombok.Value;
-import org.odessajavaclub.shared.SelfValidating;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.odessajavaclub.user.domain.User;
 
 public interface UpdateUserUseCase {
 
   Optional<User> updateUser(UpdateUserCommand command);
 
-  @Value
-  @EqualsAndHashCode(callSuper = false)
-  class UpdateUserCommand extends SelfValidating<UpdateUserCommand> {
+  @Data
+  @Builder
+  @RequiredArgsConstructor
+  @AllArgsConstructor
+  class UpdateUserCommand {
 
     @NotNull
     private final User.UserId id;
 
-    private final String newFirstName;
+    private String newFirstName;
 
-    private final String newLastName;
+    private String newLastName;
 
-    private final String newEmail;
-
-    public UpdateUserCommand(User.UserId id,
-                             String newFirstName,
-                             String newLastName,
-                             String newEmail) {
-      this.id = id;
-      this.newFirstName = newFirstName;
-      this.newLastName = newLastName;
-      this.newEmail = newEmail;
-      this.validateSelf();
-    }
+    private String newEmail;
   }
 }

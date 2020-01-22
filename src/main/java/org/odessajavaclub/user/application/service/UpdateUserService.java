@@ -7,6 +7,7 @@ import org.odessajavaclub.user.application.port.in.UpdateUserUseCase;
 import org.odessajavaclub.user.application.port.out.LoadUsersPort;
 import org.odessajavaclub.user.application.port.out.UpdateUserPort;
 import org.odessajavaclub.user.domain.User;
+import org.odessajavaclub.user.domain.User.UserBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,11 +23,22 @@ class UpdateUserService implements UpdateUserUseCase {
   @Override
   public Optional<User> updateUser(UpdateUserCommand command) {
     User.UserId userId = Objects.requireNonNull(command.getId(), "User id must not be null");
-
-    return loadUserPort.loadUser(userId).map(user -> User.from(user,
-                                                               command.getNewFirstName(),
-                                                               command.getNewLastName(),
-                                                               command.getNewEmail()))
+    return loadUserPort.loadUser(userId)
+                       .map(existingUser -> toUpdatedUser(command, existingUser))
                        .map(updateUserPort::updateUser);
+  }
+
+  private User toUpdatedUser(UpdateUserCommand command, User existingUser) {
+    UserBuilder userBuilder = existingUser.toBuilder();
+    if (command.getNewFirstName() != null) {
+      userBuilder.firstName(command.getNewFirstName());
+    }
+    if (command.getNewLastName() != null) {
+      userBuilder.lastName(command.getNewLastName());
+    }
+    if (command.getNewEmail() != null) {
+      userBuilder.email(command.getNewEmail());
+    }
+    return userBuilder.build();
   }
 }

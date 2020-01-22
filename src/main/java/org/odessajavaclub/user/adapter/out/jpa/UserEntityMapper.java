@@ -10,9 +10,10 @@ public class UserEntityMapper {
 
   public UserEntity toUserEntity(User user) {
     return UserEntity.builder()
-                     .id(user.getId()
-                             .map(User.UserId::getValue)
-                             .orElse(null))
+                     //TODO: fix this
+//                     .id(user.getId()
+//                             .map(User.UserId::getValue)
+//                             .orElse(null))
                      .firstName(user.getFirstName())
                      .lastName(user.getLastName())
                      .email(user.getEmail())
@@ -23,12 +24,13 @@ public class UserEntityMapper {
   }
 
   public User toUser(UserEntity userEntity) {
-    return User.withId(userEntity.getId(),
-                       userEntity.getFirstName(),
-                       userEntity.getLastName(),
-                       userEntity.getEmail(),
-                       userEntity.getPassword(),
-                       userEntity.getRole(),
-                       userEntity.isActive());
+//    return User.withId(userEntity.getId(),
+//                       userEntity.getFirstName(),
+//                       userEntity.getLastName(),
+//                       userEntity.getEmail(),
+//                       userEntity.getPassword(),
+//                       userEntity.getRole(),
+//                       userEntity.isActive());
+    return null;
   }
 }
