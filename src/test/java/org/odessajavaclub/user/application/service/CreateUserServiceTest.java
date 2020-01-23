@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.odessajavaclub.shared.Validating;
 import org.odessajavaclub.user.application.port.in.CreateUserUseCase;
 import org.odessajavaclub.user.application.port.out.CreateUserPort;
 import org.odessajavaclub.user.domain.User;
@@ -21,11 +22,14 @@ class CreateUserServiceTest {
 
   private CreateUserService createUserService;
 
+  private Validating validating;
+
   @BeforeEach
   void setUp() {
     createUserPort = mock(CreateUserPort.class);
     passwordEncoder = mock(PasswordEncoder.class);
-    createUserService = new CreateUserService(createUserPort, passwordEncoder);
+    validating = mock(Validating.class);
+    createUserService = new CreateUserService(createUserPort, passwordEncoder, validating);
   }
 
   @Test

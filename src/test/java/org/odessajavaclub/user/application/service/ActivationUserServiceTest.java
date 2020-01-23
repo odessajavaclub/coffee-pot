@@ -7,11 +7,13 @@ import static org.mockito.Mockito.when;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.odessajavaclub.shared.Validating;
 import org.odessajavaclub.user.application.port.in.ActivateUserUseCase;
 import org.odessajavaclub.user.application.port.in.DeactivateUserUseCase;
 import org.odessajavaclub.user.application.port.out.LoadUsersPort;
 import org.odessajavaclub.user.application.port.out.UpdateUserPort;
 import org.odessajavaclub.user.domain.User;
+import org.odessajavaclub.user.domain.User.UserId;
 import org.odessajavaclub.user.domain.UserRole;
 
 class ActivationUserServiceTest {
@@ -22,23 +24,28 @@ class ActivationUserServiceTest {
 
   private ActivationUserService activationUserService;
 
+  private Validating validating;
+
   @BeforeEach
   void setUp() {
     loadUsersPort = mock(LoadUsersPort.class);
     updateUserPort = mock(UpdateUserPort.class);
-    activationUserService = new ActivationUserService(loadUsersPort, updateUserPort);
+    validating = mock(Validating.class);
+    activationUserService = new ActivationUserService(loadUsersPort, updateUserPort, validating);
   }
 
   @Test
   void activateUserIfUserIsPresent() {
-    User user = User.withId(1L,
-                            "First name 1",
-                            "Last name 1",
-                            "one@email.com",
-                            "pass1",
-                            UserRole.ADMIN,
-                            false);
-    User activatedUser = User.from(user, true);
+    User user = User.builder()
+                    .id(new UserId(1L))
+                    .firstName("First name 1")
+                    .lastName("Last name 1")
+                    .email("one@email.com")
+                    .password("pass1")
+                    .role(UserRole.ADMIN)
+                    .active(false)
+                    .build();
+    User activatedUser = user.toBuilder().active(true).build();
     when(loadUsersPort.loadUser(new User.UserId(123L))).thenReturn(Optional.of(user));
     when(updateUserPort.updateUser(activatedUser)).thenReturn(activatedUser);
 
@@ -62,14 +69,16 @@ class ActivationUserServiceTest {
 
   @Test
   void deactivateUserIfUserIsPresent() {
-    User user = User.withId(1L,
-                            "First name 1",
-                            "Last name 1",
-                            "one@email.com",
-                            "pass1",
-                            UserRole.ADMIN,
-                            true);
-    User deactivatedUser = User.from(user, false);
+    User user = User.builder()
+                    .id(new UserId(1L))
+                    .firstName("First name 1")
+                    .lastName("Last name 1")
+                    .email("one@email.com")
+                    .password("pass1")
+                    .role(UserRole.ADMIN)
+                    .active(true)
+                    .build();
+    User deactivatedUser = user.toBuilder().active(false).build();
     when(loadUsersPort.loadUser(new User.UserId(123L))).thenReturn(Optional.of(user));
     when(updateUserPort.updateUser(deactivatedUser)).thenReturn(deactivatedUser);
 

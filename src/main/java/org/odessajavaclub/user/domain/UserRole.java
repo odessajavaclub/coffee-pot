@@ -20,7 +20,7 @@ public enum UserRole {
 
   public static UserRole fromName(String name) {
     return Arrays.stream(UserRole.values())
-                 .filter(ur -> ur.name.equals(name))
+                 .filter(ur -> ur.name.equalsIgnoreCase(name))
                  .findFirst()
                  .orElseThrow(() -> new IllegalArgumentException("Unknown role name: " + name));
   }

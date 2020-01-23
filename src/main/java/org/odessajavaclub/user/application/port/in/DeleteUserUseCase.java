@@ -1,18 +1,18 @@
 package org.odessajavaclub.user.application.port.in;
 
 import javax.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import org.odessajavaclub.user.domain.User;
 
 public interface DeleteUserUseCase {
 
   boolean deleteUser(DeleteUserCommand command);
 
-  @Data
+  @Value
   @Builder
-  @RequiredArgsConstructor
+  @AllArgsConstructor
   class DeleteUserCommand {
 
     @NotNull

@@ -1,24 +1,20 @@
 package org.odessajavaclub.shared;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-import javax.validation.Validation;
-import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
-import java.util.Set;
 
 public abstract class SelfValidating<T> {
-  private Validator validator;
+
+  private final Validating validating;
+
+  protected SelfValidating(ValidatorFactory validatorFactory) {
+    this.validating = new Validating(validatorFactory);
+  }
 
   protected SelfValidating() {
-    ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-    validator = factory.getValidator();
+    this.validating = new Validating();
   }
 
   protected void validateSelf() {
-    Set<ConstraintViolation<T>> violations = validator.validate((T) this);
-    if (!violations.isEmpty()) {
-      throw new ConstraintViolationException(violations);
-    }
+    validating.validate(this);
   }
 }

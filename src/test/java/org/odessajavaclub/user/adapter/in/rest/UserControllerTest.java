@@ -21,6 +21,7 @@ import org.odessajavaclub.user.application.port.in.DeleteUserUseCase;
 import org.odessajavaclub.user.application.port.in.GetUsersQuery;
 import org.odessajavaclub.user.application.port.in.UpdateUserUseCase;
 import org.odessajavaclub.user.domain.User;
+import org.odessajavaclub.user.domain.User.UserId;
 import org.odessajavaclub.user.domain.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -32,8 +33,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(controllers = UserController.class)
 @ComponentScan(basePackages = {"org.odessajavaclub.user.shared",
-                               "org.odessajavaclub.user.config",
-                               "org.odessajavaclub.user.adapter.in.rest"})
+    "org.odessajavaclub.user.config",
+    "org.odessajavaclub.user.adapter.in.rest"})
 class UserControllerTest {
 
   private static final String USER_NAME = "test_user";
@@ -89,13 +90,15 @@ class UserControllerTest {
                                                                                     "max@email.com",
                                                                                     "pass123",
                                                                                     UserRole.ADMIN)))
-        .thenReturn(User.withId(1L,
-                                "Maxim",
-                                "Sashkin",
-                                "max@email.com",
-                                "pass123",
-                                UserRole.ADMIN,
-                                true));
+        .thenReturn(User.builder()
+                        .id(new UserId(1L))
+                        .firstName("Maxim")
+                        .lastName("Sashkin")
+                        .email("max@email.com")
+                        .password("pass123")
+                        .role(UserRole.ADMIN)
+                        .active(true)
+                        .build());
 
     String expected = objectMapper.writeValueAsString(new GetUserDto(1L,
                                                                      "Maxim",
@@ -179,20 +182,23 @@ class UserControllerTest {
   @WithMockUser(username = USER_NAME)
   void getUsersIfUsersExist() throws Exception {
     when(getUsersQuery.getAllUsers(DEFAULT_PAGE, DEFAULT_SIZE))
-        .thenReturn(List.of(User.withId(1L,
-                                        "First name 1",
-                                        "Last name 1",
-                                        "one@email.com",
-                                        "pass1",
-                                        UserRole.ADMIN,
-                                        true),
-                            User.withId(2L,
-                                        "First name 2",
-                                        "Last name 2",
-                                        "two@email.com",
-                                        "pass2",
-                                        UserRole.USER,
-                                        false)));
+        .thenReturn(List.of(User.builder()
+                                .id(new UserId(1L))
+                                .firstName("First name 1")
+                                .lastName("Last name 1")
+                                .email("one@email.com")
+                                .password("pass1")
+                                .role(UserRole.ADMIN)
+                                .active(true)
+                                .build(),
+                            User.builder()
+                                .id(new UserId(2L))
+                                .firstName("First name 2")
+                                .lastName("Last name 2")
+                                .password("pass2")
+                                .role(UserRole.USER)
+                                .active(false)
+                                .build()));
 
     String expected = objectMapper.writeValueAsString(List.of(new GetUserDto(1L,
                                                                              "First name 1",
@@ -219,20 +225,23 @@ class UserControllerTest {
   @WithMockUser(username = USER_NAME)
   void getUsersPagedIfUsersExist() throws Exception {
     when(getUsersQuery.getAllUsers(1, 2))
-        .thenReturn(List.of(User.withId(1L,
-                                        "First name 1",
-                                        "Last name 1",
-                                        "one@email.com",
-                                        "pass1",
-                                        UserRole.ADMIN,
-                                        true),
-                            User.withId(2L,
-                                        "First name 2",
-                                        "Last name 2",
-                                        "two@email.com",
-                                        "pass2",
-                                        UserRole.USER,
-                                        false)));
+        .thenReturn(List.of(User.builder()
+                                .id(new UserId(1L))
+                                .firstName("First name 1")
+                                .lastName("Last name 1")
+                                .email("one@email.com")
+                                .password("pass1")
+                                .role(UserRole.ADMIN)
+                                .active(true)
+                                .build(),
+                            User.builder()
+                                .id(new UserId(2L))
+                                .firstName("First name 2")
+                                .lastName("Last name 2")
+                                .password("pass2")
+                                .role(UserRole.USER)
+                                .active(false)
+                                .build()));
 
     String expected = objectMapper.writeValueAsString(List.of(new GetUserDto(1L,
                                                                              "First name 1",
@@ -261,13 +270,15 @@ class UserControllerTest {
   @WithMockUser(username = USER_NAME)
   void getUserIfUserExists() throws Exception {
     when(getUsersQuery.getUserById(new User.UserId(666L)))
-        .thenReturn(Optional.of(User.withId(666L,
-                                            "John",
-                                            "Johnovich",
-                                            "john@email.com",
-                                            "pass1",
-                                            UserRole.USER,
-                                            true)));
+        .thenReturn(Optional.of(User.builder()
+                                    .id(new UserId(666L))
+                                    .firstName("John")
+                                    .lastName("Johnovich")
+                                    .email("john@email.com")
+                                    .password("pass1")
+                                    .role(UserRole.USER)
+                                    .active(true)
+                                    .build()));
 
     String expected = objectMapper.writeValueAsString(new GetUserDto(666L,
                                                                      "John",
@@ -321,15 +332,18 @@ class UserControllerTest {
                                                                               "New First Name",
                                                                               "New Last Name",
                                                                               "new@email.com")))
-        .thenReturn(Optional.of(User.withId(888L,
-                                            "New First Name",
-                                            "New Last Name",
-                                            "new@email.com",
-                                            "pass1",
-                                            UserRole.USER,
-                                            true)));
+        .thenReturn(Optional.of(User.builder()
+                                    .id(new UserId(888L))
+                                    .firstName("New First Name")
+                                    .lastName("New Last Name")
+                                    .email("new@email.com")
+                                    .password("pass1")
+                                    .role(UserRole.USER)
+                                    .active(true)
+                                    .build()));
 
-    String expected = objectMapper.writeValueAsString(new GetUserDto(888L, "New First Name",
+    String expected = objectMapper.writeValueAsString(new GetUserDto(888L,
+                                                                     "New First Name",
                                                                      "New Last Name",
                                                                      "new@email.com",
                                                                      "user",
@@ -366,13 +380,15 @@ class UserControllerTest {
   void activateUserIfUserExists() throws Exception {
     when(activateUserUseCase.activateUser(new ActivateUserUseCase.ActivateUserCommand(new User.UserId(
         123L))))
-        .thenReturn(Optional.of(User.withId(123L,
-                                            "Max",
-                                            "Sashkin",
-                                            "maxs@email.com",
-                                            "pass1",
-                                            UserRole.USER,
-                                            true)));
+        .thenReturn(Optional.of(User.builder()
+                                    .id(new UserId(123L))
+                                    .firstName("First name 1")
+                                    .lastName("Last name 1")
+                                    .email("one@email.com")
+                                    .password("pass1")
+                                    .role(UserRole.ADMIN)
+                                    .active(true)
+                                    .build()));
 
     mockMvc.perform(put("/users/activate/123"))
            .andExpect(status().isOk());
@@ -394,13 +410,15 @@ class UserControllerTest {
   void deactivateUserIfUserExists() throws Exception {
     when(deactivateUserUseCase.deactivateUser(new DeactivateUserUseCase.DeactivateUserCommand(new User.UserId(
         567L))))
-        .thenReturn(Optional.of(User.withId(567L,
-                                            "Max",
-                                            "Sashkin",
-                                            "maxs@email.com",
-                                            "pass1",
-                                            UserRole.USER,
-                                            false)));
+        .thenReturn(Optional.of(User.builder()
+                                    .id(new UserId(567L))
+                                    .firstName("First name 1")
+                                    .lastName("Last name 1")
+                                    .email("one@email.com")
+                                    .password("pass1")
+                                    .role(UserRole.ADMIN)
+                                    .active(false)
+                                    .build()));
 
     mockMvc.perform(put("/users/deactivate/567"))
            .andExpect(status().isOk());
@@ -421,20 +439,23 @@ class UserControllerTest {
   @WithMockUser(username = USER_NAME)
   void getActiveUsersOnly() throws Exception {
     when(getUsersQuery.getAllUsersByActive(true, DEFAULT_PAGE, DEFAULT_SIZE))
-        .thenReturn(List.of(User.withId(1L,
-                                        "First name 1",
-                                        "Last name 1",
-                                        "one@email.com",
-                                        "pass1",
-                                        UserRole.ADMIN,
-                                        true),
-                            User.withId(2L,
-                                        "First name 2",
-                                        "Last name 2",
-                                        "two@email.com",
-                                        "pass2",
-                                        UserRole.USER,
-                                        true)));
+        .thenReturn(List.of(User.builder()
+                                .id(new UserId(1L))
+                                .firstName("First name 1")
+                                .lastName("Last name 1")
+                                .email("one@email.com")
+                                .password("pass1")
+                                .role(UserRole.ADMIN)
+                                .active(true)
+                                .build(),
+                            User.builder()
+                                .id(new UserId(2L))
+                                .firstName("First name 2")
+                                .lastName("Last name 2")
+                                .password("pass2")
+                                .role(UserRole.USER)
+                                .active(true)
+                                .build()));
 
     String expected = objectMapper.writeValueAsString(List.of(new GetUserDto(1L,
                                                                              "First name 1",
@@ -461,20 +482,23 @@ class UserControllerTest {
   @WithMockUser(username = USER_NAME)
   void getActiveUsersOnlyPaged() throws Exception {
     when(getUsersQuery.getAllUsersByActive(true, 1, 2))
-        .thenReturn(List.of(User.withId(1L,
-                                        "First name 1",
-                                        "Last name 1",
-                                        "one@email.com",
-                                        "pass1",
-                                        UserRole.ADMIN,
-                                        true),
-                            User.withId(2L,
-                                        "First name 2",
-                                        "Last name 2",
-                                        "two@email.com",
-                                        "pass2",
-                                        UserRole.USER,
-                                        true)));
+        .thenReturn(List.of(User.builder()
+                                .id(new UserId(1L))
+                                .firstName("First name 1")
+                                .lastName("Last name 1")
+                                .email("one@email.com")
+                                .password("pass1")
+                                .role(UserRole.ADMIN)
+                                .active(true)
+                                .build(),
+                            User.builder()
+                                .id(new UserId(2L))
+                                .firstName("First name 2")
+                                .lastName("Last name 2")
+                                .password("pass2")
+                                .role(UserRole.USER)
+                                .active(true)
+                                .build()));
 
     String expected = objectMapper.writeValueAsString(List.of(new GetUserDto(1L,
                                                                              "First name 1",
@@ -503,20 +527,23 @@ class UserControllerTest {
   @WithMockUser(username = USER_NAME)
   void getInactiveUsersOnly() throws Exception {
     when(getUsersQuery.getAllUsersByActive(false, DEFAULT_PAGE, DEFAULT_SIZE))
-        .thenReturn(List.of(User.withId(1L,
-                                        "First name 1",
-                                        "Last name 1",
-                                        "one@email.com",
-                                        "pass1",
-                                        UserRole.ADMIN,
-                                        false),
-                            User.withId(2L,
-                                        "First name 2",
-                                        "Last name 2",
-                                        "two@email.com",
-                                        "pass2",
-                                        UserRole.USER,
-                                        false)));
+        .thenReturn(List.of(User.builder()
+                                .id(new UserId(1L))
+                                .firstName("First name 1")
+                                .lastName("Last name 1")
+                                .email("one@email.com")
+                                .password("pass1")
+                                .role(UserRole.ADMIN)
+                                .active(false)
+                                .build(),
+                            User.builder()
+                                .id(new UserId(2L))
+                                .firstName("First name 2")
+                                .lastName("Last name 2")
+                                .password("pass2")
+                                .role(UserRole.USER)
+                                .active(false)
+                                .build()));
 
     String expected = objectMapper.writeValueAsString(List.of(new GetUserDto(1L,
                                                                              "First name 1",
@@ -543,20 +570,23 @@ class UserControllerTest {
   @WithMockUser(username = USER_NAME)
   void getInactiveUsersOnlyPaged() throws Exception {
     when(getUsersQuery.getAllUsersByActive(false, 1, 2))
-        .thenReturn(List.of(User.withId(1L,
-                                        "First name 1",
-                                        "Last name 1",
-                                        "one@email.com",
-                                        "pass1",
-                                        UserRole.ADMIN,
-                                        false),
-                            User.withId(2L,
-                                        "First name 2",
-                                        "Last name 2",
-                                        "two@email.com",
-                                        "pass2",
-                                        UserRole.USER,
-                                        false)));
+        .thenReturn(List.of(User.builder()
+                                .id(new UserId(1L))
+                                .firstName("First name 1")
+                                .lastName("Last name 1")
+                                .email("one@email.com")
+                                .password("pass1")
+                                .role(UserRole.ADMIN)
+                                .active(false)
+                                .build(),
+                            User.builder()
+                                .id(new UserId(2L))
+                                .firstName("First name 2")
+                                .lastName("Last name 2")
+                                .password("pass2")
+                                .role(UserRole.USER)
+                                .active(false)
+                                .build()));
 
     String expected = objectMapper.writeValueAsString(List.of(new GetUserDto(1L,
                                                                              "First name 1",
