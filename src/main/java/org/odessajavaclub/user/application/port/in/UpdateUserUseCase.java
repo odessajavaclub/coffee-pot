@@ -12,8 +12,8 @@ public interface UpdateUserUseCase {
   Optional<User> updateUser(UpdateUserCommand command);
 
   @Value
-  @Builder
   @RequiredArgsConstructor
+  @Builder
   class UpdateUserCommand {
 
     @NotNull

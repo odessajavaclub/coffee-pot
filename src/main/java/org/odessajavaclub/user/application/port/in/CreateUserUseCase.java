@@ -17,7 +17,6 @@ public interface CreateUserUseCase {
 
   @Value
   @Builder
-  @AllArgsConstructor
   class CreateUserCommand {
 
     @NotBlank

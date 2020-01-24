@@ -1,36 +1,13 @@
 package org.odessajavaclub.user.adapter.out.jpa;
 
-import lombok.NoArgsConstructor;
+import org.mapstruct.Mapper;
 import org.odessajavaclub.user.domain.User;
-import org.springframework.stereotype.Component;
+import org.odessajavaclub.user.shared.UserIdMapper;
 
-@Component
-@NoArgsConstructor
-public class UserEntityMapper {
+@Mapper(uses = UserIdMapper.class)
+public interface UserEntityMapper {
 
-  public UserEntity toUserEntity(User user) {
-    return UserEntity.builder()
-                     //TODO: fix this
-//                     .id(user.getId()
-//                             .map(User.UserId::getValue)
-//                             .orElse(null))
-                     .firstName(user.getFirstName())
-                     .lastName(user.getLastName())
-                     .email(user.getEmail())
-                     .password(user.getPassword())
-                     .role(user.getRole())
-                     .active(user.isActive())
-                     .build();
-  }
+  UserEntity toUserEntity(User user);
 
-  public User toUser(UserEntity userEntity) {
-//    return User.withId(userEntity.getId(),
-//                       userEntity.getFirstName(),
-//                       userEntity.getLastName(),
-//                       userEntity.getEmail(),
-//                       userEntity.getPassword(),
-//                       userEntity.getRole(),
-//                       userEntity.isActive());
-    return null;
-  }
+  User toUser(UserEntity userEntity);
 }

@@ -23,7 +23,7 @@ class UserJpaRepositoryTest {
                                                              "User",
                                                              "new@email.com",
                                                              "pass123",
-                                                             UserRole.USER,
+                                                             UserEntityRole.USER,
                                                              true));
 
     assertNotNull(saved.getId());
@@ -36,14 +36,14 @@ class UserJpaRepositoryTest {
                                         "User1",
                                         "new1@email.com",
                                         "pass123",
-                                        UserRole.USER,
+                                        UserEntityRole.USER,
                                         true);
     UserEntity entity2 = new UserEntity(null,
                                         "New2",
                                         "User2",
                                         "new2@email.com",
                                         "pass123",
-                                        UserRole.USER,
+                                        UserEntityRole.USER,
                                         false);
     userJpaRepository.save(entity1);
     userJpaRepository.save(entity2);
@@ -60,14 +60,14 @@ class UserJpaRepositoryTest {
                                         "User1",
                                         "new1@email.com",
                                         "pass123",
-                                        UserRole.USER,
+                                        UserEntityRole.USER,
                                         true);
     UserEntity entity2 = new UserEntity(null,
                                         "New2",
                                         "User2",
                                         "new2@email.com",
                                         "pass123",
-                                        UserRole.USER,
+                                        UserEntityRole.USER,
                                         false);
     userJpaRepository.save(entity1);
     userJpaRepository.save(entity2);

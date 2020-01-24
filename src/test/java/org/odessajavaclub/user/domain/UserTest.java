@@ -2,6 +2,7 @@ package org.odessajavaclub.user.domain;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -45,6 +46,7 @@ class UserTest {
                       .build();
 
     assertAll(
+        () -> assertNull(actual.getId()),
         () -> assertEquals("Maxim", actual.getFirstName()),
         () -> assertEquals("Sashkin", actual.getLastName()),
         () -> assertEquals("maxs@email.com", actual.getEmail()),
@@ -56,7 +58,7 @@ class UserTest {
   @Test
   void withIdIfIdIsNotNull() {
     User actual = User.builder()
-                      .id(new UserId(12345L))
+                      .id(new UserId(1234L))
                       .firstName("Maxim")
                       .lastName("Sashkin")
                       .email("maxs@email.com")
@@ -66,7 +68,7 @@ class UserTest {
                       .build();
 
     assertAll(
-        () -> assertEquals(1234L, actual.getIdOptional().map(User.UserId::getValue).orElse(-1L)),
+        () -> assertEquals(1234L, actual.getId().getValue()),
         () -> assertEquals("Maxim", actual.getFirstName()),
         () -> assertEquals("Sashkin", actual.getLastName()),
         () -> assertEquals("maxs@email.com", actual.getEmail()),
@@ -88,7 +90,7 @@ class UserTest {
                       .build();
 
     assertAll(
-        () -> assertTrue(actual.getIdOptional().isEmpty()),
+        () -> assertNull(actual.getId()),
         () -> assertEquals("Maxim", actual.getFirstName()),
         () -> assertEquals("Sashkin", actual.getLastName()),
         () -> assertEquals("maxs@email.com", actual.getEmail()),

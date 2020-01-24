@@ -1,7 +1,6 @@
 package org.odessajavaclub.user.adapter.in.springevents;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
@@ -9,11 +8,11 @@ import static org.mockito.Mockito.when;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
+import org.odessajavaclub.user.adapter.in.springevents.mapping.UserSpringEventMapper;
 import org.odessajavaclub.user.adapter.in.springevents.model.CreateActiveUserRequestEvent;
 import org.odessajavaclub.user.adapter.in.springevents.model.DeleteUserRequestEvent;
 import org.odessajavaclub.user.adapter.in.springevents.model.GetUserRequestEvent;
 import org.odessajavaclub.user.adapter.in.springevents.model.GetUsersRequestEvent;
-import org.odessajavaclub.user.adapter.in.springevents.model.SpringEventUserDtoMapper;
 import org.odessajavaclub.user.adapter.in.springevents.model.UpdateUserRequestEvent;
 import org.odessajavaclub.user.application.port.in.CreateUserUseCase;
 import org.odessajavaclub.user.application.port.in.DeleteUserUseCase;
@@ -34,7 +33,7 @@ class UserControllerTest {
   private ApplicationEventPublisher applicationEventPublisher;
 
   @MockBean
-  private SpringEventUserDtoMapper springEventUserDtoMapper;
+  private UserSpringEventMapper userSpringEventMapper;
 
   @MockBean
   private CreateUserUseCase createUserUseCase;
@@ -50,9 +49,9 @@ class UserControllerTest {
 
   @Test
   void createActiveUser() {
-    User user1 = mock(User.class);
-    when(createUserUseCase.createActiveUser(any(CreateUserUseCase.CreateUserCommand.class))).thenReturn(
-        user1);
+    User user1 = User.builder().build();
+    when(createUserUseCase.createActiveUser(any(CreateUserUseCase.CreateUserCommand.class)))
+        .thenReturn(user1);
 
     applicationEventPublisher.publishEvent(new CreateActiveUserRequestEvent(this,
                                                                             "User",
@@ -62,31 +61,31 @@ class UserControllerTest {
                                                                             UserRole.USER));
 
     verify(createUserUseCase).createActiveUser(any(CreateUserUseCase.CreateUserCommand.class));
-    verify(springEventUserDtoMapper).toGetUserDto(user1);
+    verify(userSpringEventMapper).toGetUserDto(user1);
   }
 
   @Test
   void getUsers() {
-    User user1 = mock(User.class);
-    User user2 = mock(User.class);
+    User user1 = User.builder().build();
+    User user2 = User.builder().build();
     when(getUsersQuery.getAllUsersByActive(true, 6, 666)).thenReturn(List.of(user1, user2));
 
     applicationEventPublisher.publishEvent(new GetUsersRequestEvent(this, true, 6, 666));
 
     verify(getUsersQuery).getAllUsersByActive(true, 6, 666);
-    verify(springEventUserDtoMapper).toGetUserDto(user1);
-    verify(springEventUserDtoMapper).toGetUserDto(user2);
+    verify(userSpringEventMapper).toGetUserDto(user1);
+    verify(userSpringEventMapper).toGetUserDto(user2);
   }
 
   @Test
   void getUserIfPresent() {
-    User user1 = mock(User.class);
+    User user1 = User.builder().build();
     when(getUsersQuery.getUserById(new User.UserId(777L))).thenReturn(Optional.of(user1));
 
     applicationEventPublisher.publishEvent(new GetUserRequestEvent(this, new User.UserId(777L)));
 
     verify(getUsersQuery).getUserById(new User.UserId(777L));
-    verify(springEventUserDtoMapper).toGetUserDto(user1);
+    verify(userSpringEventMapper).toGetUserDto(user1);
   }
 
   @Test
@@ -96,7 +95,7 @@ class UserControllerTest {
     applicationEventPublisher.publishEvent(new GetUserRequestEvent(this, new User.UserId(777L)));
 
     verify(getUsersQuery).getUserById(new User.UserId(777L));
-    verifyNoInteractions(springEventUserDtoMapper);
+    verifyNoInteractions(userSpringEventMapper);
   }
 
   @Test
@@ -106,8 +105,7 @@ class UserControllerTest {
 
     applicationEventPublisher.publishEvent(new DeleteUserRequestEvent(this, new User.UserId(123L)));
 
-    verify(deleteUserUseCase).deleteUser(new DeleteUserUseCase.DeleteUserCommand(new User.UserId(
-        123L)));
+    verify(deleteUserUseCase).deleteUser(new DeleteUserUseCase.DeleteUserCommand(new User.UserId(123L)));
   }
 
   @Test
@@ -117,8 +115,7 @@ class UserControllerTest {
 
     applicationEventPublisher.publishEvent(new DeleteUserRequestEvent(this, new User.UserId(123L)));
 
-    verify(deleteUserUseCase).deleteUser(new DeleteUserUseCase.DeleteUserCommand(new User.UserId(
-        123L)));
+    verify(deleteUserUseCase).deleteUser(new DeleteUserUseCase.DeleteUserCommand(new User.UserId(123L)));
   }
 
   @Test
@@ -143,8 +140,7 @@ class UserControllerTest {
                                                                       "User",
                                                                       "newemail@email.com"));
 
-    verify(updateUserUseCase).updateUser(new UpdateUserUseCase.UpdateUserCommand(new User.UserId(
-        123L),
+    verify(updateUserUseCase).updateUser(new UpdateUserUseCase.UpdateUserCommand(new User.UserId(123L),
                                                                                  "New",
                                                                                  "User",
                                                                                  "newemail@email.com"));
@@ -164,8 +160,7 @@ class UserControllerTest {
                                                                       "User",
                                                                       "newemail@email.com"));
 
-    verify(updateUserUseCase).updateUser(new UpdateUserUseCase.UpdateUserCommand(new User.UserId(
-        123L),
+    verify(updateUserUseCase).updateUser(new UpdateUserUseCase.UpdateUserCommand(new User.UserId(123L),
                                                                                  "New",
                                                                                  "User",
                                                                                  "newemail@email.com"));

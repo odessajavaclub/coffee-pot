@@ -11,8 +11,6 @@ public interface DeleteUserUseCase {
   boolean deleteUser(DeleteUserCommand command);
 
   @Value
-  @Builder
-  @AllArgsConstructor
   class DeleteUserCommand {
 
     @NotNull

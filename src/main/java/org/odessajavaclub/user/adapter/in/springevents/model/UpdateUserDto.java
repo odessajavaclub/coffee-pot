@@ -1,9 +1,13 @@
 package org.odessajavaclub.user.adapter.in.springevents.model;
 
 import javax.validation.constraints.Email;
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Value
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 class UpdateUserDto {
 
   private String firstName;

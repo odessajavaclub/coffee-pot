@@ -4,11 +4,17 @@ import org.odessajavaclub.user.domain.User.UserId;
 
 public class UserIdMapper {
 
-  public UserId asUserId(long id) {
+  public UserId asUserId(Long id) {
+    if (id == null) {
+      return null;
+    }
     return new UserId(id);
   }
 
-  public long asId(UserId userId) {
+  public Long asId(UserId userId) {
+    if (userId == null) {
+      return null;
+    }
     return userId.getValue();
   }
 }

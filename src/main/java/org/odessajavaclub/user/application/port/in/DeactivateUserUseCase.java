@@ -12,8 +12,6 @@ public interface DeactivateUserUseCase {
   Optional<User> deactivateUser(DeactivateUserCommand command);
 
   @Value
-  @Builder
-  @AllArgsConstructor
   class DeactivateUserCommand {
 
     @NotNull

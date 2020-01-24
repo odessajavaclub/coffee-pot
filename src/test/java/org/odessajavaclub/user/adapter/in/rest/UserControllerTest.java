@@ -14,6 +14,9 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.odessajavaclub.auth.AuthenticationFacade;
+import org.odessajavaclub.user.adapter.in.rest.model.CreateUserDto;
+import org.odessajavaclub.user.adapter.in.rest.model.GetUserDto;
+import org.odessajavaclub.user.adapter.in.rest.model.UpdateUserDto;
 import org.odessajavaclub.user.application.port.in.ActivateUserUseCase;
 import org.odessajavaclub.user.application.port.in.CreateUserUseCase;
 import org.odessajavaclub.user.application.port.in.DeactivateUserUseCase;
@@ -32,9 +35,8 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(controllers = UserController.class)
-@ComponentScan(basePackages = {"org.odessajavaclub.user.shared",
-    "org.odessajavaclub.user.config",
-    "org.odessajavaclub.user.adapter.in.rest"})
+@ComponentScan(basePackages = {"org.odessajavaclub.user.config",
+                               "org.odessajavaclub.user.adapter.in.rest"})
 class UserControllerTest {
 
   private static final String USER_NAME = "test_user";
@@ -195,6 +197,7 @@ class UserControllerTest {
                                 .id(new UserId(2L))
                                 .firstName("First name 2")
                                 .lastName("Last name 2")
+                                .email("two@email.com")
                                 .password("pass2")
                                 .role(UserRole.USER)
                                 .active(false)
@@ -238,6 +241,7 @@ class UserControllerTest {
                                 .id(new UserId(2L))
                                 .firstName("First name 2")
                                 .lastName("Last name 2")
+                                .email("two@email.com")
                                 .password("pass2")
                                 .role(UserRole.USER)
                                 .active(false)
@@ -452,6 +456,7 @@ class UserControllerTest {
                                 .id(new UserId(2L))
                                 .firstName("First name 2")
                                 .lastName("Last name 2")
+                                .email("two@email.com")
                                 .password("pass2")
                                 .role(UserRole.USER)
                                 .active(true)
@@ -495,6 +500,7 @@ class UserControllerTest {
                                 .id(new UserId(2L))
                                 .firstName("First name 2")
                                 .lastName("Last name 2")
+                                .email("two@email.com")
                                 .password("pass2")
                                 .role(UserRole.USER)
                                 .active(true)
@@ -540,6 +546,7 @@ class UserControllerTest {
                                 .id(new UserId(2L))
                                 .firstName("First name 2")
                                 .lastName("Last name 2")
+                                .email("two@email.com")
                                 .password("pass2")
                                 .role(UserRole.USER)
                                 .active(false)
@@ -583,6 +590,7 @@ class UserControllerTest {
                                 .id(new UserId(2L))
                                 .firstName("First name 2")
                                 .lastName("Last name 2")
+                                .email("two@email.com")
                                 .password("pass2")
                                 .role(UserRole.USER)
                                 .active(false)

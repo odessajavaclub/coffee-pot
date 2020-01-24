@@ -25,7 +25,7 @@ class GetUsersServiceTest {
 
   @Test
   void getAllUsers() {
-    List<User> users = List.of(mock(User.class), mock(User.class));
+    List<User> users = List.of(User.builder().build(), User.builder().build());
     when(loadUsersPort.loadAllUsers()).thenReturn(users);
 
     assertEquals(users, getUsersService.getAllUsers());
@@ -33,7 +33,7 @@ class GetUsersServiceTest {
 
   @Test
   void getAllUsersPaged() {
-    List<User> users = List.of(mock(User.class), mock(User.class));
+    List<User> users = List.of(User.builder().build(), User.builder().build());
     when(loadUsersPort.loadAllUsers(123, 456)).thenReturn(users);
 
     assertEquals(users, getUsersService.getAllUsers(123, 456));
@@ -41,7 +41,7 @@ class GetUsersServiceTest {
 
   @Test
   void getActiveUsers() {
-    List<User> users = List.of(mock(User.class), mock(User.class));
+    List<User> users = List.of(User.builder().build(), User.builder().build());
     when(loadUsersPort.loadAllUsersByActive(true)).thenReturn(users);
 
     assertEquals(users, getUsersService.getAllUsersByActive(true));
@@ -49,7 +49,7 @@ class GetUsersServiceTest {
 
   @Test
   void getActiveUsersPaged() {
-    List<User> users = List.of(mock(User.class), mock(User.class));
+    List<User> users = List.of(User.builder().build(), User.builder().build());
     when(loadUsersPort.loadAllUsersByActive(true, 123, 456)).thenReturn(users);
 
     assertEquals(users, getUsersService.getAllUsersByActive(true, 123, 456));
@@ -57,7 +57,7 @@ class GetUsersServiceTest {
 
   @Test
   void getInactiveUsers() {
-    List<User> users = List.of(mock(User.class), mock(User.class));
+    List<User> users = List.of(User.builder().build(), User.builder().build());
     when(loadUsersPort.loadAllUsersByActive(false)).thenReturn(users);
 
     assertEquals(users, getUsersService.getAllUsersByActive(false));
@@ -65,7 +65,7 @@ class GetUsersServiceTest {
 
   @Test
   void getInactiveUsersPaged() {
-    List<User> users = List.of(mock(User.class), mock(User.class));
+    List<User> users = List.of(User.builder().build(), User.builder().build());
     when(loadUsersPort.loadAllUsersByActive(false, 123, 456)).thenReturn(users);
 
     assertEquals(users, getUsersService.getAllUsersByActive(false, 123, 456));
@@ -74,7 +74,7 @@ class GetUsersServiceTest {
   @Test
   void getUserByIdIfUserIsPresent() {
     User.UserId userId = new User.UserId(12345L);
-    User user = mock(User.class);
+    User user = User.builder().build();
     when(loadUsersPort.loadUser(userId)).thenReturn(Optional.of(user));
 
     assertEquals(Optional.of(user), getUsersService.getUserById(userId));

@@ -12,9 +12,9 @@ import org.odessajavaclub.user.adapter.in.springevents.model.GetUserRequestEvent
 import org.odessajavaclub.user.adapter.in.springevents.model.GetUserResponseEvent;
 import org.odessajavaclub.user.adapter.in.springevents.model.GetUsersRequestEvent;
 import org.odessajavaclub.user.adapter.in.springevents.model.GetUsersResponseEvent;
-import org.odessajavaclub.user.adapter.in.springevents.model.SpringEventUserDtoMapper;
 import org.odessajavaclub.user.adapter.in.springevents.model.UpdateUserRequestEvent;
 import org.odessajavaclub.user.adapter.in.springevents.model.UpdateUserResponseEvent;
+import org.odessajavaclub.user.adapter.in.springevents.mapping.UserSpringEventMapper;
 import org.odessajavaclub.user.application.port.in.CreateUserUseCase;
 import org.odessajavaclub.user.application.port.in.DeleteUserUseCase;
 import org.odessajavaclub.user.application.port.in.GetUsersQuery;
@@ -28,8 +28,6 @@ public class UserController {
 
   private final ApplicationEventPublisher applicationEventPublisher;
 
-  private final SpringEventUserDtoMapper springEventUserDtoMapper;
-
   private final CreateUserUseCase createUserUseCase;
 
   private final GetUsersQuery getUsersQuery;
@@ -37,6 +35,8 @@ public class UserController {
   private final DeleteUserUseCase deleteUserUseCase;
 
   private final UpdateUserUseCase updateUserUseCase;
+
+  private final UserSpringEventMapper springEventUserDtoMapper;
 
   @EventListener
   public void createActiveUser(CreateActiveUserRequestEvent requestEvent) {

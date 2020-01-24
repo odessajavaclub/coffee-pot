@@ -4,6 +4,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.odessajavaclub.user.adapter.in.rest.mapping.UserRestMapper;
+import org.odessajavaclub.user.adapter.in.rest.model.CreateUserDto;
+import org.odessajavaclub.user.adapter.in.rest.model.GetUserDto;
+import org.odessajavaclub.user.adapter.in.rest.model.UpdateUserDto;
 import org.odessajavaclub.user.application.port.in.ActivateUserUseCase;
 import org.odessajavaclub.user.application.port.in.CreateUserUseCase;
 import org.odessajavaclub.user.application.port.in.CreateUserUseCase.CreateUserCommand;
@@ -12,6 +16,7 @@ import org.odessajavaclub.user.application.port.in.DeleteUserUseCase;
 import org.odessajavaclub.user.application.port.in.GetUsersQuery;
 import org.odessajavaclub.user.application.port.in.UpdateUserUseCase;
 import org.odessajavaclub.user.domain.User;
+import org.odessajavaclub.user.domain.User.UserId;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,13 +45,13 @@ public class UserController {
 
   private final DeactivateUserUseCase deactivateUserUseCase;
 
-  private final UserMapper userMapper;
+  private final UserRestMapper userRestMapper;
 
   @PostMapping
   GetUserDto createUser(@Valid @RequestBody CreateUserDto createUserDto) {
-    CreateUserCommand command = userMapper.createUserDtoToCreateUserCommand(createUserDto);
+    CreateUserCommand command = userRestMapper.toCreateUserCommand(createUserDto);
     User user = createUserUseCase.createActiveUser(command);
-    return userMapper.userToGetUserDto(user);
+    return userRestMapper.toGetUserDto(user);
   }
 
   @GetMapping
@@ -56,12 +61,12 @@ public class UserController {
     if (active == null) {
       return getUsersQuery.getAllUsers(page, size)
                           .stream()
-                          .map(userMapper::userToGetUserDto)
+                          .map(userRestMapper::toGetUserDto)
                           .collect(Collectors.toList());
     } else {
       return getUsersQuery.getAllUsersByActive(active, page, size)
                           .stream()
-                          .map(userMapper::userToGetUserDto)
+                          .map(userRestMapper::toGetUserDto)
                           .collect(Collectors.toList());
     }
   }
@@ -69,7 +74,7 @@ public class UserController {
   @GetMapping("/{id}")
   ResponseEntity<GetUserDto> getUser(@PathVariable Long id) {
     return getUsersQuery.getUserById(new User.UserId(id))
-                        .map(userMapper::userToGetUserDto)
+                        .map(userRestMapper::toGetUserDto)
                         .map(ResponseEntity::ok)
                         .orElseGet(() -> ResponseEntity.notFound().build());
   }
@@ -77,9 +82,7 @@ public class UserController {
   @DeleteMapping("/{id}")
   ResponseEntity<?> deleteUser(@PathVariable Long id) {
     return
-        deleteUserUseCase.deleteUser(DeleteUserUseCase.DeleteUserCommand.builder()
-                                                                        .userId(new User.UserId(id))
-                                                                        .build())
+        deleteUserUseCase.deleteUser(new DeleteUserUseCase.DeleteUserCommand(new UserId(id)))
         ? ResponseEntity.noContent().build()
         : ResponseEntity.notFound().build();
   }
@@ -87,31 +90,25 @@ public class UserController {
   @PutMapping("/{id}")
   ResponseEntity<GetUserDto> updateUser(@PathVariable Long id,
                                         @Valid @RequestBody UpdateUserDto user) {
-    return updateUserUseCase.updateUser(userMapper.updateUserDtoToUpdateUserCommand(id, user))
-                            .map(userMapper::userToGetUserDto)
+    return updateUserUseCase.updateUser(userRestMapper.toUpdateUserCommand(id, user))
+                            .map(userRestMapper::toGetUserDto)
                             .map(ResponseEntity::ok)
                             .orElseGet(() -> ResponseEntity.notFound().build());
   }
 
   @PutMapping("/activate/{id}")
   ResponseEntity<?> activateUser(@PathVariable Long id) {
-    return activateUserUseCase
-        .activateUser(ActivateUserUseCase.ActivateUserCommand.builder()
-                                                             .userId(new User.UserId(id))
-                                                             .build())
-        .map(userMapper::userToGetUserDto)
-        .map(ResponseEntity::ok)
-        .orElseGet(() -> ResponseEntity.notFound().build());
+    return activateUserUseCase.activateUser(new ActivateUserUseCase.ActivateUserCommand(new User.UserId(
+        id))).map(userRestMapper::toGetUserDto)
+                              .map(ResponseEntity::ok)
+                              .orElseGet(() -> ResponseEntity.notFound().build());
   }
 
   @PutMapping("/deactivate/{id}")
   ResponseEntity<?> deactivateUser(@PathVariable Long id) {
-    return deactivateUserUseCase
-        .deactivateUser(DeactivateUserUseCase.DeactivateUserCommand.builder()
-                                                                   .userId(new User.UserId(id))
-                                                                   .build())
-        .map(userMapper::userToGetUserDto)
-        .map(ResponseEntity::ok)
-        .orElseGet(() -> ResponseEntity.notFound().build());
+    return deactivateUserUseCase.deactivateUser(new DeactivateUserUseCase.DeactivateUserCommand(new User.UserId(id)))
+                                .map(userRestMapper::toGetUserDto)
+                                .map(ResponseEntity::ok)
+                                .orElseGet(() -> ResponseEntity.notFound().build());
   }
 }

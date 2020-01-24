@@ -14,11 +14,13 @@ import org.odessajavaclub.user.domain.User.UserId;
 import org.odessajavaclub.user.domain.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.jdbc.Sql;
 
 @DataJpaTest
-@Import({UserRepository.class, UserEntityMapper.class})
+@ComponentScan(basePackages = {"org.odessajavaclub.user.config",
+                               "org.odessajavaclub.user.adapter.out.jpa"})
 @Sql("user-repository-test-data.sql")
 class UserRepositoryTest {
 

@@ -1,8 +1,12 @@
 package org.odessajavaclub.user.adapter.in.springevents.model;
 
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Value
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class GetUserDto {
 
   private long id;
