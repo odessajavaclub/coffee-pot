@@ -11,9 +11,14 @@ import org.odessajavaclub.user.application.port.out.DeleteUserPort;
 import org.odessajavaclub.user.application.port.out.LoadUsersPort;
 import org.odessajavaclub.user.application.port.out.UpdateUserPort;
 import org.odessajavaclub.user.domain.User;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
 
-//@Component
-public class UserMockRepository implements CreateUserPort, LoadUsersPort, DeleteUserPort,
+@Profile("mock")
+@Component
+public class UserMockRepository implements CreateUserPort,
+                                           LoadUsersPort,
+                                           DeleteUserPort,
                                            UpdateUserPort {
 
   private static AtomicLong id = new AtomicLong(1L);

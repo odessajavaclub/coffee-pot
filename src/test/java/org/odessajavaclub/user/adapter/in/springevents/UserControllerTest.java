@@ -1,6 +1,7 @@
 package org.odessajavaclub.user.adapter.in.springevents;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
@@ -8,13 +9,16 @@ import static org.mockito.Mockito.when;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
-import org.odessajavaclub.user.adapter.in.springevents.mapping.UserSpringEventMapper;
+import org.odessajavaclub.user.adapter.in.springevents.mapper.UserSpringEventMapper;
 import org.odessajavaclub.user.adapter.in.springevents.model.CreateActiveUserRequestEvent;
 import org.odessajavaclub.user.adapter.in.springevents.model.DeleteUserRequestEvent;
+import org.odessajavaclub.user.adapter.in.springevents.model.GetUserDto;
 import org.odessajavaclub.user.adapter.in.springevents.model.GetUserRequestEvent;
 import org.odessajavaclub.user.adapter.in.springevents.model.GetUsersRequestEvent;
 import org.odessajavaclub.user.adapter.in.springevents.model.UpdateUserRequestEvent;
+import org.odessajavaclub.user.adapter.in.springevents.model.UserSpringEventRole;
 import org.odessajavaclub.user.application.port.in.CreateUserUseCase;
+import org.odessajavaclub.user.application.port.in.CreateUserUseCase.CreateUserCommand;
 import org.odessajavaclub.user.application.port.in.DeleteUserUseCase;
 import org.odessajavaclub.user.application.port.in.GetUsersQuery;
 import org.odessajavaclub.user.application.port.in.UpdateUserUseCase;
@@ -25,7 +29,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.test.context.ActiveProfiles;
 
+@ActiveProfiles("springevents")
 @SpringBootTest(classes = UserController.class)
 class UserControllerTest {
 
@@ -50,6 +56,11 @@ class UserControllerTest {
   @Test
   void createActiveUser() {
     User user1 = User.builder().build();
+
+    when(userSpringEventMapper.toCreateUserCommand(any(CreateActiveUserRequestEvent.class)))
+        .thenReturn(CreateUserCommand.builder().build());
+    when(userSpringEventMapper.toGetUserDto(user1))
+        .thenReturn(mock(GetUserDto.class));
     when(createUserUseCase.createActiveUser(any(CreateUserUseCase.CreateUserCommand.class)))
         .thenReturn(user1);
 
@@ -58,17 +69,24 @@ class UserControllerTest {
                                                                             "One",
                                                                             "userone@email.com",
                                                                             "pass1",
-                                                                            UserRole.USER));
+                                                                            UserSpringEventRole.USER));
 
-    verify(createUserUseCase).createActiveUser(any(CreateUserUseCase.CreateUserCommand.class));
+    verify(userSpringEventMapper).toCreateUserCommand(any(CreateActiveUserRequestEvent.class));
     verify(userSpringEventMapper).toGetUserDto(user1);
+    verify(createUserUseCase).createActiveUser(any(CreateUserUseCase.CreateUserCommand.class));
   }
 
   @Test
   void getUsers() {
-    User user1 = User.builder().build();
-    User user2 = User.builder().build();
-    when(getUsersQuery.getAllUsersByActive(true, 6, 666)).thenReturn(List.of(user1, user2));
+    User user1 = User.builder().firstName("User 1").build();
+    User user2 = User.builder().firstName("User 2").build();
+
+    when(userSpringEventMapper.toGetUserDto(user1))
+        .thenReturn(mock(GetUserDto.class));
+    when(userSpringEventMapper.toGetUserDto(user2))
+        .thenReturn(mock(GetUserDto.class));
+    when(getUsersQuery.getAllUsersByActive(true, 6, 666))
+        .thenReturn(List.of(user1, user2));
 
     applicationEventPublisher.publishEvent(new GetUsersRequestEvent(this, true, 6, 666));
 
@@ -80,7 +98,11 @@ class UserControllerTest {
   @Test
   void getUserIfPresent() {
     User user1 = User.builder().build();
-    when(getUsersQuery.getUserById(new User.UserId(777L))).thenReturn(Optional.of(user1));
+
+    when(userSpringEventMapper.toGetUserDto(user1))
+        .thenReturn(mock(GetUserDto.class));
+    when(getUsersQuery.getUserById(new User.UserId(777L)))
+        .thenReturn(Optional.of(user1));
 
     applicationEventPublisher.publishEvent(new GetUserRequestEvent(this, new User.UserId(777L)));
 
@@ -100,26 +122,37 @@ class UserControllerTest {
 
   @Test
   void deleteUserIfPresent() {
+    when(userSpringEventMapper.toDeleteUserCommand(any(DeleteUserRequestEvent.class)))
+        .thenReturn(new DeleteUserUseCase.DeleteUserCommand(new User.UserId(123L)));
     when(deleteUserUseCase.deleteUser(new DeleteUserUseCase.DeleteUserCommand(new User.UserId(123L))))
         .thenReturn(true);
 
     applicationEventPublisher.publishEvent(new DeleteUserRequestEvent(this, new User.UserId(123L)));
 
+    verify(userSpringEventMapper).toDeleteUserCommand(any(DeleteUserRequestEvent.class));
     verify(deleteUserUseCase).deleteUser(new DeleteUserUseCase.DeleteUserCommand(new User.UserId(123L)));
   }
 
   @Test
   void deleteUserIfAbsent() {
+    when(userSpringEventMapper.toDeleteUserCommand(any(DeleteUserRequestEvent.class)))
+        .thenReturn(new DeleteUserUseCase.DeleteUserCommand(new User.UserId(123L)));
     when(deleteUserUseCase.deleteUser(new DeleteUserUseCase.DeleteUserCommand(new User.UserId(123L))))
         .thenReturn(false);
 
     applicationEventPublisher.publishEvent(new DeleteUserRequestEvent(this, new User.UserId(123L)));
 
+    verify(userSpringEventMapper).toDeleteUserCommand(any(DeleteUserRequestEvent.class));
     verify(deleteUserUseCase).deleteUser(new DeleteUserUseCase.DeleteUserCommand(new User.UserId(123L)));
   }
 
   @Test
   void updateUserIfPresent() {
+    when(userSpringEventMapper.toUpdateUserCommand(any(UpdateUserRequestEvent.class)))
+        .thenReturn(new UpdateUserUseCase.UpdateUserCommand(new User.UserId(123L),
+                                                            "New",
+                                                            "User",
+                                                            "newemail@email.com"));
     when(updateUserUseCase.updateUser(new UpdateUserUseCase.UpdateUserCommand(new User.UserId(123L),
                                                                               "New",
                                                                               "User",
@@ -140,6 +173,7 @@ class UserControllerTest {
                                                                       "User",
                                                                       "newemail@email.com"));
 
+    verify(userSpringEventMapper).toUpdateUserCommand(any(UpdateUserRequestEvent.class));
     verify(updateUserUseCase).updateUser(new UpdateUserUseCase.UpdateUserCommand(new User.UserId(123L),
                                                                                  "New",
                                                                                  "User",
@@ -148,6 +182,11 @@ class UserControllerTest {
 
   @Test
   void updateUserIfAbsent() {
+    when(userSpringEventMapper.toUpdateUserCommand(any(UpdateUserRequestEvent.class)))
+        .thenReturn(new UpdateUserUseCase.UpdateUserCommand(new User.UserId(123L),
+                                                            "New",
+                                                            "User",
+                                                            "newemail@email.com"));
     when(updateUserUseCase.updateUser(new UpdateUserUseCase.UpdateUserCommand(new User.UserId(123L),
                                                                               "New",
                                                                               "User",
@@ -160,6 +199,7 @@ class UserControllerTest {
                                                                       "User",
                                                                       "newemail@email.com"));
 
+    verify(userSpringEventMapper).toUpdateUserCommand(any(UpdateUserRequestEvent.class));
     verify(updateUserUseCase).updateUser(new UpdateUserUseCase.UpdateUserCommand(new User.UserId(123L),
                                                                                  "New",
                                                                                  "User",

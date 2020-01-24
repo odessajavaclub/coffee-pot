@@ -3,8 +3,8 @@ package org.odessajavaclub.user.application.port.in;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import org.odessajavaclub.user.domain.User;
 import org.odessajavaclub.user.domain.UserRole;
@@ -16,6 +16,7 @@ public interface CreateUserUseCase {
   User createInactiveUser(CreateUserCommand command);
 
   @Value
+  @RequiredArgsConstructor
   @Builder
   class CreateUserCommand {
 

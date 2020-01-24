@@ -1,8 +1,10 @@
-package org.odessajavaclub.user.adapter.in.rest.mapping;
+package org.odessajavaclub.user.adapter.in.rest.mapper;
 
 import java.util.Objects;
 import org.odessajavaclub.user.domain.UserRole;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UserRoleRestMapper {
 
   public UserRole asUserRole(String role) {

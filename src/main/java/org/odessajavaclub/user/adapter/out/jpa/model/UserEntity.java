@@ -1,4 +1,4 @@
-package org.odessajavaclub.user.adapter.out.jpa;
+package org.odessajavaclub.user.adapter.out.jpa.model;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;

@@ -47,8 +47,6 @@ class UserControllerTest {
 
   private static final int DEFAULT_SIZE = 100;
 
-  public static final boolean DEFAULT_ACTIVE = true;
-
   @Autowired
   private MockMvc mockMvc;
 
@@ -382,8 +380,7 @@ class UserControllerTest {
   @Test
   @WithMockUser(username = USER_NAME)
   void activateUserIfUserExists() throws Exception {
-    when(activateUserUseCase.activateUser(new ActivateUserUseCase.ActivateUserCommand(new User.UserId(
-        123L))))
+    when(activateUserUseCase.activateUser(new ActivateUserUseCase.ActivateUserCommand(new User.UserId(123L))))
         .thenReturn(Optional.of(User.builder()
                                     .id(new UserId(123L))
                                     .firstName("First name 1")
@@ -401,8 +398,7 @@ class UserControllerTest {
   @Test
   @WithMockUser(username = USER_NAME)
   void activateUserIfUserDoesNotExist() throws Exception {
-    when(activateUserUseCase.activateUser(new ActivateUserUseCase.ActivateUserCommand(new User.UserId(
-        123L))))
+    when(activateUserUseCase.activateUser(new ActivateUserUseCase.ActivateUserCommand(new User.UserId(123L))))
         .thenReturn(Optional.empty());
 
     mockMvc.perform(put("/users/activate/123"))
@@ -412,8 +408,7 @@ class UserControllerTest {
   @Test
   @WithMockUser(username = USER_NAME)
   void deactivateUserIfUserExists() throws Exception {
-    when(deactivateUserUseCase.deactivateUser(new DeactivateUserUseCase.DeactivateUserCommand(new User.UserId(
-        567L))))
+    when(deactivateUserUseCase.deactivateUser(new DeactivateUserUseCase.DeactivateUserCommand(new User.UserId(567L))))
         .thenReturn(Optional.of(User.builder()
                                     .id(new UserId(567L))
                                     .firstName("First name 1")

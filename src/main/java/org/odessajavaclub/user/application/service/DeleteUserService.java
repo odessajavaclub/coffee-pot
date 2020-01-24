@@ -19,6 +19,6 @@ class DeleteUserService implements DeleteUserUseCase {
   @Override
   public boolean deleteUser(DeleteUserCommand command) {
     validating.validate(command);
-    return deleteUserPort.deleteUser(command.getUserId());
+    return deleteUserPort.deleteUser(command.getId());
   }
 }

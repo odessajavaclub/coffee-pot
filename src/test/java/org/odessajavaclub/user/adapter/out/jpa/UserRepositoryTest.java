@@ -9,20 +9,46 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
+import org.mapstruct.factory.Mappers;
+import org.odessajavaclub.user.adapter.out.jpa.UserRepositoryTest.TestConfig;
+import org.odessajavaclub.user.adapter.out.jpa.mapper.UserEntityMapper;
 import org.odessajavaclub.user.domain.User;
 import org.odessajavaclub.user.domain.User.UserId;
 import org.odessajavaclub.user.domain.UserRole;
+import org.odessajavaclub.user.shared.UserIdMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.jdbc.Sql;
 
 @DataJpaTest
-@ComponentScan(basePackages = {"org.odessajavaclub.user.config",
-                               "org.odessajavaclub.user.adapter.out.jpa"})
+@Import(TestConfig.class)
 @Sql("user-repository-test-data.sql")
 class UserRepositoryTest {
+
+  @TestConfiguration
+  static class TestConfig {
+
+    @Autowired
+    UserJpaRepository userJpaRepository;
+
+    @Bean
+    UserEntityMapper userEntityMapper() {
+      return Mappers.getMapper(UserEntityMapper.class);
+    }
+
+    @Bean
+    UserIdMapper userIdMapper() {
+      return new UserIdMapper();
+    }
+
+    @Bean
+    UserRepository userRepository() {
+      return new UserRepository(userJpaRepository, userEntityMapper());
+    }
+  }
 
   @Autowired
   private UserRepository userRepository;

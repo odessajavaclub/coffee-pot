@@ -2,7 +2,6 @@ package org.odessajavaclub.user.adapter.in.springevents.model;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import org.odessajavaclub.user.domain.UserRole;
 import org.springframework.context.ApplicationEvent;
 
 @Getter
@@ -17,14 +16,14 @@ public class CreateActiveUserRequestEvent extends ApplicationEvent {
 
   private final String password;
 
-  private final UserRole role;
+  private final UserSpringEventRole role;
 
   public CreateActiveUserRequestEvent(Object source,
                                       String firstName,
                                       String lastName,
                                       String email,
                                       String password,
-                                      UserRole role) {
+                                      UserSpringEventRole role) {
     super(source);
     this.firstName = firstName;
     this.lastName = lastName;

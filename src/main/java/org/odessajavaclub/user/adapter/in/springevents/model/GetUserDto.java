@@ -17,7 +17,7 @@ public class GetUserDto {
 
   private String email;
 
-  private String role;
+  private UserSpringEventRole role;
 
   private boolean active;
 }

@@ -25,7 +25,7 @@ class ActivationUserService implements ActivateUserUseCase, DeactivateUserUseCas
   @Override
   public Optional<User> activateUser(ActivateUserCommand command) {
     validating.validate(command);
-    return loadUsersPort.loadUser(command.getUserId())
+    return loadUsersPort.loadUser(command.getId())
                         .map(u -> u.toBuilder().active(true).build())
                         .map(updateUserPort::updateUser);
   }
@@ -33,7 +33,7 @@ class ActivationUserService implements ActivateUserUseCase, DeactivateUserUseCas
   @Override
   public Optional<User> deactivateUser(DeactivateUserCommand command) {
     validating.validate(command);
-    return loadUsersPort.loadUser(command.getUserId())
+    return loadUsersPort.loadUser(command.getId())
                         .map(u -> u.toBuilder().active(false).build())
                         .map(updateUserPort::updateUser);
   }

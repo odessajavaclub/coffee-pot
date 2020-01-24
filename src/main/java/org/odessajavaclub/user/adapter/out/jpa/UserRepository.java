@@ -5,6 +5,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import lombok.RequiredArgsConstructor;
+import org.odessajavaclub.user.adapter.out.jpa.mapper.UserEntityMapper;
+import org.odessajavaclub.user.adapter.out.jpa.model.UserEntity;
 import org.odessajavaclub.user.application.port.out.CreateUserPort;
 import org.odessajavaclub.user.application.port.out.DeleteUserPort;
 import org.odessajavaclub.user.application.port.out.LoadUsersPort;
