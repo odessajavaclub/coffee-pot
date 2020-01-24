@@ -13,7 +13,11 @@ import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mapstruct.factory.Mappers;
 import org.odessajavaclub.auth.AuthenticationFacade;
+import org.odessajavaclub.user.adapter.in.rest.UserControllerTest.TestConfig;
+import org.odessajavaclub.user.adapter.in.rest.mapper.UserRestMapper;
+import org.odessajavaclub.user.adapter.in.rest.mapper.UserRoleRestMapper;
 import org.odessajavaclub.user.adapter.in.rest.model.CreateUserDto;
 import org.odessajavaclub.user.adapter.in.rest.model.GetUserDto;
 import org.odessajavaclub.user.adapter.in.rest.model.UpdateUserDto;
@@ -26,18 +30,39 @@ import org.odessajavaclub.user.application.port.in.UpdateUserUseCase;
 import org.odessajavaclub.user.domain.User;
 import org.odessajavaclub.user.domain.User.UserId;
 import org.odessajavaclub.user.domain.UserRole;
+import org.odessajavaclub.user.shared.UserIdMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(controllers = UserController.class)
-@ComponentScan(basePackages = {"org.odessajavaclub.user.config",
-                               "org.odessajavaclub.user.adapter.in.rest"})
+@Import(TestConfig.class)
 class UserControllerTest {
+
+  @TestConfiguration
+  static class TestConfig {
+
+    @Bean
+    UserRestMapper userRestMapper() {
+      return Mappers.getMapper(UserRestMapper.class);
+    }
+
+    @Bean
+    UserRoleRestMapper userRoleRestMapper() {
+      return new UserRoleRestMapper();
+    }
+
+    @Bean
+    UserIdMapper userIdMapper() {
+      return new UserIdMapper();
+    }
+  }
 
   private static final String USER_NAME = "test_user";
 
