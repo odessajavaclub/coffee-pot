@@ -46,6 +46,7 @@ class UserTest {
                       .build();
 
     assertAll(
+        () -> assertTrue(actual.getIdOptional().isEmpty()),
         () -> assertNull(actual.getId()),
         () -> assertEquals("Maxim", actual.getFirstName()),
         () -> assertEquals("Sashkin", actual.getLastName()),
@@ -68,6 +69,7 @@ class UserTest {
                       .build();
 
     assertAll(
+        () -> assertTrue(actual.getIdOptional().isPresent()),
         () -> assertEquals(1234L, actual.getId().getValue()),
         () -> assertEquals("Maxim", actual.getFirstName()),
         () -> assertEquals("Sashkin", actual.getLastName()),
@@ -91,6 +93,7 @@ class UserTest {
 
     assertAll(
         () -> assertNull(actual.getId()),
+        () -> assertTrue(actual.getIdOptional().isEmpty()),
         () -> assertEquals("Maxim", actual.getFirstName()),
         () -> assertEquals("Sashkin", actual.getLastName()),
         () -> assertEquals("maxs@email.com", actual.getEmail()),

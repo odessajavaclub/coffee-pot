@@ -54,13 +54,47 @@ class UserRepositoryTest {
   private UserRepository userRepository;
 
   @Test
-  void createUser() {
+  void createReadonlyUser() {
     User newUser = userRepository.createUser(User.builder()
                                                  .firstName("New")
                                                  .lastName("User")
                                                  .email("newuser@email.com")
                                                  .password("{noop}newuser1234")
                                                  .role(UserRole.READONLY)
+                                                 .active(true)
+                                                 .build());
+
+    List<User> actual = userRepository.loadAllUsers();
+
+    assertNotNull(newUser);
+    assertEquals(5, actual.size());
+  }
+
+  @Test
+  void createAdminUser() {
+    User newUser = userRepository.createUser(User.builder()
+                                                 .firstName("New")
+                                                 .lastName("User")
+                                                 .email("newuser@email.com")
+                                                 .password("{noop}newuser1234")
+                                                 .role(UserRole.ADMIN)
+                                                 .active(true)
+                                                 .build());
+
+    List<User> actual = userRepository.loadAllUsers();
+
+    assertNotNull(newUser);
+    assertEquals(5, actual.size());
+  }
+
+  @Test
+  void createRegularUser() {
+    User newUser = userRepository.createUser(User.builder()
+                                                 .firstName("New")
+                                                 .lastName("User")
+                                                 .email("newuser@email.com")
+                                                 .password("{noop}newuser1234")
+                                                 .role(UserRole.USER)
                                                  .active(true)
                                                  .build());
 
@@ -98,10 +132,24 @@ class UserRepositoryTest {
   }
 
   @Test
+  void loadAllUsersPaged() {
+    List<User> actual = userRepository.loadAllUsers(0, 2);
+
+    assertEquals(2, actual.size());
+  }
+
+  @Test
   void loadAllActiveUsers() {
     List<User> actual = userRepository.loadAllUsersByActive(true);
 
     assertEquals(3, actual.size());
+  }
+
+  @Test
+  void loadAllActiveUsersPaged() {
+    List<User> actual = userRepository.loadAllUsersByActive(true, 0, 2);
+
+    assertEquals(2, actual.size());
   }
 
   @Test
