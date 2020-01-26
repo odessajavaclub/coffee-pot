@@ -1,4 +1,4 @@
-package org.odessajavaclub.category.adapter.in.web;
+package org.odessajavaclub.category.adapter.in.rest;
 
 import lombok.RequiredArgsConstructor;
 import org.odessajavaclub.category.application.port.in.CreateCategoryUseCase;
