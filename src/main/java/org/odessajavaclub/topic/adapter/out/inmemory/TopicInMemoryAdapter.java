@@ -1,5 +1,13 @@
 package org.odessajavaclub.topic.adapter.out.inmemory;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
 import org.odessajavaclub.topic.application.port.out.CreateTopicPort;
 import org.odessajavaclub.topic.application.port.out.DeleteTopicPort;
 import org.odessajavaclub.topic.application.port.out.LoadTopicPort;
@@ -9,15 +17,6 @@ import org.odessajavaclub.topic.domain.enumeration.TopicStatus;
 import org.odessajavaclub.topic.domain.enumeration.TopicType;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.stream.Collectors;
 
 @Component
 @Profile("alpha")

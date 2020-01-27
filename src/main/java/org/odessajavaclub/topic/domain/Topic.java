@@ -1,5 +1,11 @@
 package org.odessajavaclub.topic.domain;
 
+import java.util.Date;
+import java.util.Optional;
+import javax.validation.constraints.FutureOrPresent;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,13 +15,6 @@ import lombok.Setter;
 import lombok.Value;
 import org.odessajavaclub.topic.domain.enumeration.TopicStatus;
 import org.odessajavaclub.topic.domain.enumeration.TopicType;
-
-import javax.validation.constraints.FutureOrPresent;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import java.util.Date;
-import java.util.Optional;
 
 // TODO: Add image field
 // TODO: Remove author field
@@ -47,8 +46,16 @@ public class Topic {
     @NonNull private Long value;
   }
 
-  public Topic() {}
+  public Topic() {
+  }
 
+  /**
+   * Constructs a {@link Topic} from a {@link Topic} and topic id.
+   *
+   * @param topic   topic
+   * @param topicId topic id
+   * @return an instance of {@link Topic}
+   */
   public static Topic from(Topic topic, TopicId topicId) {
     Topic result = new Topic();
     result.setId(topicId);

@@ -5,7 +5,14 @@ import org.odessajavaclub.topic.domain.Topic;
 
 @NoArgsConstructor
 public class TopicEntityMapper {
-  public TopicEntity toTopicJPA(Topic topic) {
+
+  /**
+   * Maps {@link Topic} to {@link TopicEntity}.
+   *
+   * @param topic {@link Topic}
+   * @return {@link TopicEntity}
+   */
+  public TopicEntity toTopicJpa(Topic topic) {
     return TopicEntity.builder()
         .id(topic.getId().map(Topic.TopicId::getValue).orElse(null))
         .title(topic.getTitle())
@@ -17,6 +24,12 @@ public class TopicEntityMapper {
         .build();
   }
 
+  /**
+   * Maps {@link TopicEntity} to {@link Topic}.
+   *
+   * @param topicEntity {@link TopicEntity}
+   * @return {@link Topic}
+   */
   public Topic toTopic(TopicEntity topicEntity) {
     Topic topic = new Topic();
     Topic.TopicId topicId =

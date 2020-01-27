@@ -19,6 +19,13 @@ public class Validating {
     this(Validation.buildDefaultValidatorFactory());
   }
 
+  /**
+   * Validates {@code object} and throws {@link ConstraintViolationException} if it is invalid.
+   *
+   * @param object input object to be validated
+   * @param <T>    type of input object
+   * @throws ConstraintViolationException if input object is invalid
+   */
   public <T> void validate(T object) {
     Set<ConstraintViolation<T>> violations = validator.validate(object);
     if (!violations.isEmpty()) {

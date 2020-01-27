@@ -1,11 +1,10 @@
 package org.odessajavaclub.topic.application.service;
 
+import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.odessajavaclub.topic.application.port.in.DeleteTopicUseCase;
 import org.odessajavaclub.topic.application.port.out.DeleteTopicPort;
 import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
 
 @RequiredArgsConstructor
 @Service

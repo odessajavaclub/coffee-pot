@@ -20,7 +20,7 @@ public class CoffeePotSecurityConfig extends WebSecurityConfigurerAdapter {
   }
 
   @Autowired
-  public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+  void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
     auth.inMemoryAuthentication()
         .withUser("lohika_user@gmail.com")
         .password("{noop}password123")

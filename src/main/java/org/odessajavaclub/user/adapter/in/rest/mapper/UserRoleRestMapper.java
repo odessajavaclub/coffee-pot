@@ -1,14 +1,21 @@
 package org.odessajavaclub.user.adapter.in.rest.mapper;
 
-import java.util.Objects;
 import org.odessajavaclub.user.domain.UserRole;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UserRoleRestMapper {
 
+  /**
+   * Maps string representation to its {@link UserRole}.
+   *
+   * @param role string representation
+   * @return {@link UserRole}
+   */
   public UserRole asUserRole(String role) {
-    Objects.requireNonNull(role, "Role must not be null");
+    if (role == null) {
+      return null;
+    }
     switch (role) {
       case "admin":
         return UserRole.ADMIN;
@@ -21,8 +28,16 @@ public class UserRoleRestMapper {
     }
   }
 
+  /**
+   * Maps {@link UserRole} to its string representation.
+   *
+   * @param userRole {@link UserRole}
+   * @return user role string representation
+   */
   public String asRole(UserRole userRole) {
-    Objects.requireNonNull(userRole, "User role must not be null");
+    if (userRole == null) {
+      return null;
+    }
     switch (userRole) {
       case ADMIN:
         return "admin";

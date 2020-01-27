@@ -1,5 +1,7 @@
 package org.odessajavaclub.topic.adapter.in.springevents;
 
+import java.text.SimpleDateFormat;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.odessajavaclub.topic.adapter.in.springevents.events.CreateTopicRequestEvent;
@@ -16,9 +18,6 @@ import org.odessajavaclub.topic.domain.Topic;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 
-import java.text.SimpleDateFormat;
-import java.util.Optional;
-
 @RequiredArgsConstructor
 @Log4j2
 public class TopicController {
@@ -29,7 +28,7 @@ public class TopicController {
   private final GetTopicsQuery topicsQuery;
 
   @EventListener
-  public void on(CreateTopicRequestEvent event) {
+  void on(CreateTopicRequestEvent event) {
     log.info("Create new topic: [{}]", event.getTopic());
     Topic topic = event.getTopic();
     Topic createdTopic =
@@ -45,7 +44,7 @@ public class TopicController {
   }
 
   @EventListener
-  public void on(GetTopicByIdRequestEvent event) {
+  void on(GetTopicByIdRequestEvent event) {
     log.info("Get Topics by id: [{}]", event.getId());
     topicsQuery
         .getTopic(event.getId())
@@ -55,7 +54,7 @@ public class TopicController {
   }
 
   @EventListener
-  public void on(GetTopicByNameRequestEvent event) {
+  void on(GetTopicByNameRequestEvent event) {
     log.info("Get Topics by topic name: [{}]", event.getName());
     topicsQuery
         .getTopicsByName(
@@ -66,7 +65,7 @@ public class TopicController {
   }
 
   @EventListener
-  public void on(UpdateTopicRequestEvent event) {
+  void on(UpdateTopicRequestEvent event) {
     Topic topic = event.getTopic();
     Optional<Topic> updatedTopic =
         updateTopicUseCase.updateTopic(
@@ -85,7 +84,7 @@ public class TopicController {
   }
 
   @EventListener
-  public void on(DeleteTopicByIdRequestEvent event) {
+  void on(DeleteTopicByIdRequestEvent event) {
     if (deleteTopicUseCase.deleteTopic(new DeleteTopicUseCase.DeleteTopicCommand(event.getId()))) {
       log.info("Topic: [{}] successfully deleted", event.getId());
     }

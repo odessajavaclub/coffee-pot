@@ -1,5 +1,11 @@
 package org.odessajavaclub.topic.adapter.out.persistence;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.odessajavaclub.shared.PersistenceAdapter;
 import org.odessajavaclub.topic.application.port.out.CreateTopicPort;
@@ -12,24 +18,17 @@ import org.odessajavaclub.topic.domain.enumeration.TopicType;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 @PersistenceAdapter
 @RequiredArgsConstructor
 public class TopicPersistenceAdapter
     implements CreateTopicPort, LoadTopicPort, UpdateTopicPort, DeleteTopicPort {
-  private final TopicJPARepository topicJpaRepository;
+  private final TopicJpaRepository topicJpaRepository;
 
   private final TopicEntityMapper topicEntityMapper;
 
   @Override
   public Topic createTopic(Topic topic) {
-    TopicEntity topicEntity = topicEntityMapper.toTopicJPA(topic);
+    TopicEntity topicEntity = topicEntityMapper.toTopicJpa(topic);
     TopicEntity createdTopic = topicJpaRepository.save(topicEntity);
     return topicEntityMapper.toTopic(createdTopic);
   }
@@ -116,7 +115,7 @@ public class TopicPersistenceAdapter
       throw new RuntimeException("Topic ID is absent");
     }
 
-    TopicEntity updatedEntity = topicJpaRepository.save(topicEntityMapper.toTopicJPA(topic));
+    TopicEntity updatedEntity = topicJpaRepository.save(topicEntityMapper.toTopicJpa(topic));
     return topicEntityMapper.toTopic(updatedEntity);
   }
 }
