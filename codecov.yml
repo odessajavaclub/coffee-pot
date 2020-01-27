@@ -21,4 +21,11 @@ comment:
   behavior: default
   require_changes: false
 ignore:
-  - "UserInitializer.java"
+  - "src/main/java/org/odessajavaclub/user/config"
+  - "src/main/java/org/odessajavaclub/user/bootstrap"
+  - "src/main/java/org/odessajavaclub/user/adapter/in/rest/model"
+  - "src/main/java/org/odessajavaclub/user/adapter/in/rest/mapper"
+  - "src/main/java/org/odessajavaclub/user/adapter/in/springevents/model"
+  - "src/main/java/org/odessajavaclub/user/adapter/in/springevents/mapper"
+  - "src/main/java/org/odessajavaclub/user/adapter/out/jpa/model"
+  - "src/main/java/org/odessajavaclub/user/adapter/out/jpa/mapper"
