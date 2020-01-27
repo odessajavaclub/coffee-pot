@@ -24,6 +24,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     - Create "user" module
 - ISSUE-7 ([#10](https://github.com/odessajavaclub/coffee-pot/pull/10))
     - Create "attachment" module
+- ISSUE-36 ([#37](https://github.com/odessajavaclub/coffee-pot/pull/37))
+    - Add MapStruct to user module
 
 ### Changed
 - ISSUE-24 ([#24](https://github.com/odessajavaclub/coffee-pot/pull/24))

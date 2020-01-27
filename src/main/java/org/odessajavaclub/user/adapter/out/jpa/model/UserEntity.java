@@ -1,4 +1,4 @@
-package org.odessajavaclub.user.adapter.out.jpa;
+package org.odessajavaclub.user.adapter.out.jpa.model;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -13,7 +13,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.odessajavaclub.user.domain.UserRole;
 
 @Entity
 @Table(name = "USERS")
@@ -37,9 +36,8 @@ public class UserEntity {
 
   private String password;
 
-  // TODO: should we create a separate enum for JPA adapter?
   @Enumerated(EnumType.STRING)
-  private UserRole role;
+  private UserEntityRole role;
 
   private boolean active;
 }

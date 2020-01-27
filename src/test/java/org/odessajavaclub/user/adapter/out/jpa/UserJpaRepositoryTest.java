@@ -5,7 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
-import org.odessajavaclub.user.domain.UserRole;
+import org.odessajavaclub.user.adapter.out.jpa.model.UserEntity;
+import org.odessajavaclub.user.adapter.out.jpa.model.UserEntityRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +24,7 @@ class UserJpaRepositoryTest {
                                                              "User",
                                                              "new@email.com",
                                                              "pass123",
-                                                             UserRole.USER,
+                                                             UserEntityRole.USER,
                                                              true));
 
     assertNotNull(saved.getId());
@@ -36,14 +37,14 @@ class UserJpaRepositoryTest {
                                         "User1",
                                         "new1@email.com",
                                         "pass123",
-                                        UserRole.USER,
+                                        UserEntityRole.USER,
                                         true);
     UserEntity entity2 = new UserEntity(null,
                                         "New2",
                                         "User2",
                                         "new2@email.com",
                                         "pass123",
-                                        UserRole.USER,
+                                        UserEntityRole.USER,
                                         false);
     userJpaRepository.save(entity1);
     userJpaRepository.save(entity2);
@@ -60,14 +61,14 @@ class UserJpaRepositoryTest {
                                         "User1",
                                         "new1@email.com",
                                         "pass123",
-                                        UserRole.USER,
+                                        UserEntityRole.USER,
                                         true);
     UserEntity entity2 = new UserEntity(null,
                                         "New2",
                                         "User2",
                                         "new2@email.com",
                                         "pass123",
-                                        UserRole.USER,
+                                        UserEntityRole.USER,
                                         false);
     userJpaRepository.save(entity1);
     userJpaRepository.save(entity2);

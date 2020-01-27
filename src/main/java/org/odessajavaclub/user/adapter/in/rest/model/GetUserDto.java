@@ -1,6 +1,5 @@
-package org.odessajavaclub.user.adapter.in.springevents.model;
+package org.odessajavaclub.user.adapter.in.rest.model;
 
-import javax.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,12 +7,17 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-class UpdateUserDto {
+public class GetUserDto {
+
+  private long id;
 
   private String firstName;
 
   private String lastName;
 
-  @Email
   private String email;
+
+  private String role;
+
+  private boolean active;
 }

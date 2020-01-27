@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.odessajavaclub.shared.Validating;
 import org.odessajavaclub.user.application.port.in.CreateUserUseCase;
 import org.odessajavaclub.user.application.port.out.CreateUserPort;
 import org.odessajavaclub.user.domain.User;
@@ -21,11 +22,14 @@ class CreateUserServiceTest {
 
   private CreateUserService createUserService;
 
+  private Validating validating;
+
   @BeforeEach
   void setUp() {
     createUserPort = mock(CreateUserPort.class);
     passwordEncoder = mock(PasswordEncoder.class);
-    createUserService = new CreateUserService(createUserPort, passwordEncoder);
+    validating = mock(Validating.class);
+    createUserService = new CreateUserService(createUserPort, passwordEncoder, validating);
   }
 
   @Test
@@ -37,12 +41,14 @@ class CreateUserServiceTest {
 
   @Test
   void createActiveUserIfInputDataIsValid() {
-    User user = User.withoutId("Good",
-                               "User",
-                               "good@email.com",
-                               "pass1",
-                               UserRole.USER,
-                               true);
+    User user = User.builder()
+                    .firstName("Good")
+                    .lastName("User")
+                    .email("good@email.com")
+                    .password("pass1")
+                    .role(UserRole.USER)
+                    .active(true)
+                    .build();
 
     when(passwordEncoder.encode("pass1")).thenReturn("pass1");
     when(createUserPort.createUser(user)).thenReturn(user);
@@ -65,12 +71,14 @@ class CreateUserServiceTest {
 
   @Test
   void createInactiveUserIfInputDataIsValid() {
-    User user = User.withoutId("Good",
-                               "User",
-                               "good@email.com",
-                               "pass1",
-                               UserRole.USER,
-                               false);
+    User user = User.builder()
+                    .firstName("Good")
+                    .lastName("User")
+                    .email("good@email.com")
+                    .password("pass1")
+                    .role(UserRole.USER)
+                    .active(false)
+                    .build();
 
     when(passwordEncoder.encode("pass1")).thenReturn("pass1");
     when(createUserPort.createUser(user)).thenReturn(user);

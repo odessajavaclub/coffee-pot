@@ -1,9 +1,9 @@
 package org.odessajavaclub.user.application.port.in;
 
 import javax.validation.constraints.NotNull;
-import lombok.EqualsAndHashCode;
+import lombok.Builder;
+import lombok.RequiredArgsConstructor;
 import lombok.Value;
-import org.odessajavaclub.shared.SelfValidating;
 import org.odessajavaclub.user.domain.User;
 
 public interface DeleteUserUseCase {
@@ -11,15 +11,11 @@ public interface DeleteUserUseCase {
   boolean deleteUser(DeleteUserCommand command);
 
   @Value
-  @EqualsAndHashCode(callSuper = false)
-  class DeleteUserCommand extends SelfValidating<DeleteUserCommand> {
+  @RequiredArgsConstructor
+  @Builder
+  class DeleteUserCommand {
 
     @NotNull
-    private final User.UserId userId;
-
-    public DeleteUserCommand(User.UserId userId) {
-      this.userId = userId;
-      this.validateSelf();
-    }
+    private final User.UserId id;
   }
 }

@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.odessajavaclub.shared.Validating;
 import org.odessajavaclub.user.application.port.in.DeleteUserUseCase;
 import org.odessajavaclub.user.application.port.out.DeleteUserPort;
 import org.odessajavaclub.user.domain.User;
@@ -17,10 +18,13 @@ class DeleteUserServiceTest {
 
   private DeleteUserService deleteUserService;
 
+  private Validating validating;
+
   @BeforeEach
   void setUp() {
     deleteUserPort = mock(DeleteUserPort.class);
-    deleteUserService = new DeleteUserService(deleteUserPort);
+    validating = mock(Validating.class);
+    deleteUserService = new DeleteUserService(deleteUserPort, validating);
   }
 
   @Test

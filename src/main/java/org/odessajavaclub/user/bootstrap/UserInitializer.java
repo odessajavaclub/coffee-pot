@@ -19,33 +19,41 @@ public class UserInitializer implements CommandLineRunner {
   public void run(String... args) {
     log.info("Started creating mock users");
 
-    createUserPort.createUser(User.withoutId("Maxim",
-                                             "Sashkin",
-                                             "maxs@email.com",
-                                             "{noop}maxs1234",
-                                             UserRole.USER,
-                                             true));
+    createUserPort.createUser(User.builder()
+                                  .firstName("Maxim")
+                                  .lastName("Sashkin")
+                                  .email("maxs@email.com")
+                                  .password("{noop}maxs1234")
+                                  .role(UserRole.USER)
+                                  .active(true)
+                                  .build());
 
-    createUserPort.createUser(User.withoutId("Alexander",
-                                             "Pletnev",
-                                             "alexp@email.com",
-                                             "{noop}alexp1234",
-                                             UserRole.ADMIN,
-                                             true));
+    createUserPort.createUser(User.builder()
+                                  .firstName("Alexander")
+                                  .lastName("Pletnev")
+                                  .email("alexp@email.com")
+                                  .password("{noop}alexp1234")
+                                  .role(UserRole.ADMIN)
+                                  .active(true)
+                                  .build());
 
-    createUserPort.createUser(User.withoutId("Alexander",
-                                             "Bevziuk",
-                                             "alexb@email.com",
-                                             "{noop}alexb1234",
-                                             UserRole.USER,
-                                             true));
+    createUserPort.createUser(User.builder()
+                                  .firstName("Alexander")
+                                  .lastName("Bevziuk")
+                                  .email("alexb@email.com")
+                                  .password("{noop}alexb1234")
+                                  .role(UserRole.USER)
+                                  .active(true)
+                                  .build());
 
-    createUserPort.createUser(User.withoutId("Oleksii",
-                                             "Aleksandrov",
-                                             "oleksiia@email.com",
-                                             "{noop}oleksii1234",
-                                             UserRole.USER,
-                                             true));
+    createUserPort.createUser(User.builder()
+                                  .firstName("Oleksii")
+                                  .lastName("Aleksandrov")
+                                  .email("oleksiia@email.com")
+                                  .password("{noop}oleksii1234")
+                                  .role(UserRole.READONLY)
+                                  .active(true)
+                                  .build());
 
     log.info("Finished creating mock users");
   }

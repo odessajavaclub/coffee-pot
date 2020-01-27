@@ -9,29 +9,94 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
+import org.mapstruct.factory.Mappers;
+import org.odessajavaclub.user.adapter.out.jpa.UserRepositoryTest.TestConfig;
+import org.odessajavaclub.user.adapter.out.jpa.mapper.UserEntityMapper;
 import org.odessajavaclub.user.domain.User;
+import org.odessajavaclub.user.domain.User.UserId;
 import org.odessajavaclub.user.domain.UserRole;
+import org.odessajavaclub.user.shared.UserIdMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.jdbc.Sql;
 
 @DataJpaTest
-@Import({UserRepository.class, UserEntityMapper.class})
+@Import(TestConfig.class)
 @Sql("user-repository-test-data.sql")
 class UserRepositoryTest {
+
+  @TestConfiguration
+  static class TestConfig {
+
+    @Autowired
+    UserJpaRepository userJpaRepository;
+
+    @Bean
+    UserEntityMapper userEntityMapper() {
+      return Mappers.getMapper(UserEntityMapper.class);
+    }
+
+    @Bean
+    UserIdMapper userIdMapper() {
+      return new UserIdMapper();
+    }
+
+    @Bean
+    UserRepository userRepository() {
+      return new UserRepository(userJpaRepository, userEntityMapper());
+    }
+  }
 
   @Autowired
   private UserRepository userRepository;
 
   @Test
-  void createUser() {
-    User newUser = userRepository.createUser(User.withoutId("New",
-                                                            "User",
-                                                            "newuser@email.com",
-                                                            "{noop}newuser1234",
-                                                            UserRole.READONLY,
-                                                            true));
+  void createReadonlyUser() {
+    User newUser = userRepository.createUser(User.builder()
+                                                 .firstName("New")
+                                                 .lastName("User")
+                                                 .email("newuser@email.com")
+                                                 .password("{noop}newuser1234")
+                                                 .role(UserRole.READONLY)
+                                                 .active(true)
+                                                 .build());
+
+    List<User> actual = userRepository.loadAllUsers();
+
+    assertNotNull(newUser);
+    assertEquals(5, actual.size());
+  }
+
+  @Test
+  void createAdminUser() {
+    User newUser = userRepository.createUser(User.builder()
+                                                 .firstName("New")
+                                                 .lastName("User")
+                                                 .email("newuser@email.com")
+                                                 .password("{noop}newuser1234")
+                                                 .role(UserRole.ADMIN)
+                                                 .active(true)
+                                                 .build());
+
+    List<User> actual = userRepository.loadAllUsers();
+
+    assertNotNull(newUser);
+    assertEquals(5, actual.size());
+  }
+
+  @Test
+  void createRegularUser() {
+    User newUser = userRepository.createUser(User.builder()
+                                                 .firstName("New")
+                                                 .lastName("User")
+                                                 .email("newuser@email.com")
+                                                 .password("{noop}newuser1234")
+                                                 .role(UserRole.USER)
+                                                 .active(true)
+                                                 .build());
 
     List<User> actual = userRepository.loadAllUsers();
 
@@ -67,10 +132,24 @@ class UserRepositoryTest {
   }
 
   @Test
+  void loadAllUsersPaged() {
+    List<User> actual = userRepository.loadAllUsers(0, 2);
+
+    assertEquals(2, actual.size());
+  }
+
+  @Test
   void loadAllActiveUsers() {
     List<User> actual = userRepository.loadAllUsersByActive(true);
 
     assertEquals(3, actual.size());
+  }
+
+  @Test
+  void loadAllActiveUsersPaged() {
+    List<User> actual = userRepository.loadAllUsersByActive(true, 0, 2);
+
+    assertEquals(2, actual.size());
   }
 
   @Test
@@ -84,13 +163,15 @@ class UserRepositoryTest {
   void loadExistingUser() {
     Optional<User> actual = userRepository.loadUser(new User.UserId(2L));
 
-    User expected = User.withId(2L,
-                                "Alexander",
-                                "Bevziuk",
-                                "alexb@email.com",
-                                "{noop}alexb1234",
-                                UserRole.USER,
-                                true);
+    User expected = User.builder()
+                        .id(new UserId(2L))
+                        .firstName("Alexander")
+                        .lastName("Bevziuk")
+                        .email("alexb@email.com")
+                        .password("{noop}alexb1234")
+                        .role(UserRole.USER)
+                        .active(true)
+                        .build();
 
     assertEquals(Optional.of(expected), actual);
   }
@@ -105,23 +186,27 @@ class UserRepositoryTest {
   @Test
   void updateUserWithNullId() {
     assertThrows(UserIdIsAbsentException.class,
-                 () -> userRepository.updateUser(User.withoutId("New",
-                                                                "User",
-                                                                "newuser@email.com",
-                                                                "{noop}newuser1234",
-                                                                UserRole.READONLY,
-                                                                true)));
+                 () -> userRepository.updateUser(User.builder()
+                                                     .firstName("New")
+                                                     .lastName("User")
+                                                     .email("newuser@email.com")
+                                                     .password("{noop}newuser1234")
+                                                     .role(UserRole.READONLY)
+                                                     .active(true)
+                                                     .build()));
   }
 
   @Test
   void updateUserWithNormalId() {
-    User expected = User.withId(1L,
-                                "New",
-                                "User",
-                                "newuser@email.com",
-                                "{noop}newuser1234",
-                                UserRole.READONLY,
-                                true);
+    User expected = User.builder()
+                        .id(new UserId(1L))
+                        .firstName("New")
+                        .lastName("User")
+                        .email("newuser@email.com")
+                        .password("{noop}newuser1234")
+                        .role(UserRole.READONLY)
+                        .active(true)
+                        .build();
 
     User updatedUser = userRepository.updateUser(expected);
 

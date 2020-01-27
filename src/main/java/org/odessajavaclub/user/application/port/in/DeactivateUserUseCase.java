@@ -2,9 +2,9 @@ package org.odessajavaclub.user.application.port.in;
 
 import java.util.Optional;
 import javax.validation.constraints.NotNull;
-import lombok.EqualsAndHashCode;
+import lombok.Builder;
+import lombok.RequiredArgsConstructor;
 import lombok.Value;
-import org.odessajavaclub.shared.SelfValidating;
 import org.odessajavaclub.user.domain.User;
 
 public interface DeactivateUserUseCase {
@@ -12,15 +12,11 @@ public interface DeactivateUserUseCase {
   Optional<User> deactivateUser(DeactivateUserCommand command);
 
   @Value
-  @EqualsAndHashCode(callSuper = false)
-  class DeactivateUserCommand extends SelfValidating<DeactivateUserCommand> {
+  @RequiredArgsConstructor
+  @Builder
+  class DeactivateUserCommand {
 
     @NotNull
-    private final User.UserId userId;
-
-    public DeactivateUserCommand(User.UserId userId) {
-      this.userId = userId;
-      this.validateSelf();
-    }
+    private final User.UserId id;
   }
 }

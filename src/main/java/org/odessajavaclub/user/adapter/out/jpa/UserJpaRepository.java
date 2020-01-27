@@ -1,6 +1,7 @@
 package org.odessajavaclub.user.adapter.out.jpa;
 
 import java.util.List;
+import org.odessajavaclub.user.adapter.out.jpa.model.UserEntity;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;

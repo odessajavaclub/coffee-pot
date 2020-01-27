@@ -1,11 +1,15 @@
-package org.odessajavaclub.user.adapter.in.rest;
+package org.odessajavaclub.user.adapter.in.rest.model;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Value
-class CreateUserDto {
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class CreateUserDto {
 
   @NotBlank
   private String firstName;
