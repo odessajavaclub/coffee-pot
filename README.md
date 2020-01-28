@@ -18,7 +18,12 @@ We try to implement a simple list of topics for our internal java club.
 
 Currently, we use [Google Java Style](https://google.github.io/styleguide/javaguide.html)
 
-It is checked during maven `validate` phase using [maven-checkstyle-plugin](https://maven.apache.org/plugins/maven-checkstyle-plugin/)
+It is checked during Maven `validate` phase using [maven-checkstyle-plugin](https://maven.apache.org/plugins/maven-checkstyle-plugin/)
+
+Manually check your code style using Maven:
+```
+mvn checkstyle:check
+```
 
 Build **fails**, if your code doesn't correspond to Google Java Style.
 
