@@ -1,15 +1,7 @@
 # syntax=docker/dockerfile:experimental
-FROM  maven:3.6.3-jdk-11-slim as maven
+FROM --platform=$BUILDPLATFORM openjdk:11-jre
 WORKDIR /coffee_pot
-COPY ./pom.xml ./pom.xml
-RUN ["/bin/bash", "-c", "mvn dependency:go-offline -B"]
-COPY ./src ./src
-
-RUN ["/bin/bash", "-c", "mvn package && cp target/coffee_pot.jar coffee_pot.jar"]
-
-FROM openjdk:11-jre
-WORKDIR /coffee_pot
-COPY --from=maven /coffee_pot/coffee_pot.jar ./coffee_pot.jar
+COPY target/coffee_pot.jar ./coffee_pot.jar
 COPY docker/start.sh start.sh
 COPY docker/wait-for-it.sh wait-for-it.sh
 RUN ["/bin/bash", "-c", "touch coffee_pot.jar"]
