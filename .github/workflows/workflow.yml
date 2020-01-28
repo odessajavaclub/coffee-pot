@@ -19,7 +19,7 @@ jobs:
 
       - name: Docker login
         run: |
-          docker login -u "${DOCKER_REGISTRY_USERNAME}" -p "${DOCKER_REGISTRY_PASSWORD}"
+          echo "${DOCKER_REGISTRY_PASSWORD}" | docker login -u "${DOCKER_REGISTRY_USERNAME}" --password-stdin
         env:
           DOCKER_REGISTRY_USERNAME: ${{ secrets.DOCKER_HUB_LOGIN }}
           DOCKER_REGISTRY_PASSWORD: ${{ secrets.DOCKER_HUB_PASS }}
@@ -41,6 +41,7 @@ jobs:
           docker buildx build \
             --platform linux/amd64,linux/arm64 \
             --output "type=image,push=true" \
+            --tag alexpletnev/coffee-pot:latest
             --file Dockerfile .
 
       - name: Docker logout
