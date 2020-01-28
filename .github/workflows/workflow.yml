@@ -41,7 +41,7 @@ jobs:
           docker buildx build \
             --platform linux/amd64,linux/arm64 \
             --output "type=image,push=true" \
-            --tag alexpletnev/coffee-pot:latest
+            --tag alexpletnev/coffee-pot:latest \
             --file Dockerfile .
 
       - name: Docker logout
