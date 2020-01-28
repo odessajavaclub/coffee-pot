@@ -30,7 +30,13 @@ A final result of phase0 must be like this:
 
 ## Phase 1
 
-TBD
+1. Swagger Codegen (create DAO and clients) deploy them into shared package
+2. Add monitoring features (Actuator with gracefully shutdown)
+3. Create Combiner service as reactive (flux)
+4. Add Slice instead of list
+5. Deployment process (CI/CD)
+6. Logging with tracing (sleuth)
+7. Add circuit breaker (hystrix)
 
 # Launch Instructions
 
