@@ -9,18 +9,19 @@ jobs:
 
     steps:
       - name: Prepare
-          id: prepare
-          run: |
-            if [[ $GITHUB_REF == refs/tags/* ]]; then
-              TAG=${GITHUB_REF#refs/tags/}
-              echo ::set-output name=version::${TAG%-*}
-            else
-              echo ::set-output name=version::unstable
-            fi
-            echo ::set-output name=build_date::$(date -u +'%Y-%m-%dT%H:%M:%SZ')
-            echo ::set-output name=docker_platforms::linux/amd64,linux/arm64
-            echo ::set-output name=docker_username::${{ secrets.DOCKER_HUB_LOGIN }}
-            echo ::set-output name=docker_image::${{ secrets.DOCKER_HUB_LOGIN }}/coffee-pot
+        id: prepare
+        run: |
+          if [[ $GITHUB_REF == refs/tags/* ]]; then
+            TAG=${GITHUB_REF#refs/tags/}
+            echo ::set-output name=version::${TAG%-*}
+          else
+            echo ::set-output name=version::unstable
+          fi
+          echo ::set-output name=build_date::$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+          echo ::set-output name=docker_platforms::linux/amd64,linux/arm64
+          echo ::set-output name=docker_username::${{ secrets.DOCKER_HUB_LOGIN }}
+          echo ::set-output name=docker_image::${{ secrets.DOCKER_HUB_LOGIN }}/coffee-pot
+
       - name: Set up Docker Buildx
         id: buildx
         uses: crazy-max/ghaction-docker-buildx@v1
