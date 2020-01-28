@@ -1,12 +1,11 @@
 package org.odessajavaclub.topic.application.port.in;
 
-import org.odessajavaclub.topic.domain.Topic;
-import org.odessajavaclub.topic.domain.enumeration.TopicStatus;
-import org.odessajavaclub.topic.domain.enumeration.TopicType;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import org.odessajavaclub.topic.domain.Topic;
+import org.odessajavaclub.topic.domain.enumeration.TopicStatus;
+import org.odessajavaclub.topic.domain.enumeration.TopicType;
 
 public interface GetTopicsQuery {
 

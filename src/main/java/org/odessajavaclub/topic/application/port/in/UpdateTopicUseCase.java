@@ -1,16 +1,15 @@
 package org.odessajavaclub.topic.application.port.in;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Optional;
+import javax.validation.ValidationException;
+import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import org.odessajavaclub.shared.SelfValidating;
 import org.odessajavaclub.topic.domain.Topic;
 import org.odessajavaclub.topic.domain.enumeration.TopicStatus;
 import org.odessajavaclub.topic.domain.enumeration.TopicType;
-
-import javax.validation.ValidationException;
-import javax.validation.constraints.NotNull;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Optional;
 
 public interface UpdateTopicUseCase {
 

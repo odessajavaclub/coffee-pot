@@ -1,12 +1,6 @@
 package org.odessajavaclub.topic.adapter.out.persistence;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.odessajavaclub.topic.domain.enumeration.TopicStatus;
-import org.odessajavaclub.topic.domain.enumeration.TopicType;
-
+import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -16,7 +10,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import java.util.Date;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.odessajavaclub.topic.domain.enumeration.TopicStatus;
+import org.odessajavaclub.topic.domain.enumeration.TopicType;
 
 @Entity
 @Table(name = "topic")

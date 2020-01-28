@@ -18,6 +18,16 @@ public class CreateActiveUserRequestEvent extends ApplicationEvent {
 
   private final UserSpringEventRole role;
 
+  /**
+   * Constructor.
+   *
+   * @param source    source
+   * @param firstName first name
+   * @param lastName  last name
+   * @param email     email
+   * @param password  password
+   * @param role      role
+   */
   public CreateActiveUserRequestEvent(Object source,
                                       String firstName,
                                       String lastName,

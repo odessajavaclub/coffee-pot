@@ -17,6 +17,15 @@ public class UpdateUserRequestEvent extends ApplicationEvent {
 
   private String newEmail;
 
+  /**
+   * Constructor.
+   *
+   * @param source       source
+   * @param id           user id
+   * @param newFirstName new first name
+   * @param newLastName  new last name
+   * @param newEmail     new email
+   */
   public UpdateUserRequestEvent(Object source,
                                 User.UserId id,
                                 String newFirstName,

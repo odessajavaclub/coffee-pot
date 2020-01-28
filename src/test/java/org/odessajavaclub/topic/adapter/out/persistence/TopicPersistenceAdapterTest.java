@@ -25,7 +25,7 @@ class TopicPersistenceAdapterTest {
 
   @Autowired private TopicPersistenceAdapter adapterUnderTest;
 
-  @Autowired private TopicJPARepository repository;
+  @Autowired private TopicJpaRepository repository;
 
   @Test
   void loadsFirstTopic() {

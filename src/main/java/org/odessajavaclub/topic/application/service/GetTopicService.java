@@ -1,5 +1,9 @@
 package org.odessajavaclub.topic.application.service;
 
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.odessajavaclub.topic.application.port.in.GetTopicsQuery;
 import org.odessajavaclub.topic.application.port.out.LoadTopicPort;
@@ -7,11 +11,6 @@ import org.odessajavaclub.topic.domain.Topic;
 import org.odessajavaclub.topic.domain.enumeration.TopicStatus;
 import org.odessajavaclub.topic.domain.enumeration.TopicType;
 import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service

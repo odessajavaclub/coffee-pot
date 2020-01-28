@@ -13,18 +13,13 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @ComponentScan(basePackages = "org.odessajavaclub")
 @EnableSwagger2
 public class CoffeePotAppConfig {
+
   @Bean
-  public Docket api() {
+  Docket api() {
     return new Docket(DocumentationType.SWAGGER_2)
         .select()
         .apis(RequestHandlerSelectors.any())
         .paths(PathSelectors.any())
         .build();
   }
-
-  // For testing purposes is commented
-//    @Bean
-//    PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
-//    }
 }

@@ -14,6 +14,14 @@ public class GetUsersRequestEvent extends ApplicationEvent {
 
   private final int size;
 
+  /**
+   * Constructor.
+   *
+   * @param source source
+   * @param active active
+   * @param page   page
+   * @param size   size
+   */
   public GetUsersRequestEvent(Object source, boolean active, int page, int size) {
     super(source);
     this.active = active;

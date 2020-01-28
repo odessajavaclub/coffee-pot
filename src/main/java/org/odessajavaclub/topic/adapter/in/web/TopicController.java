@@ -1,5 +1,10 @@
 package org.odessajavaclub.topic.adapter.in.web;
 
+import java.net.URI;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.odessajavaclub.topic.application.port.in.CreateTopicUseCase;
 import org.odessajavaclub.topic.application.port.in.DeleteTopicUseCase;
@@ -20,12 +25,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
-
-import javax.validation.Valid;
-import java.net.URI;
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor

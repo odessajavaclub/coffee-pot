@@ -13,8 +13,22 @@ public class GetTopicByNameRequestEvent extends ApplicationEvent {
   private final int page;
   private final int size;
 
-  public GetTopicByNameRequestEvent(
-      Object source, String name, String sortBy, String order, int page, int size) {
+  /**
+   * Constructor.
+   *
+   * @param source source
+   * @param name   name
+   * @param sortBy sortBy
+   * @param order  order
+   * @param page   page
+   * @param size   size
+   */
+  public GetTopicByNameRequestEvent(Object source,
+                                    String name,
+                                    String sortBy,
+                                    String order,
+                                    int page,
+                                    int size) {
     super(source);
     this.name = name;
     this.sortBy = sortBy;

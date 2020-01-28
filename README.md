@@ -14,6 +14,22 @@ We try to implement a simple list of topics for our internal java club.
 - Meeting
 - Resource
 
+## Checkstyle
+
+Currently, we use [Google Java Style](https://google.github.io/styleguide/javaguide.html)
+
+It is checked during Maven `validate` phase using [maven-checkstyle-plugin](https://maven.apache.org/plugins/maven-checkstyle-plugin/)
+
+Manually check your code style using Maven:
+```
+mvn checkstyle:check
+```
+
+Build **fails**, if your code doesn't correspond to Google Java Style.
+
+For IntelliJ IDEA there is a plugin [CheckStyle-IDEA](https://plugins.jetbrains.com/plugin/1065-checkstyle-idea).
+It contains a bundled configuration `Google Checks`, which you should select for this project in preferences.
+
 ## Phase 0
 
 In one single repo need to implement next items:
