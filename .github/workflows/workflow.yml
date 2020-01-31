@@ -19,7 +19,7 @@ jobs:
       run: mvn -B package --file pom.xml
 
     - name: Upload artifact
-    - uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v1
       with:
         name: coffee_pot
         path: target/coffee_pot.jar
