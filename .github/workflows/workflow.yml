@@ -15,6 +15,14 @@ jobs:
       with:
         java-version: 11
 
+    - name: Cache maven dependencies
+      uses: actions/cache@v1
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
+
     - name: Build
       run: mvn -B package --file pom.xml
 
