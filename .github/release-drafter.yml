@@ -1,0 +1,16 @@
+name-template: 'v$NEXT_PATCH_VERSION'
+tag-template: 'v$NEXT_PATCH_VERSION'
+template: |
+  # What's Changed
+  $CHANGES
+categories:
+  - title: 'Enhancement'
+    label: 'type: enhancement'
+  - title: 'Bug Fixes'
+    label: 'type: bug'
+  - title: 'GitHub Actions'
+    label: 'type: github actions'
+  - title: 'Documentation'
+    label: 'type: documentation'
+  - title: 'Dependency Updates'
+    label: 'type: dependencies'
