@@ -30,7 +30,7 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: coffee_pot
-        path: target/coffee_pot.jar
+        path: ./target/coffee_pot.jar
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1.0.5

@@ -1,0 +1,56 @@
+name: Release Drafter
+
+#on:
+#  push:
+#    # branches to consider in the event; optional, defaults to all
+#    branches:
+#      - master
+
+on: push
+
+jobs:
+  release-drafter:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Cache maven dependencies
+        uses: actions/cache@v1
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Build
+        run: mvn -B package --file pom.xml
+
+        # Drafts your next Release notes as Pull Requests are merged into "master"
+      - name: Create draft release
+        id: create_draft_release
+        uses: release-drafter/release-drafter@v5
+        # with:
+          # (Optional) specify config name to use, relative to .github/. Default: release-drafter.yml
+          # config-name: release-drafter.yml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload draft release asset
+        id: upload_draft_release_asset
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`.
+          # See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+          upload_url: ${{ steps.create_draft_release.outputs.upload_url }}
+          asset_path: ./target/coffee_pot.jar
+          asset_name: coffee_pot.jar
+          asset_content_type: application/jar
