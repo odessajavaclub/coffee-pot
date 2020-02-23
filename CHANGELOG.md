@@ -32,6 +32,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     - Add upload-artifact GitHub action
 - ISSUE-51 ([#55](https://github.com/odessajavaclub/coffee-pot/pull/55))
     - Create config for release-drafter GitHub Action
+- ISSUE-51 ([#54](https://github.com/odessajavaclub/coffee-pot/pull/54))
+    - Create release-drafter.yml GitHub Action
 
 ### Changed
 - ISSUE-24 ([#24](https://github.com/odessajavaclub/coffee-pot/pull/24))
