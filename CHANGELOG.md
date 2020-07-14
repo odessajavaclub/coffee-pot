@@ -38,3 +38,5 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     - Add coverage settings for codecov.io, add coverage into README.md 
 - ISSUE-52 ([#53](https://github.com/odessajavaclub/coffee-pot/pull/53))
     - Cache maven dependencies in "Workflow CI" GitHub action
+- ISSUE-65 ([#67](https://github.com/odessajavaclub/coffee-pot/pull/67))
+    - Refactor springfox usage
