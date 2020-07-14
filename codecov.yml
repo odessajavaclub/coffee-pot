@@ -6,7 +6,7 @@ coverage:
   round: down
   range: "80...100"
   status:
-    project: yes
+    project: true
     patch: yes
     changes: no
 parsers:
@@ -21,6 +21,7 @@ comment:
   behavior: default
   require_changes: false
 ignore:
+  - "src/main/java/org/odessajavaclub/config"
   - "src/main/java/org/odessajavaclub/user/config"
   - "src/main/java/org/odessajavaclub/user/bootstrap"
   - "src/main/java/org/odessajavaclub/user/adapter/in/rest/model"
