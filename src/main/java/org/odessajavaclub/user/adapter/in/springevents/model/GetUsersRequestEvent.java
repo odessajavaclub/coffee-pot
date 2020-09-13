@@ -2,11 +2,10 @@ package org.odessajavaclub.user.adapter.in.springevents.model;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import org.springframework.context.ApplicationEvent;
 
 @Getter
 @EqualsAndHashCode(callSuper = false)
-public class GetUsersRequestEvent extends ApplicationEvent {
+public class GetUsersRequestEvent {
 
   private final boolean active;
 
@@ -17,13 +16,11 @@ public class GetUsersRequestEvent extends ApplicationEvent {
   /**
    * Constructor.
    *
-   * @param source source
    * @param active active
    * @param page   page
    * @param size   size
    */
-  public GetUsersRequestEvent(Object source, boolean active, int page, int size) {
-    super(source);
+  public GetUsersRequestEvent(boolean active, int page, int size) {
     this.active = active;
     this.page = page;
     this.size = size;

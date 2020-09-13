@@ -25,6 +25,7 @@ import org.odessajavaclub.user.domain.User;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Profile("springevents")
@@ -44,48 +45,64 @@ public class UserController {
 
   private final UserSpringEventMapper springEventUserDtoMapper;
 
+  /**
+   * By default spring events are synchronous, meaning the publisher thread blocks until
+   * all listeners have finished processing the event.
+   *
+   * <p>To make an event listener run in async mode,
+   * all we have to do is use the @Async annotation on that listener.
+   * To make the @Async annotation work, we also have to annotate one of our @Configuration classes
+   * or the @SpringBootApplication class with @EnableAsync.
+   *
+   * @return {@link CreateActiveUserResponseEvent}
+   */
+  @Async
   @EventListener
-  void createActiveUser(CreateActiveUserRequestEvent requestEvent) {
+  CreateActiveUserResponseEvent createActiveUser(CreateActiveUserRequestEvent requestEvent) {
     CreateUserCommand command = springEventUserDtoMapper.toCreateUserCommand(requestEvent);
     User createdUser = createUserUseCase.createActiveUser(command);
     GetUserDto getUserDto = springEventUserDtoMapper.toGetUserDto(createdUser);
-    CreateActiveUserResponseEvent responseEvent = new CreateActiveUserResponseEvent(this,
-                                                                                    getUserDto);
-    publisher.publishEvent(responseEvent);
+
+    // For the methods annotated with @EventListener and defined as a non-void return type,
+    // Spring will publish the result as a new event for us.
+    return new CreateActiveUserResponseEvent(getUserDto);
   }
 
+  @Async
   @EventListener
-  void getUsers(GetUsersRequestEvent requestEvent) {
+  GetUsersResponseEvent getUsers(GetUsersRequestEvent requestEvent) {
     List<GetUserDto> users = getUsersQuery.getAllUsersByActive(requestEvent.isActive(),
                                                                requestEvent.getPage(),
                                                                requestEvent.getSize())
                                           .stream()
                                           .map(springEventUserDtoMapper::toGetUserDto)
                                           .collect(Collectors.toList());
-    publisher.publishEvent(new GetUsersResponseEvent(this, users));
+    return new GetUsersResponseEvent(users);
   }
 
+  @Async
   @EventListener
   void getUser(GetUserRequestEvent requestEvent) {
     getUsersQuery.getUserById(requestEvent.getId())
-                 .map(u -> new GetUserResponseEvent(this,
-                                                    springEventUserDtoMapper.toGetUserDto(u)))
+                 .map(u -> new GetUserResponseEvent(springEventUserDtoMapper.toGetUserDto(u)))
                  .ifPresent(publisher::publishEvent);
   }
 
+  @Async
   @EventListener
-  void deleteUser(DeleteUserRequestEvent requestEvent) {
+  DeleteUserResponseEvent deleteUser(DeleteUserRequestEvent requestEvent) {
     DeleteUserCommand command = springEventUserDtoMapper.toDeleteUserCommand(requestEvent);
     boolean removed = deleteUserUseCase.deleteUser(command);
-    publisher.publishEvent(new DeleteUserResponseEvent(this, removed));
+    return new DeleteUserResponseEvent(removed);
   }
 
+  @Async
   @EventListener
   void updateUser(UpdateUserRequestEvent requestEvent) {
     updateUserUseCase.updateUser(springEventUserDtoMapper.toUpdateUserCommand(requestEvent))
                      .map(springEventUserDtoMapper::toGetUserDto)
                      .ifPresentOrElse(
-                         u -> publisher.publishEvent(new UpdateUserResponseEvent(this, u)),
-                         () -> publisher.publishEvent(new UpdateUserResponseEvent(this, null)));
+                         u -> publisher.publishEvent(new UpdateUserResponseEvent(u)),
+                         () -> publisher.publishEvent(new UpdateUserResponseEvent(null)));
   }
 }

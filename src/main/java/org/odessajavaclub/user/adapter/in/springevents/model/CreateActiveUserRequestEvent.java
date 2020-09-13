@@ -2,11 +2,11 @@ package org.odessajavaclub.user.adapter.in.springevents.model;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import org.springframework.context.ApplicationEvent;
 
 @Getter
 @EqualsAndHashCode(callSuper = false)
-public class CreateActiveUserRequestEvent extends ApplicationEvent {
+// since Spring 4.2, we can also publish objects as an event without extending ApplicationEvent
+public class CreateActiveUserRequestEvent {
 
   private final String firstName;
 
@@ -21,20 +21,17 @@ public class CreateActiveUserRequestEvent extends ApplicationEvent {
   /**
    * Constructor.
    *
-   * @param source    source
    * @param firstName first name
    * @param lastName  last name
    * @param email     email
    * @param password  password
    * @param role      role
    */
-  public CreateActiveUserRequestEvent(Object source,
-                                      String firstName,
+  public CreateActiveUserRequestEvent(String firstName,
                                       String lastName,
                                       String email,
                                       String password,
                                       UserSpringEventRole role) {
-    super(source);
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email;
