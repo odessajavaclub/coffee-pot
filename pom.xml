@@ -22,7 +22,7 @@
   <properties>
     <java.version>11</java.version>
     <swagger2.version>3.0.0</swagger2.version>
-    <mapstruct.version>1.4.0.Final</mapstruct.version>
+    <mapstruct.version>1.4.1.Final</mapstruct.version>
     <checkstyle.version>3.1.1</checkstyle.version>
   </properties>
 
