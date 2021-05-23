@@ -82,8 +82,7 @@ class UserControllerTest {
     when(createUserUseCase.createActiveUser(any(CreateUserUseCase.CreateUserCommand.class)))
         .thenReturn(user1);
 
-    applicationEventPublisher.publishEvent(new CreateActiveUserRequestEvent(this,
-                                                                            "User",
+    applicationEventPublisher.publishEvent(new CreateActiveUserRequestEvent("User",
                                                                             "One",
                                                                             "userone@email.com",
                                                                             "pass1",
@@ -116,7 +115,7 @@ class UserControllerTest {
     when(getUsersQuery.getAllUsersByActive(true, 6, 666))
         .thenReturn(List.of(user1, user2));
 
-    applicationEventPublisher.publishEvent(new GetUsersRequestEvent(this, true, 6, 666));
+    applicationEventPublisher.publishEvent(new GetUsersRequestEvent(true, 6, 666));
 
     verify(getUsersQuery).getAllUsersByActive(true, 6, 666);
   }
@@ -136,7 +135,7 @@ class UserControllerTest {
     when(getUsersQuery.getUserById(new User.UserId(777L)))
         .thenReturn(Optional.of(user1));
 
-    applicationEventPublisher.publishEvent(new GetUserRequestEvent(this, new User.UserId(777L)));
+    applicationEventPublisher.publishEvent(new GetUserRequestEvent(new User.UserId(777L)));
 
     verify(getUsersQuery).getUserById(new User.UserId(777L));
   }
@@ -145,7 +144,7 @@ class UserControllerTest {
   void getUserIfAbsent() {
     when(getUsersQuery.getUserById(new User.UserId(777L))).thenReturn(Optional.empty());
 
-    applicationEventPublisher.publishEvent(new GetUserRequestEvent(this, new User.UserId(777L)));
+    applicationEventPublisher.publishEvent(new GetUserRequestEvent(new User.UserId(777L)));
 
     verify(getUsersQuery).getUserById(new User.UserId(777L));
   }
@@ -155,7 +154,7 @@ class UserControllerTest {
     when(deleteUserUseCase.deleteUser(new DeleteUserUseCase.DeleteUserCommand(new User.UserId(123L))))
         .thenReturn(true);
 
-    applicationEventPublisher.publishEvent(new DeleteUserRequestEvent(this, new User.UserId(123L)));
+    applicationEventPublisher.publishEvent(new DeleteUserRequestEvent(new User.UserId(123L)));
 
     verify(deleteUserUseCase).deleteUser(new DeleteUserUseCase.DeleteUserCommand(new User.UserId(123L)));
   }
@@ -165,7 +164,7 @@ class UserControllerTest {
     when(deleteUserUseCase.deleteUser(new DeleteUserUseCase.DeleteUserCommand(new User.UserId(123L))))
         .thenReturn(false);
 
-    applicationEventPublisher.publishEvent(new DeleteUserRequestEvent(this, new User.UserId(123L)));
+    applicationEventPublisher.publishEvent(new DeleteUserRequestEvent(new User.UserId(123L)));
 
     verify(deleteUserUseCase).deleteUser(new DeleteUserUseCase.DeleteUserCommand(new User.UserId(123L)));
   }
@@ -186,8 +185,7 @@ class UserControllerTest {
                                     .active(true)
                                     .build()));
 
-    applicationEventPublisher.publishEvent(new UpdateUserRequestEvent(this,
-                                                                      new User.UserId(123L),
+    applicationEventPublisher.publishEvent(new UpdateUserRequestEvent(new User.UserId(123L),
                                                                       "New",
                                                                       "User",
                                                                       "newemail@email.com"));
@@ -206,8 +204,7 @@ class UserControllerTest {
                                                                               "newemail@email.com")))
         .thenReturn(Optional.empty());
 
-    applicationEventPublisher.publishEvent(new UpdateUserRequestEvent(this,
-                                                                      new User.UserId(123L),
+    applicationEventPublisher.publishEvent(new UpdateUserRequestEvent(new User.UserId(123L),
                                                                       "New",
                                                                       "User",
                                                                       "newemail@email.com"));

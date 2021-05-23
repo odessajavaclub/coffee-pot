@@ -2,16 +2,14 @@ package org.odessajavaclub.user.adapter.in.springevents.model;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import org.springframework.context.ApplicationEvent;
 
 @Getter
 @EqualsAndHashCode(callSuper = false)
-public class CreateActiveUserResponseEvent extends ApplicationEvent {
+public class CreateActiveUserResponseEvent {
 
   private final GetUserDto createdUser;
 
-  public CreateActiveUserResponseEvent(Object source, GetUserDto createdUser) {
-    super(source);
+  public CreateActiveUserResponseEvent(GetUserDto createdUser) {
     this.createdUser = createdUser;
   }
 }
